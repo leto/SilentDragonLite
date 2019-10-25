@@ -64,7 +64,7 @@ void Controller::setConnection(Connection* c) {
 
     this->zrpc->setConnection(c);
 
-    ui->statusBar->showMessage("Ready!");
+    ui->statusBar->showMessage("Your hushd is connected");
 
     // See if we need to remove the reindex/rescan flags from the hush.conf file
     auto hushConfLocation = Settings::getInstance()->gethushdConfLocation();
@@ -96,7 +96,7 @@ void Controller::fillTxJsonParams(json& allRecepients, Tx tx) {
         // Construct the JSON params
         json rec = json::object();
         rec["address"]      = toAddr.addr.toStdString();
-        rec["amount"]       = toAddr.amount;
+        rec["amount"]       = toAddr.amount * 10000000;
         if (Settings::isZAddress(toAddr.addr) && !toAddr.memo.trimmed().isEmpty())
             rec["memo"]     = toAddr.memo.toStdString();
 
@@ -120,7 +120,7 @@ void Controller::noConnection() {
     main->ui->statusBar->showMessage(QObject::tr("No Connection"), 1000);
 
     // Clear balances table.
-    QMap<QString, qint64> emptyBalances;
+    QMap<QString, double> emptyBalances;
     QList<UnspentOutput>  emptyOutputs;
     balancesTableModel->setNewData(emptyBalances, emptyOutputs);
 
@@ -161,21 +161,25 @@ void Controller::getInfoThenRefresh(bool force) {
         prevCallSucceeded = true;
 
         // Testnet?
+        QString chainName;
         if (!reply["chain_name"].is_null()) {
-            Settings::getInstance()->setTestnet(reply["chain_name"].get<json::string_t>() == "test");
+            chainName = QString::fromStdString(reply["chain_name"].get<json::string_t>());
+            Settings::getInstance()->setTestnet(chainName == "test");
         };
 
         // Recurring pamynets are testnet only
         if (!Settings::getInstance()->isTestnet())
             main->disableRecurring();
 
-        // Connected, so display checkmark.
-        QIcon i(":/icons/res/connected.gif");
-        main->statusIcon->setPixmap(i.pixmap(16, 16));
-
         static int    lastBlock = 0;
         int curBlock  = reply["latest_block_height"].get<json::number_integer_t>();
         model->setLatestBlock(curBlock);
+
+        // Connected, so display checkmark.
+        QIcon i(":/icons/res/connected.gif");
+        main->statusLabel->setText(chainName + "(" + QString::number(curBlock) + ")");
+        main->statusIcon->setPixmap(i.pixmap(16, 16));
+
         //int version = reply["version"].get<json::string_t>();
         int version = 1;
         Settings::getInstance()->sethushdVersion(version);
@@ -251,7 +255,7 @@ void Controller::updateUI(bool anyUnconfirmed) {
 };
 
 // Function to process reply of the listunspent and z_listunspent API calls, used below.
-bool Controller::processUnspent(const json& reply, QMap<QString, qint64>* balancesMap, QList<UnspentOutput>* newUtxos) {
+bool Controller::processUnspent(const json& reply, QMap<QString, double>* balancesMap, QList<UnspentOutput>* newUtxos) {
     bool anyUnconfirmed = false;
 
     auto processFn = [=](const json& array) {
@@ -259,11 +263,11 @@ bool Controller::processUnspent(const json& reply, QMap<QString, qint64>* balanc
             QString qsAddr  = QString::fromStdString(it["address"]);
             int block       = it["created_in_block"].get<json::number_unsigned_t>();
             QString txid    = QString::fromStdString(it["created_in_txid"]);
-            QString amount  = Settings::getDecimalString(it["value"].get<json::number_unsigned_t>());
+            QString amount  = Settings::getDecimalString(it["value"].get<json::number_float_t>());
 
             newUtxos->push_back(UnspentOutput{ qsAddr, txid, amount, block, true });
 
-            (*balancesMap)[qsAddr] = (*balancesMap)[qsAddr] + it["value"].get<json::number_unsigned_t>();
+            (*balancesMap)[qsAddr] = ((*balancesMap)[qsAddr] + it["value"].get<json::number_float_t>()) /10000000;
         }    
     };
 
@@ -279,26 +283,28 @@ void Controller::refreshBalances() {
 
     // 1. Get the Balances
     zrpc->fetchBalance([=] (json reply) {    
-        auto balT      = reply["tbalance"].get<json::number_unsigned_t>();
-        auto balZ      = reply["zbalance"].get<json::number_unsigned_t>();
+        auto balT      = reply["tbalance"].get<json::number_float_t>();
+        auto balZ      = reply["zbalance"].get<json::number_float_t>();
         auto balTotal  = balT + balZ;
 
         AppDataModel::getInstance()->setBalances(balT, balZ);
 
-        ui->balSheilded   ->setText(Settings::gethushDisplayFormat(balZ));
-        ui->balTransparent->setText(Settings::gethushDisplayFormat(balT));
-        ui->balTotal      ->setText(Settings::gethushDisplayFormat(balTotal));
+        ui->balSheilded   ->setText(Settings::gethushDisplayFormat(balZ /10000000));
+        ui->balTransparent->setText(Settings::gethushDisplayFormat(balT /10000000));
+        ui->balTotal      ->setText(Settings::gethushDisplayFormat(balTotal /10000000));
 
 
-        ui->balSheilded   ->setToolTip(Settings::gethushDisplayFormat(balZ));
-        ui->balTransparent->setToolTip(Settings::gethushDisplayFormat(balT));
-        ui->balTotal      ->setToolTip(Settings::gethushDisplayFormat(balTotal));
+        ui->balSheilded   ->setToolTip(Settings::gethushDisplayFormat(balZ /10000000));
+        ui->balTransparent->setToolTip(Settings::gethushDisplayFormat(balT /10000000));
+        ui->balTotal      ->setToolTip(Settings::gethushDisplayFormat(balTotal /10000000));
+
+      
     });
 
     // 2. Get the UTXOs
     // First, create a new UTXO list. It will be replacing the existing list when everything is processed.
     auto newUtxos = new QList<UnspentOutput>();
-    auto newBalances = new QMap<QString, qint64>();
+    auto newBalances = new QMap<QString, double>();
 
     // Call the Transparent and Z unspent APIs serially and then, once they're done, update the UI
     zrpc->fetchUnspent([=] (json reply) {
@@ -323,7 +329,7 @@ void Controller::refreshTransactions() {
 
         for (auto& it : reply.get<json::array_t>()) {  
             QString address;
-            qint64 total_amount;
+            double total_amount;
             QList<TransactionItemDetail> items;
 
             // First, check if there's outgoing metadata
@@ -331,7 +337,7 @@ void Controller::refreshTransactions() {
             
                 for (auto o: it["outgoing_metadata"].get<json::array_t>()) {
                     QString address = QString::fromStdString(o["address"]);
-                    qint64 amount = -1 * o["value"].get<json::number_integer_t>(); // Sent items are -ve
+                    double amount = -1 * o["value"].get<json::number_float_t>() /10000000;// Sent items are -ve
                     
                     QString memo;
                     if (!o["memo"].is_null()) {
@@ -353,7 +359,7 @@ void Controller::refreshTransactions() {
                    it["datetime"].get<json::number_unsigned_t>(),
                    address,
                    QString::fromStdString(it["txid"]),
-                   model->getLatestBlock() - it["block_height"].get<json::number_unsigned_t>(),
+                   model->getLatestBlock() - it["block_height"].get<json::number_unsigned_t>(), 
                    items
                 });
             } else {
@@ -363,7 +369,7 @@ void Controller::refreshTransactions() {
 
                 items.push_back(TransactionItemDetail{
                     address,
-                    it["amount"].get<json::number_integer_t>(),
+                    it["amount"].get<json::number_float_t>(),
                     ""
                 });
 
@@ -417,7 +423,7 @@ void Controller::executeTransaction(Tx tx,
     std::cout << std::setw(2) << params << std::endl;
 
     zrpc->sendTransaction(QString::fromStdString(params.dump()), [=](const json& reply) {
-        if (reply["result"].is_null() || reply["result"] != "success") {
+        if (reply.find("txid") == reply.end()) {
             error("", "Couldn't understand Response: " + QString::fromStdString(reply.dump()));
         }
 
@@ -508,11 +514,12 @@ void Controller::refreshhushPrice() {
     if (!zrpc->haveConnection()) 
         return noConnection();
 
-    QUrl cmcURL("https://api.coingecko.com/api/v3/simple/price?ids=hush&vs_currencies=btc%2Cusd%2Ceur&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true");
-
+       // TODO: use/render all this data
+    QUrl cmcURL("ncies=btc%2Cusd%2Ceur&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true");
+   
     QNetworkRequest req;
     req.setUrl(cmcURL);
-    
+
     QNetworkAccessManager *manager = new QNetworkAccessManager(this->main);
     QNetworkReply *reply = manager->get(req);
 
@@ -524,34 +531,41 @@ void Controller::refreshhushPrice() {
             if (reply->error() != QNetworkReply::NoError) {
                 auto parsed = json::parse(reply->readAll(), nullptr, false);
                 if (!parsed.is_discarded() && !parsed["error"]["message"].is_null()) {
-                    qDebug() << QString::fromStdString(parsed["error"]["message"]);    
+                    qDebug() << QString::fromStdString(parsed["error"]["message"]);
                 } else {
                     qDebug() << reply->errorString();
                 }
                 Settings::getInstance()->sethushPrice(0);
                 return;
-            } 
+            }
 
+            qDebug() << "No network errors";
             auto all = reply->readAll();
-            
             auto parsed = json::parse(all, nullptr, false);
             if (parsed.is_discarded()) {
                 Settings::getInstance()->sethushPrice(0);
                 return;
             }
 
-            for (const json& item : parsed.get<json::array_t>()) {
-                if (item["symbol"].get<json::string_t>() == Settings::getTokenName().toStdString()) {
-                    QString price = QString::fromStdString(item["price_usd"].get<json::string_t>());
-                    qDebug() << Settings::getTokenName() << " Price=" << price;
-                    Settings::getInstance()->sethushPrice(price.toDouble());
+            qDebug() << "Parsed JSON";
 
-                    return;
-                }
+            const json& item  = parsed.get<json::object_t>();
+            const json& hush  = item["Hush"].get<json::object_t>();
+
+            if (hush["usd"] >= 0) {
+                qDebug() << "Found hush key in price json";
+                // TODO: support BTC/EUR prices as well
+                QString price = QString::fromStdString(hush["usd"].get<json::string_t>());
+                qDebug() << "HUSH = $" << QString::number((double)hush["usd"]);
+                Settings::getInstance()->sethushPrice( hush["usd"] );
+
+                return;
+            } else {
+                qDebug() << "No hush key found in JSON! API might be down or we are rate-limited\n";
             }
-        } catch (...) {
+        } catch (const std::exception& e) {
             // If anything at all goes wrong, just set the price to 0 and move on.
-            qDebug() << QString("Caught something nasty");
+            qDebug() << QString("Caught something nasty: ") << e.what();
         }
 
         // If nothing, then set the price to 0;
@@ -560,114 +574,27 @@ void Controller::refreshhushPrice() {
 }
 
 void Controller::shutdownhushd() {
-    // Shutdown embedded hushd if it was started
-    if (ehushd == nullptr || ehushd->processId() == 0 || !zrpc->haveConnection()) {
-        // No hushd running internally, just return
-        return;
+    // Save the wallet and exit the lightclient library cleanly.
+    if (zrpc->haveConnection()) {
+        QDialog d(main);
+        Ui_ConnectionDialog connD;
+        connD.setupUi(&d);
+        connD.topIcon->setBasePixmap(QIcon(":/icons/res/icon.ico").pixmap(256, 256));
+        connD.status->setText(QObject::tr("Please wait for SilentDragonLite to exit"));
+        connD.statusDetail->setText(QObject::tr("Waiting for hushd to exit"));
+
+        bool finished = false;
+
+        zrpc->saveWallet([&] (json) {        
+            if (!finished)
+                d.accept();
+            finished = true;
+        });
+
+        if (!finished)
+            d.exec();
     }
-
-    // json payload = {
-    //     {"jsonrpc", "1.0"},
-    //     {"id", "someid"},
-    //     {"method", "stop"}
-    // };
-    
-    // getConnection()->doRPCWithDefaultErrorHandling(payload, [=](auto) {});
-    // getConnection()->shutdown();
-
-    // QDialog d(main);
-    // Ui_ConnectionDialog connD;
-    // connD.setupUi(&d);
-    // connD.topIcon->setBasePixmap(QIcon(":/icons/res/icon.ico").pixmap(256, 256));
-    // connD.status->setText(QObject::tr("Please wait for silentdragon to exit"));
-    // connD.statusDetail->setText(QObject::tr("Waiting for hushd to exit"));
-
-    // QTimer waiter(main);
-
-    // // We capture by reference all the local variables because of the d.exec() 
-    // // below, which blocks this function until we exit. 
-    // int waitCount = 0;
-    // QObject::connect(&waiter, &QTimer::timeout, [&] () {
-    //     waitCount++;
-
-    //     if ((ehushd->atEnd() && ehushd->processId() == 0) ||
-    //         waitCount > 30 || 
-    //         getConnection()->config->hushDaemon)  {   // If hushd is daemon, then we don't have to do anything else
-    //         qDebug() << "Ended";
-    //         waiter.stop();
-    //         QTimer::singleShot(1000, [&]() { d.accept(); });
-    //     } else {
-    //         qDebug() << "Not ended, continuing to wait...";
-    //     }
-    // });
-    // waiter.start(1000);
-
-    // // Wait for the hush process to exit.
-    // if (!Settings::getInstance()->isHeadless()) {
-    //     d.exec(); 
-    // } else {
-    //     while (waiter.isActive()) {
-    //         QCoreApplication::processEvents();
-
-    //         QThread::sleep(1);
-    //     }
-    // }
 }
-
-
-// // Fetch the Z-board topics list
-// void Controller::getZboardTopics(std::function<void(QMap<QString, QString>)> cb) {
-//     if (!zrpc->haveConnection())
-//         return noConnection();
-
-//     QUrl cmcURL("http://z-board.net/listTopics");
-
-//     QNetworkRequest req;
-//     req.setUrl(cmcURL);
-
-//     QNetworkReply *reply = conn->restclient->get(req);
-
-//     QObject::connect(reply, &QNetworkReply::finished, [=] {
-//         reply->deleteLater();
-
-//         try {
-//             if (reply->error() != QNetworkReply::NoError) {
-//                 auto parsed = json::parse(reply->readAll(), nullptr, false);
-//                 if (!parsed.is_discarded() && !parsed["error"]["message"].is_null()) {
-//                     qDebug() << QString::fromStdString(parsed["error"]["message"]);
-//                 }
-//                 else {
-//                     qDebug() << reply->errorString();
-//                 }
-//                 return;
-//             }
-
-//             auto all = reply->readAll();
-
-//             auto parsed = json::parse(all, nullptr, false);
-//             if (parsed.is_discarded()) {
-//                 return;
-//             }
-
-//             QMap<QString, QString> topics;
-//             for (const json& item : parsed["topics"].get<json::array_t>()) {
-//                 if (item.find("addr") == item.end() || item.find("topicName") == item.end())
-//                     return;
-
-//                 QString addr  = QString::fromStdString(item["addr"].get<json::string_t>());
-//                 QString topic = QString::fromStdString(item["topicName"].get<json::string_t>());
-                
-//                 topics.insert(topic, addr);
-//             }
-
-//             cb(topics);
-//         }
-//         catch (...) {
-//             // If anything at all goes wrong, just set the price to 0 and move on.
-//             qDebug() << QString("Caught something nasty");
-//         }
-//     });
-// }
 
 /** 
  * Get a Sapling address from the user's wallet

@@ -39,7 +39,7 @@ void LiteInterface::createNewZaddr(bool, const std::function<void(json)>& cb) {
     if (conn == nullptr)
         return;
 
-    conn->doRPCWithDefaultErrorHandling("new", "zs", cb);
+    conn->doRPCWithDefaultErrorHandling("new", "zs1", cb);
 }
 
 void LiteInterface::createNewTaddr(const std::function<void(json)>& cb) {
@@ -68,6 +68,13 @@ void LiteInterface::fetchTransactions(const std::function<void(json)>& cb) {
         return;
 
     conn->doRPCWithDefaultErrorHandling("list", "", cb);
+}
+
+void LiteInterface::saveWallet(const std::function<void(json)>& cb) {
+    if (conn == nullptr)
+        return;
+
+    conn->doRPCWithDefaultErrorHandling("save", "", cb);
 }
 
 void LiteInterface::sendTransaction(QString params, const std::function<void(json)>& cb, 
