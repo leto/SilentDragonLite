@@ -40,7 +40,6 @@ public:
 
     Connection* getConnection() { return zrpc->getConnection(); }
     void setConnection(Connection* c);
-
     void refresh(bool force = false);
     void refreshAddresses();    
     

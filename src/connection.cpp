@@ -134,6 +134,7 @@ void ConnectionLoader::showInformation(QString info, QString detail) {
     qDebug() << "Showing info " << info << ":" << detail;
     connD->status->setText(info);
     connD->statusDetail->setText(detail);
+    
 }
 
 /**

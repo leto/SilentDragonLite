@@ -953,21 +953,21 @@
               </spacer>
              </item>
              <item row="2" column="2">
-              <widget class="QLabel" name="version">
+              <widget class="QLabel" name="Vendor">
                <property name="text">
                 <string>Loading...</string>
                </property>
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="heightLabel">
+              <widget class="QLabel" name="Vendor">
                <property name="text">
-                <string>Blockheight</string>
+                <string>blockHeight</string>
                </property>
               </widget>
              </item>
              <item row="3" column="2">
-              <widget class="QLabel" name="Vendor">
+              <widget class="QLabel" name="Version">
                <property name="text">
                 <string>Loading...</string>
                </property>
@@ -976,7 +976,7 @@
              <item row="3" column="0">
               <widget class="QLabel" name="label_12">
                <property name="text">
-                <string>Version hushd light</string>
+                <string>Version hushlightd</string>
                </property>
               </widget>
              </item>

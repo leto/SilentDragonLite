@@ -174,6 +174,7 @@ void Controller::getInfoThenRefresh(bool force) {
         static int    lastBlock = 0;
         int curBlock  = reply["latest_block_height"].get<json::number_integer_t>();
         model->setLatestBlock(curBlock);
+        ui->blockHeight->setText(QString::number(curBlock));
 
         // Connected, so display checkmark.
         QIcon i(":/icons/res/connected.gif");
@@ -184,7 +185,12 @@ void Controller::getInfoThenRefresh(bool force) {
       //int version = reply["version"].get<json::string_t>();
         int version = 1;
         Settings::getInstance()->sethushdVersion(version);
+       ui->Version->setText(QString::fromStdString(reply["version"].get<json::string_t>())); 
+       ui->Vendor->setText(QString::fromStdString(reply["vendor"].get<json::string_t>()));
 
+       
+    
+    
         // See if recurring payments needs anything
         Recurring::getInstance()->processPending(main);
 
