@@ -64,7 +64,7 @@ void Controller::setConnection(Connection* c) {
 
     this->zrpc->setConnection(c);
 
-    ui->statusBar->showMessage("Your hushd is connected");
+    ui->statusBar->showMessage("Connectet with https://hush-lightwallet.de");
 
     // See if we need to remove the reindex/rescan flags from the hush.conf file
     auto hushConfLocation = Settings::getInstance()->gethushdConfLocation();
@@ -174,16 +174,23 @@ void Controller::getInfoThenRefresh(bool force) {
         static int    lastBlock = 0;
         int curBlock  = reply["latest_block_height"].get<json::number_integer_t>();
         model->setLatestBlock(curBlock);
+        ui->blockHeight->setText(QString::number(curBlock));
 
         // Connected, so display checkmark.
         QIcon i(":/icons/res/connected.gif");
-        main->statusLabel->setText(chainName + "(" + QString::number(curBlock) + ")");
+        main->statusLabel->setText( "connected" "(" + QString::number(curBlock) + ")");
+        main->statusLabel->setText(" HUSH/USD=$" + QString::number( (double) Settings::getInstance()->gethushPrice() ));
         main->statusIcon->setPixmap(i.pixmap(16, 16));
-
-        //int version = reply["version"].get<json::string_t>();
+        
+      //int version = reply["version"].get<json::string_t>();
         int version = 1;
         Settings::getInstance()->sethushdVersion(version);
+       ui->Version->setText(QString::fromStdString(reply["version"].get<json::string_t>())); 
+       ui->Vendor->setText(QString::fromStdString(reply["vendor"].get<json::string_t>()));
 
+       
+    
+    
         // See if recurring payments needs anything
         Recurring::getInstance()->processPending(main);
 
@@ -559,7 +566,7 @@ void Controller::refreshhushPrice() {
                 //QString price = QString::fromStdString(hush["usd"].get<json::string_t>());
                 qDebug() << "HUSH = $" << QString::number((double)hush["usd"]);
                 Settings::getInstance()->sethushPrice( hush["usd"] );
-                
+                  return;
             }
          } catch (const std::exception& e) {
             // If anything at all goes wrong, just set the price to 0 and move on.
