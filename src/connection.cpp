@@ -43,7 +43,7 @@ void ConnectionLoader::doAutoConnect() {
 
     auto config = std::shared_ptr<ConnectionConfig>(new ConnectionConfig());
     config->dangerous = true;
-    config->server = QString("127.0.0.1:9069");
+    config->server = QString("https://hush-lightwallet.de:439");
 
     // Initialize the library
     main->logger->write(QObject::tr("Attempting to initialize"));
