@@ -22,9 +22,9 @@ silentdragon-lite.pro.user
 /Makefile
 /Makefile.*
 qrc_application.cpp
-hush-qt-wallet_plugin_import.cpp
+silentdragonlite_plugin_import.cpp
 silentdragon_plugin_import.cpp
-hush-qt-wallet_resource*
+silentdragonlite_resource*
 silentdragon_resource*
 workspace.code-workspace
 *.zip
@@ -36,4 +36,4 @@ hushd
 IDEWorkspaceChecks.plist
 *.sln
 node_modules
-hush-qt-wallet.pro.user.4.10-pre1
+silentdragonlite.pro.user.4.10-pre1

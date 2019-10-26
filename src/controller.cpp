@@ -96,7 +96,7 @@ void Controller::fillTxJsonParams(json& allRecepients, Tx tx) {
         // Construct the JSON params
         json rec = json::object();
         rec["address"]      = toAddr.addr.toStdString();
-        rec["amount"]       = toAddr.amount * 10000000;
+        rec["amount"]       = toAddr.amount * 100000000;
         if (Settings::isZAddress(toAddr.addr) && !toAddr.memo.trimmed().isEmpty())
             rec["memo"]     = toAddr.memo.toStdString();
 
@@ -267,7 +267,7 @@ bool Controller::processUnspent(const json& reply, QMap<QString, double>* balanc
 
             newUtxos->push_back(UnspentOutput{ qsAddr, txid, amount, block, true });
 
-            (*balancesMap)[qsAddr] = ((*balancesMap)[qsAddr] + (it["value"].get<json::number_float_t>()) /10000000);
+            (*balancesMap)[qsAddr] = ((*balancesMap)[qsAddr] + (it["value"].get<json::number_float_t>()) /100000000);
         }    
     };
 
@@ -289,14 +289,14 @@ void Controller::refreshBalances() {
 
         AppDataModel::getInstance()->setBalances(balT, balZ);
 
-        ui->balSheilded   ->setText(Settings::gethushDisplayFormat(balZ /10000000));
-        ui->balTransparent->setText(Settings::gethushDisplayFormat(balT /10000000));
-        ui->balTotal      ->setText(Settings::gethushDisplayFormat(balTotal /10000000));
+        ui->balSheilded   ->setText(Settings::gethushDisplayFormat(balZ /100000000));
+        ui->balTransparent->setText(Settings::gethushDisplayFormat(balT /100000000));
+        ui->balTotal      ->setText(Settings::gethushDisplayFormat(balTotal /100000000));
 
 
-        ui->balSheilded   ->setToolTip(Settings::gethushDisplayFormat(balZ /10000000));
-        ui->balTransparent->setToolTip(Settings::gethushDisplayFormat(balT /10000000));
-        ui->balTotal      ->setToolTip(Settings::gethushDisplayFormat(balTotal /10000000));
+        ui->balSheilded   ->setToolTip(Settings::gethushDisplayFormat(balZ /100000000));
+        ui->balTransparent->setToolTip(Settings::gethushDisplayFormat(balT /100000000));
+        ui->balTotal      ->setToolTip(Settings::gethushDisplayFormat(balTotal /100000000));
 
       
     });
@@ -337,7 +337,7 @@ void Controller::refreshTransactions() {
             
                 for (auto o: it["outgoing_metadata"].get<json::array_t>()) {
                     QString address = QString::fromStdString(o["address"]);
-                  double amount = -1 * o ["value"].get<json::number_float_t>() /10000000;  // Sent items are -ve
+                  double amount = -1 * o ["value"].get<json::number_float_t>() /100000000;  // Sent items are -ve
                     
                     QString memo;
                     if (!o["memo"].is_null()) {
@@ -369,8 +369,8 @@ void Controller::refreshTransactions() {
 
                 items.push_back(TransactionItemDetail{
                     address,
-                    it["amount"].get<json::number_float_t>() /10000000,
-                    "."
+                    it["amount"].get<json::number_float_t>() /100000000,
+                    ""
                 });
 
                 TransactionItem tx{

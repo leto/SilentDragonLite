@@ -101,7 +101,7 @@ public:
     static QString getDecimalString(double amt);
     static QString getUSDFormat(double bal);
 
-    static QString getUSDFromhushAmount(double bal);
+    
     static QString gethushDisplayFormat(double bal);
     static QString gethushUSDDisplayFormat(double bal);
 

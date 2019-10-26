@@ -145,7 +145,7 @@ bool TxTableModel::exportToCsv(QString fileName) const {
             for (int i=0; i < dat.items.length(); i++) {
                 total += dat.items[i].amount;
             }
-            return Settings::getInstance()->getUSDFromhushAmount(total);
+            return Settings::getInstance()->getUSDFormat(total);
         }    
         }
     }

@@ -216,9 +216,6 @@ void Settings::openTxInExplorer(QString txid) {
 
 
 
-QString Settings::getUSDFromhushAmount(double bal) {
-    return getUSDFormat(bal * Settings::getInstance()->gethushPrice());
-}
 
 QString Settings::getUSDFormat(double bal) {
     return "$" + QLocale(QLocale::English).toString(bal * Settings::getInstance()->gethushPrice(), 'f', 2);

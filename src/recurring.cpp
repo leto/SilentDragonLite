@@ -135,7 +135,7 @@ RecurringPaymentInfo* Recurring::getNewRecurringFromTx(QWidget* parent, MainWind
         ui.lblTo->setText(tx.toAddrs[0].addr);
 
         // Default is USD
-        ui.lblAmt->setText(Settings::getUSDFromhushAmount(tx.toAddrs[0].amount));
+        ui.lblAmt->setText(Settings::getUSDFormat(tx.toAddrs[0].amount));
 
         ui.txtMemo->setPlainText(tx.toAddrs[0].memo);
         ui.txtMemo->setEnabled(false);
@@ -147,7 +147,7 @@ RecurringPaymentInfo* Recurring::getNewRecurringFromTx(QWidget* parent, MainWind
             return;
 
         if (c == "USD") {
-            ui.lblAmt->setText(Settings::getUSDFromhushAmount(tx.toAddrs[0].amount));
+            ui.lblAmt->setText(Settings::getUSDFormat(tx.toAddrs[0].amount));
         }
         else {
             ui.lblAmt->setText(Settings::getDecimalString(tx.toAddrs[0].amount));

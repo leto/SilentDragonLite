@@ -13,14 +13,14 @@ Copy-Item release/$target/README.md         release/wininstaller/
 Copy-Item release/$target/hushd.exe        release/wininstaller/
 Copy-Item release/$target/hush-cli.exe     release/wininstaller/
 
-Get-Content src/scripts/hush-qt-wallet.wxs | ForEach-Object { $_ -replace "RELEASE_VERSION", "$version" } | Out-File -Encoding utf8 release/wininstaller/hush-qt-wallet.wxs
+Get-Content src/scripts/silentdragonlite.wxs | ForEach-Object { $_ -replace "RELEASE_VERSION", "$version" } | Out-File -Encoding utf8 release/wininstaller/silentdragonlite.wxs
 
-candle.exe release/wininstaller/hush-qt-wallet.wxs -o release/wininstaller/hush-qt-wallet.wixobj 
+candle.exe release/wininstaller/silentdragonlite.wxs -o release/wininstaller/silentdragonlite.wixobj 
 if (!$?) {
     exit 1;
 }
 
-light.exe -ext WixUIExtension -cultures:en-us release/wininstaller/hush-qt-wallet.wixobj -out release/wininstaller/silentdragon.msi 
+light.exe -ext WixUIExtension -cultures:en-us release/wininstaller/silentdragonlite.wixobj -out release/wininstaller/silentdragon.msi 
 if (!$?) {
     exit 1;
 }
