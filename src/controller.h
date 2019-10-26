@@ -20,6 +20,7 @@ struct WatchedTx {
     std::function<void(QString, QString)> error;
 };
 
+
 struct MigrationStatus {
     bool            available;     // Whether the underlying hushd supports migration?
     bool            enabled;

@@ -201,8 +201,8 @@ void Recurring::updateInfoWithTx(RecurringPaymentInfo* r, Tx tx) {
     r->toAddr = tx.toAddrs[0].addr;
     r->memo = tx.toAddrs[0].memo;
     r->fromAddr = tx.fromAddr;
-    if (r->currency.isEmpty() || r->currency == "USD") {
-        r->currency = "USD";
+    if (r->currency.isEmpty() || r->currency == "usd") {
+        r->currency = "usd";
         r->amt = tx.toAddrs[0].amount * Settings::getInstance()->gethushPrice();
     }
     else {
@@ -461,7 +461,7 @@ void Recurring::processMultiplePending(RecurringPaymentInfo rpi, MainWindow* mai
 void Recurring::executeRecurringPayment(MainWindow* main, RecurringPaymentInfo rpi, QList<int> paymentNumbers) {
     // Amount is in USD or hush?
     auto amt = rpi.amt;
-    if (rpi.currency == "USD") {
+    if (rpi.currency == "usd") {
         // If there is no price, then fail the payment
         if (Settings::getInstance()->gethushPrice() == 0) {
             for (auto paymentNumber: paymentNumbers) {
