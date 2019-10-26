@@ -682,7 +682,7 @@ void AppDataServer::processSendTx(QJsonObject sendTx, MainWindow* mainwindow, st
         return a.first > b.first;
     });
 
-    tx.fromAddr = bals[0].first;
+   tx.fromAddr = bals[0].first;
     tx.toAddrs = { ToFields{ sendTx["to"].toString(), amt, sendTx["memo"].toString()} };
 
     // TODO: Respect the autoshield change setting

@@ -30,7 +30,7 @@
 <context>
     <name>ConnectionDialog</name>
     <message>
-        <source>hush-qt-wallet</source>
+        <source>silentdragonlite</source>
         <translation type="vanished">silentdragon</translation>
     </message>
     <message>
@@ -47,7 +47,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <source>hush-qt-wallet</source>
+        <source>silentdragonlite</source>
         <translation type="vanished">silentdragon</translation>
     </message>
     <message>
@@ -456,7 +456,7 @@
         <translation>wallet.dat dosyasını yedekle</translation>
     </message>
     <message>
-        <source>Thanks for supporting hush-qt-wallet!</source>
+        <source>Thanks for supporting silentdragonlite!</source>
         <translation type="vanished">silentdragon&apos;i desteklediğiniz için teşekkür ederiz!</translation>
     </message>
     <message>
@@ -464,7 +464,7 @@
         <translation type="vanished">0.01 Bağış yap </translation>
     </message>
     <message>
-        <source> to support hush-qt-wallet</source>
+        <source> to support silentdragonlite</source>
         <translatorcomment>0.01 Bağış yap yazısının devamı</translatorcomment>
         <translation type="vanished">ve silentdragon&apos;i destekle</translation>
     </message>
@@ -995,11 +995,11 @@ z-adres&apos;i gibi görünmüyor</translation>
         <translation type="vanished">hushd bekleniyor</translation>
     </message>
     <message>
-        <source>You have hushd set to start as a daemon, which can cause problems with hush-qt-wallet
+        <source>You have hushd set to start as a daemon, which can cause problems with silentdragonlite
 
-.Please remove the following line from your hush.conf and restart hush-qt-wallet
+.Please remove the following line from your hush.conf and restart silentdragonlite
 daemon=1</source>
-        <translation type="vanished">hushd, hush-qt-wallet ile sorunlara neden olan bir daemon olarak başlayacak şekilde ayarladınız.
+        <translation type="vanished">hushd, silentdragonlite ile sorunlara neden olan bir daemon olarak başlayacak şekilde ayarladınız.
 
 .Lütfen aşağıdaki satırı hush.conf dosyanızdan kaldırın ve silentdragon&apos;i yeniden başlatın
 daemon=1</translation>
@@ -1045,7 +1045,7 @@ Not starting embedded hushd because --no-embedded was passed</source>
 
 .Please remove the following line from your hush.conf and restart silentdragon
 daemon=1</source>
-        <translation type="vanished">hushd&apos;yi, hush-qt-wallet ile sorunlara neden olabilecek bir daemon olacak şekilde ayarladınız.
+        <translation type="vanished">hushd&apos;yi, silentdragonlite ile sorunlara neden olabilecek bir daemon olacak şekilde ayarladınız.
 
 .Lütfen aşağıdaki satırı hush.conf dosyanızdan kaldırın ve silentdragon&apos;i yeniden başlatın
 daemon=1</translation>
@@ -1205,7 +1205,7 @@ Yayınlanan sürümler sayfasını ziyaret etmek ister misiniz?</translation>
         <translation type="vanished"> tx hesaplanıyor. Bu birkaç dakika sürebilir.</translation>
     </message>
     <message>
-        <source>Please wait for hush-qt-wallet to exit</source>
+        <source>Please wait for silentdragonlite to exit</source>
         <translation type="vanished">Lütfen çıkmak için silentdragon&apos;i bekleyin</translation>
     </message>
     <message>

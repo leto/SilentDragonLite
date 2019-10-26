@@ -18,7 +18,7 @@
     <name>ConnectionDialog</name>
     <message>
         <location filename="../src/connection.ui" line="17"/>
-        <source>hush-qt-wallet</source>
+        <source>silentdragonlite</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -31,7 +31,7 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/mainwindow.ui" line="14"/>
-        <source>hush-qt-wallet</source>
+        <source>silentdragonlite</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -345,7 +345,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="471"/>
-        <source>Thanks for supporting hush-qt-wallet!</source>
+        <source>Thanks for supporting silentdragonlite!</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -355,7 +355,7 @@
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="473"/>
-        <source> to support hush-qt-wallet</source>
+        <source> to support silentdragonlite</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
@@ -592,9 +592,9 @@ doesn&apos;t look like a z-address</source>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="75"/>
-        <source>You have hushd set to start as a daemon, which can cause problems with hush-qt-wallet
+        <source>You have hushd set to start as a daemon, which can cause problems with silentdragonlite
 
-.Please remove the following line from your hush.conf and restart hush-qt-wallet
+.Please remove the following line from your hush.conf and restart silentdragonlite
 daemon=1</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
@@ -714,7 +714,7 @@ Not starting embedded hushd because --no-embedded was passed</source>
     </message>
     <message>
         <location filename="../src/rpc.cpp" line="953"/>
-        <source>Please wait for hush-qt-wallet to exit</source>
+        <source>Please wait for silentdragonlite to exit</source>
         <translation type="unfinished">YOUR_TRANSLATION_HERE</translation>
     </message>
     <message>
