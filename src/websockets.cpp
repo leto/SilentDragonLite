@@ -769,6 +769,8 @@ void AppDataServer::processGetInfo(QJsonObject jobj, MainWindow* mainWindow, std
 void AppDataServer::processGetTransactions(MainWindow* mainWindow, std::shared_ptr<ClientWebSocket> pClient) {
     QJsonArray txns;
     auto model = mainWindow->getRPC()->getTransactionsModel();
+    qDebug() << "processGetTransactions";
+    
     
     // Add transactions
     for (int i = 0; i < model->rowCount(QModelIndex()) && i < Settings::getMaxMobileAppTxns(); i++) {

@@ -267,7 +267,7 @@ bool Controller::processUnspent(const json& reply, QMap<QString, double>* balanc
 
             newUtxos->push_back(UnspentOutput{ qsAddr, txid, amount, block, true });
 
-            (*balancesMap)[qsAddr] = ((*balancesMap)[qsAddr] + it["value"].get<json::number_float_t>()) /10000000;
+            (*balancesMap)[qsAddr] = ((*balancesMap)[qsAddr] + (it["value"].get<json::number_float_t>()) /10000000);
         }    
     };
 
@@ -337,7 +337,7 @@ void Controller::refreshTransactions() {
             
                 for (auto o: it["outgoing_metadata"].get<json::array_t>()) {
                     QString address = QString::fromStdString(o["address"]);
-                  double amount = it["value"].get<json::number_float_t>();  // Sent items are -ve
+                  double amount = -1 * o ["value"].get<json::number_float_t>() /10000000;  // Sent items are -ve
                     
                     QString memo;
                     if (!o["memo"].is_null()) {
@@ -369,8 +369,8 @@ void Controller::refreshTransactions() {
 
                 items.push_back(TransactionItemDetail{
                     address,
-                    it["amount"].get<json::number_float_t>(),
-                    ""
+                    it["amount"].get<json::number_float_t>() /10000000,
+                    "."
                 });
 
                 TransactionItem tx{

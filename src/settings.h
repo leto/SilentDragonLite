@@ -99,7 +99,7 @@ public:
     static bool    isTAddress(QString addr);
 
     static QString getDecimalString(double amt);
-    static QString getUSDFormat(double usdAmt);
+    static QString getUSDFormat(double bal);
 
     static QString getUSDFromhushAmount(double bal);
     static QString gethushDisplayFormat(double bal);
