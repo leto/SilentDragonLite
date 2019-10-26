@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	    
     ui->setupUi(this);
-    logger = new Logger(this, QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("./komodo/HUSH3/silentdragonlite-debug.log"));
+    logger = new Logger(this, QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("silentdragonlite-cli-wallet.log"));
 
     // Status Bar
     setupStatusBar();

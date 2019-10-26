@@ -336,7 +336,7 @@ void Controller::refreshTransactions() {
 
         for (auto& it : reply.get<json::array_t>()) {  
             QString address;
-            double total_amount;
+            quint64 total_amount;
             QList<TransactionItemDetail> items;
 
             // First, check if there's outgoing metadata
@@ -346,11 +346,14 @@ void Controller::refreshTransactions() {
                     QString address = QString::fromStdString(o["address"]);
                   double amount = -1 * o ["value"].get<json::number_float_t>() /100000000;  // Sent items are -ve
                     
+                   // Check for Memos
+                   
                     QString memo;
                     if (!o["memo"].is_null()) {
                         memo = QString::fromStdString(o["memo"]);
-                    }
 
+                     }
+                    
                     items.push_back(TransactionItemDetail{address, amount, memo});
                     total_amount += amount;
                 }
@@ -380,6 +383,7 @@ void Controller::refreshTransactions() {
                     ""
                 });
 
+  
                 TransactionItem tx{
                     "Receive",
                     it["datetime"].get<json::number_unsigned_t>(),
