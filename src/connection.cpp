@@ -51,10 +51,16 @@ void ConnectionLoader::doAutoConnect() {
     // Check to see if there's an existing wallet
     if (litelib_wallet_exists(Settings::getChainName().toStdString().c_str())) {
         main->logger->write(QObject::tr("Using existing wallet."));
-        litelib_initialize_existing(config->dangerous, config->server.toStdString().c_str());
+         char* resp = litelib_initialize_existing(config->dangerous, config->server.toStdString().c_str());
+        QString response = litelib_process_response(resp);
+
+        if (response.toUpper().trimmed() != "OK") {
+            showError(response);
+               return;
+        }
     } else {
         main->logger->write(QObject::tr("Create/restore wallet."));
-        litelib_initialize_existing(config->dangerous, config->server.toStdString().c_str());
+        createOrRestore(config->dangerous, config->server);
         d->show();
     }    
     
