@@ -606,14 +606,7 @@ bool MainWindow::confirmTx(Tx tx, RecurringPaymentInfo* rpi) {
     // Syncing warning
     confirm.syncingWarning->setVisible(Settings::getInstance()->isSyncing());
 
-    // And FromAddress in the confirm dialog 
-    confirm.sendFrom->setText(fnSplitAddressForWrap(tx.fromAddr));
-    confirm.sendFrom->setFont(fixedFont);    
-    QString tooltip = tr("Current balance      : ") +
-        rpc->getModel()->getAllBalances().value(tx.fromAddr).toDecimalhushUSDString();
-    tooltip += "\n" + tr("Balance after this Tx: ") +
-        (rpc->getModel()->getAllBalances().value(tx.fromAddr) - totalSpending).toDecimalhushUSDString();
-    confirm.sendFrom->setToolTip(tooltip);
+    
 
     // Show the dialog and submit it if the user confirms
     return d.exec() == QDialog::Accepted;        
@@ -686,7 +679,7 @@ void MainWindow::sendButton() {
 }
 
 QString MainWindow::doSendTxValidations(Tx tx) {
-    if (!Settings::isValidAddress(tx.fromAddr)) return QString(tr("From Address is Invalid"));    
+       
 
     for (auto toAddr : tx.toAddrs) {
         if (!Settings::isValidAddress(toAddr.addr)) {

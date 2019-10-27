@@ -150,8 +150,8 @@ public:
         parser.setApplicationDescription("Shielded desktop light wallet for hush");
         parser.addHelpOption();
 
-        // Positional argument will specify a zcash payment URI
-        parser.addPositionalArgument("zcashURI", "An optional hush URI to pay");
+        // Positional argument will specify a hush payment URI
+        parser.addPositionalArgument("hushURI", "An optional hush URI to pay");
 
         parser.process(a);
 

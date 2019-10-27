@@ -150,7 +150,7 @@ bool TxTableModel::exportToCsv(QString fileName) const {
         }
     }
 
-    if (role == Qt::DecorationRole && index.column() == 0) {
+    if (role == Qt::DecorationRole && index.column() == 0) {       
         bool hasMemo = false;
         for (int i=0; i < dat.items.length(); i++) {
             if (!dat.items[i].memo.isEmpty()) {

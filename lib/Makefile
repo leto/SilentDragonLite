@@ -19,10 +19,10 @@ release: target/release/silentdragonlite.$(EXT)
 debug: target/debug/silentdragonlite.$(EXT) 
 
 target/release/silentdragonlite.$(EXT): src/lib.rs Cargo.toml
-	CFLAGS=$(CFLAGS) cargo build --lib --release
+	LIBS="" CFLAGS=$(CFLAGS) cargo build --lib --release
 
 target/debug/silentdragonlite.$(EXT): src/lib.rs Cargo.toml
-	CFLAGS=$(CFLAGS) cargo build --lib
+	LIBS="" CFLAGS=$(CFLAGS) cargo build --lib
 
 clean:
 	rm -rf target

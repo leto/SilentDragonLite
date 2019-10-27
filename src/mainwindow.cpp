@@ -285,7 +285,7 @@ void MainWindow::setupSettingsModal() {
         // Enable the troubleshooting options only if using embedded hushd
         if (!rpc->isEmbedded()) {
             settings.chkRescan->setEnabled(false);
-            settings.chkRescan->setToolTip(tr("You're using an external hushd. Please restart zcashd with -rescan"));
+            settings.chkRescan->setToolTip(tr("You're using an external hushd. Please restart hushd with -rescan"));
         }
 
         if (settingsDialog.exec() == QDialog::Accepted) {
