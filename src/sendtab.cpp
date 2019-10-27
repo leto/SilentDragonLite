@@ -679,8 +679,6 @@ void MainWindow::sendButton() {
 }
 
 QString MainWindow::doSendTxValidations(Tx tx) {
-       
-
     for (auto toAddr : tx.toAddrs) {
         if (!Settings::isValidAddress(toAddr.addr)) {
             QString addr = (toAddr.addr.length() > 100 ? toAddr.addr.left(100) + "..." : toAddr.addr);
