@@ -56,14 +56,11 @@ void ConnectionLoader::doAutoConnect() {
 
         if (response.toUpper().trimmed() != "OK") {
             showError(response);
-            return;
+               return;
         }
     } else {
         main->logger->write(QObject::tr("Create/restore wallet."));
-        char* resp = litelib_initialize_existing(config->dangerous, config->server.toStdString().c_str());
-        QString response = litelib_process_response(resp);
-
-
+        createOrRestore(config->dangerous, config->server);
         d->show();
     }    
     

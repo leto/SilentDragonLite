@@ -150,11 +150,7 @@ public:
         parser.setApplicationDescription("Shielded desktop light wallet for hush");
         parser.addHelpOption();
 
-        // Add an option to specify the conf file
-            QCommandLineOption confOption(QStringList() << "conf", "Use the hush.conf specified instead of looking for the default one.",
-                                          "confFile");
-        parser.addOption(confOption);
-
+       
         // Positional argument will specify a hush payment URI
         parser.addPositionalArgument("HUSHURI", "An optional hush URI to pay");
 
@@ -207,11 +203,6 @@ public:
         }
 
         Settings::getInstance()->setUseEmbedded(false);
-        
-        // Check to see if a conf location was specified
-        if (parser.isSet(confOption)) {
-            Settings::getInstance()->setUsinghushConf(parser.value(confOption));
-        }
 
         w = new MainWindow();
         w->setWindowTitle("SilentDragonLite v" + QString(APP_VERSION));

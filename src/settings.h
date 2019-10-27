@@ -119,7 +119,7 @@ public:
     static bool    addTohushConf(QString confLocation, QString line);
     static bool    removeFromhushConf(QString confLocation, QString option);
 
-    static QString getChainName() { return QString("test"); }
+    static QString getChainName() { return QString("main"); }
 
     static const QString labelRegExp;
 

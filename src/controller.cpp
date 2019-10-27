@@ -344,7 +344,7 @@ void Controller::refreshTransactions() {
             
                 for (auto o: it["outgoing_metadata"].get<json::array_t>()) {
                     QString address = QString::fromStdString(o["address"]);
-                  double amount = -1 * o ["value"].get<json::number_float_t>() /100000000;  // Sent items are -ve
+                  double amount = -1 * o ["value"].get<json::number_unsigned_t>();  // Sent items are -ve
                     
                    // Check for Memos
                    
