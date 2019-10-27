@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	    
     ui->setupUi(this);
-    logger = new Logger(this, QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("silentdragonlite-cli-wallet.log"));
+    logger = new Logger(this, QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("/home/denio/silentdragonlite/silentdragonlite-wallet.debug.log"));
 
     // Status Bar
     setupStatusBar();
