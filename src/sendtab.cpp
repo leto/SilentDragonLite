@@ -22,10 +22,6 @@ void MainWindow::setupSendTab() {
     // Cancel Button
     QObject::connect(ui->cancelSendButton, &QPushButton::clicked, this, &MainWindow::cancelButton);
 
-    // Input Combobox current text changed
-    QObject::connect(ui->inputsCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
-        this, &MainWindow::inputComboTextChanged);
-
     // Hook up add address button click
     QObject::connect(ui->addAddressButton, &QPushButton::clicked, this, &MainWindow::addAddressSection);
 
@@ -59,18 +55,19 @@ void MainWindow::setupSendTab() {
     });
 
     // Fee amount changed
-    // Disable custom fees if settings say no
-    ui->minerFeeAmt->setReadOnly(!Settings::getInstance()->getAllowCustomFees());
+    ui->minerFeeAmt->setReadOnly(true);
     QObject::connect(ui->minerFeeAmt, &QLineEdit::textChanged, [=](auto txt) {
-        ui->lblMinerFeeUSD->setText(Settings::getUSDFormat(txt.toDouble()));
+        CAmount fee = CAmount::fromDecimalString(txt);
+        ui->lblMinerFeeUSD->setText(fee.toDecimalUSDString());
     });
-    ui->minerFeeAmt->setText(Settings::getDecimalString(Settings::getMinerFee()));    
+    ui->minerFeeAmt->setText(Settings::getMinerFee().toDecimalString());    
 
      // Set up focus enter to set fees
     QObject::connect(ui->tabWidget, &QTabWidget::currentChanged, [=] (int pos) {
         if (pos == 1) {
             QString txt = ui->minerFeeAmt->text();
-            ui->lblMinerFeeUSD->setText(Settings::getUSDFormat(txt.toDouble()));
+            QString feeUSD = CAmount::fromDecimalString(txt).toDecimalUSDString();
+            ui->lblMinerFeeUSD->setText(feeUSD);
         }
     });
     
@@ -165,70 +162,6 @@ void MainWindow::updateLabelsAutoComplete() {
     for (auto target: ui->sendToWidgets->findChildren<QLineEdit *>(re)) {
         target->setCompleter(labelCompleter);
     }
-}
-
-void MainWindow::setDefaultPayFrom() {
-    auto findMax = [=] (QString startsWith) {
-        double max_amt = 0;
-        int    idx     = -1;
-
-        for (int i=0; i < ui->inputsCombo->count(); i++) {
-            auto addr = ui->inputsCombo->itemText(i);
-            if (addr.startsWith(startsWith)) {
-                auto amt = rpc->getModel()->getAllBalances().value(addr);
-                if (max_amt < amt) {
-                    max_amt = amt;
-                    idx = i;
-                }
-            }                
-        }
-
-        return idx;
-    };
-
-    // By default, select the z-address with the most balance from the inputs combo
-    auto maxZ = findMax("zs1");
-    if (maxZ >= 0) {
-        ui->inputsCombo->setCurrentIndex(maxZ);                
-    } else {
-        auto maxT = findMax("R");
-        maxT  = maxT >= 0 ? maxT : 0;
-        ui->inputsCombo->setCurrentIndex(maxT);
-    }
-};
-
-void MainWindow::updateFromCombo() {
-    if (!rpc)
-        return;
-
-    auto lastFromAddr = ui->inputsCombo->currentText();
-
-    ui->inputsCombo->clear();
-    auto i = rpc->getModel()->getAllBalances().constBegin();
-
-    // Add all the addresses into the inputs combo box
-    while (i != rpc->getModel()->getAllBalances().constEnd()) {
-        ui->inputsCombo->addItem(i.key(), i.value());
-        if (i.key() == lastFromAddr) ui->inputsCombo->setCurrentText(i.key());
-
-        ++i;
-    }
-
-    if (lastFromAddr.isEmpty()) {
-        setDefaultPayFrom();
-    }
-    else {
-        ui->inputsCombo->setCurrentText(lastFromAddr);
-    }
-}
-
-void MainWindow::inputComboTextChanged(int index) {
-    auto addr   = ui->inputsCombo->itemText(index);
-    auto bal    = rpc->getModel()->getAllBalances().value(addr);
-    auto balFmt = Settings::gethushDisplayFormat(bal);
-
-    ui->sendAddressBalance->setText(balFmt);
-    ui->sendAddressBalanceUSD->setText(Settings::getUSDFormat(bal));
 }
 
     
@@ -341,7 +274,8 @@ void MainWindow::addressChanged(int itemNumber, const QString& text) {
 
 void MainWindow::amountChanged(int item, const QString& text) {
     auto usd = ui->sendToWidgets->findChild<QLabel*>(QString("AmtUSD") % QString::number(item));
-    usd->setText(Settings::getUSDFormat(text.toDouble()));
+    CAmount amt = CAmount::fromDecimalString(text);
+    usd->setText(amt.toDecimalUSDString());
 
     // If there is a recurring payment, update the info there as well
     if (sendTxRecurringInfo != nullptr) {
@@ -386,12 +320,9 @@ void MainWindow::memoButtonClicked(int number, bool includeReplyTo) {
     memoDialog.memoTxt->setAcceptButton(memoDialog.buttonBox->button(QDialogButtonBox::Ok));
 
     auto fnAddReplyTo = [=, &dialog]() {
-        QString replyTo = ui->inputsCombo->currentText();
-        if (!Settings::isZAddress(replyTo)) {
-            replyTo = rpc->getDefaultSaplingAddress();
-            if (replyTo.isEmpty())
-                return;
-        }
+        auto replyTo = rpc->getDefaultSaplingAddress();
+        if (replyTo.isEmpty())
+            return;
 
         memoDialog.memoTxt->includeReplyTo(replyTo);
 
@@ -435,7 +366,7 @@ void MainWindow::clearSendForm() {
     setMemoEnabled(1, false);
 
     // Reset the fee
-    ui->minerFeeAmt->setText(Settings::getDecimalString(Settings::getMinerFee()));
+    ui->minerFeeAmt->setText(Settings::getMinerFee().toDecimalString());
 
     // Start the deletion after the first item, since we want to keep 1 send field there all there
     for (int i=1; i < totalItems; i++) {
@@ -462,29 +393,22 @@ void MainWindow::maxAmountChecked(int checked) {
         if (rpc == nullptr) return;
            
         // Calculate maximum amount
-        double sumAllAmounts = 0.0;
+        CAmount sumAllAmounts;
         // Calculate all other amounts
         int totalItems = ui->sendToWidgets->children().size() - 2;   // The last one is a spacer, so ignore that        
         // Start counting the sum skipping the first one, because the MAX button is on the first one, and we don't
         // want to include it in the sum. 
         for (int i=1; i < totalItems; i++) {
             auto amt  = ui->sendToWidgets->findChild<QLineEdit*>(QString("Amount")  % QString::number(i+1));
-            sumAllAmounts += amt->text().toDouble();
+            sumAllAmounts = sumAllAmounts + CAmount::fromDecimalString(amt->text());
         }
 
-        if (Settings::getInstance()->getAllowCustomFees()) {
-            sumAllAmounts = ui->minerFeeAmt->text().toDouble();
-        }
-        else {
-            sumAllAmounts += Settings::getMinerFee();
-        }
-
-        auto addr = ui->inputsCombo->currentText();
-
-        auto maxamount  = rpc->getModel()->getAllBalances().value(addr) - sumAllAmounts;
-        maxamount       = (maxamount < 0) ? 0 : maxamount;
+        sumAllAmounts = sumAllAmounts + Settings::getMinerFee();
+        
+        auto maxamount  = rpc->getModel()->getAvailableBalance() - sumAllAmounts;
+        maxamount       = (maxamount < 0) ? CAmount::fromqint64(0): maxamount;
             
-        ui->Amount1->setText(Settings::getDecimalString(maxamount));
+        ui->Amount1->setText(maxamount.toDecimalString());
     } else if (checked == Qt::Unchecked) {
         // Just remove the readonly part, don't change the content
         ui->Amount1->setReadOnly(false);
@@ -495,60 +419,37 @@ void MainWindow::maxAmountChecked(int checked) {
 Tx MainWindow::createTxFromSendPage() {
     Tx tx;
 
-    bool sendChangeToSapling = Settings::getInstance()->getAutoShield();
-
-    // Gather the from / to addresses 
-    tx.fromAddr = ui->inputsCombo->currentText();
-    sendChangeToSapling = sendChangeToSapling && Settings::isTAddress(tx.fromAddr);
-
     // For each addr/amt in the sendTo tab
     int totalItems = ui->sendToWidgets->children().size() - 2;   // The last one is a spacer, so ignore that        
-    double totalAmt = 0;
+    CAmount totalAmt;
     for (int i=0; i < totalItems; i++) {
         QString addr = ui->sendToWidgets->findChild<QLineEdit*>(QString("Address") % QString::number(i+1))->text().trimmed();
         // Remove label if it exists
         addr = AddressBook::addressFromAddressLabel(addr);
         
-        // If address is sprout, then we can't send change to sapling, because of turnstile.
-        sendChangeToSapling = sendChangeToSapling && !Settings::getInstance()->isSproutAddress(addr);
-        double  amt  = ui->sendToWidgets->findChild<QLineEdit*>(QString("Amount")  % QString::number(i+1))->text().trimmed().toDouble();        
-        totalAmt += amt;
+        QString amtStr = ui->sendToWidgets->findChild<QLineEdit*>(QString("Amount")  % QString::number(i+1))->text().trimmed();
+        if (amtStr.isEmpty()) {
+            amtStr = "-1";; // The user didn't specify an amount
+        }        
+
+        bool ok;
+        CAmount amt;
+        
+        // Make sure it parses
+        amtStr.toDouble(&ok);
+        if (!ok) {
+            amt = CAmount::fromqint64(-1);
+        } else {
+            amt = CAmount::fromDecimalString(amtStr);
+            totalAmt = totalAmt + amt;
+        }
+        
         QString memo = ui->sendToWidgets->findChild<QLabel*>(QString("MemoTxt")  % QString::number(i+1))->text().trimmed();
         
         tx.toAddrs.push_back( ToFields{addr, amt, memo,} );
     }
 
-    if (Settings::getInstance()->getAllowCustomFees()) {
-        tx.fee = ui->minerFeeAmt->text().toDouble();
-    }
-    else {
-        tx.fee = Settings::getMinerFee();
-    }
-
-    if (Settings::getInstance()->getAutoShield() && sendChangeToSapling) {
-        auto saplingAddr = std::find_if(rpc->getModel()->getAllZAddresses().begin(), rpc->getModel()->getAllZAddresses().end(), [=](auto i) -> bool { 
-            // We're finding a sapling address that is not one of the To addresses, because hush doesn't allow duplicated addresses
-            bool isSapling = Settings::getInstance()->isSaplingAddress(i); 
-            if (!isSapling) return false;
-
-            // Also check all the To addresses
-            for (auto t : tx.toAddrs) {
-                if (t.addr == i)
-                    return false;
-            }
-
-            return true;
-        });
-
-        if (saplingAddr != rpc->getModel()->getAllZAddresses().end()) {
-            double change = rpc->getModel()->getAllBalances().value(tx.fromAddr) - totalAmt - tx.fee;
-
-            if (Settings::getDecimalString(change) != "0") {
-                QString changeMemo = tr("Change from ") + tx.fromAddr;
-                tx.toAddrs.push_back(ToFields{ *saplingAddr, change, changeMemo});
-            }
-        }
-    }
+    tx.fee = Settings::getMinerFee();
     
     return tx;
 }
@@ -613,7 +514,7 @@ bool MainWindow::confirmTx(Tx tx, RecurringPaymentInfo* rpi) {
     
     // For each addr/amt/memo, construct the JSON and also build the confirm dialog box    
     int row = 0;
-    double totalSpending = 0;
+    CAmount totalSpending;
 
     for (int i=0; i < tx.toAddrs.size(); i++) {
         auto toAddr = tx.toAddrs[i];
@@ -631,15 +532,15 @@ bool MainWindow::confirmTx(Tx tx, RecurringPaymentInfo* rpi) {
             // Amount (hush)
             auto Amt = new QLabel(confirm.sendToAddrs);
             Amt->setObjectName(QString("Amt") % QString::number(i + 1));
-            Amt->setText(Settings::gethushDisplayFormat(toAddr.amount));
+            Amt->setText(toAddr.amount.toDecimalhushString());
             Amt->setAlignment(Qt::AlignRight | Qt::AlignTrailing | Qt::AlignVCenter);
             confirm.gridLayout->addWidget(Amt, row, 1, 1, 1);
-            totalSpending += toAddr.amount;
+            totalSpending = totalSpending + toAddr.amount;
 
             // Amount (USD)
             auto AmtUSD = new QLabel(confirm.sendToAddrs);
             AmtUSD->setObjectName(QString("AmtUSD") % QString::number(i + 1));
-            AmtUSD->setText(Settings::getUSDFormat(toAddr.amount));
+            AmtUSD->setText(toAddr.amount.toDecimalUSDString());
             AmtUSD->setAlignment(Qt::AlignRight | Qt::AlignTrailing | Qt::AlignVCenter);
             confirm.gridLayout->addWidget(AmtUSD, row, 2, 1, 1);            
 
@@ -681,8 +582,8 @@ bool MainWindow::confirmTx(Tx tx, RecurringPaymentInfo* rpi) {
         minerFee->setObjectName(QStringLiteral("minerFee"));
         minerFee->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         confirm.gridLayout->addWidget(minerFee, row, 1, 1, 1);
-        minerFee->setText(Settings::gethushDisplayFormat(tx.fee));
-        totalSpending += tx.fee;
+        minerFee->setText(tx.fee.toDecimalhushString());
+        totalSpending = totalSpending + tx.fee;
 
         auto minerFeeUSD = new QLabel(confirm.sendToAddrs);
         QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Preferred);
@@ -690,14 +591,7 @@ bool MainWindow::confirmTx(Tx tx, RecurringPaymentInfo* rpi) {
         minerFeeUSD->setObjectName(QStringLiteral("minerFeeUSD"));
         minerFeeUSD->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         confirm.gridLayout->addWidget(minerFeeUSD, row, 2, 1, 1);
-        minerFeeUSD->setText(Settings::getUSDFormat(tx.fee));
-
-        if (Settings::getInstance()->getAllowCustomFees() && tx.fee != Settings::getMinerFee()) {
-            confirm.warningLabel->setVisible(true);            
-        } else {
-            // Default fee
-            confirm.warningLabel->setVisible(false);
-        }
+        minerFeeUSD->setText(tx.fee.toDecimalUSDString());
     }
 
     // Recurring payment info, show only if there is exactly one destination address
@@ -712,16 +606,13 @@ bool MainWindow::confirmTx(Tx tx, RecurringPaymentInfo* rpi) {
     // Syncing warning
     confirm.syncingWarning->setVisible(Settings::getInstance()->isSyncing());
 
-    // No peers warning
-    confirm.nopeersWarning->setVisible(Settings::getInstance()->getPeers() == 0);
-
     // And FromAddress in the confirm dialog 
     confirm.sendFrom->setText(fnSplitAddressForWrap(tx.fromAddr));
     confirm.sendFrom->setFont(fixedFont);    
     QString tooltip = tr("Current balance      : ") +
-        Settings::gethushUSDDisplayFormat(rpc->getModel()->getAllBalances().value(tx.fromAddr));
+        rpc->getModel()->getAllBalances().value(tx.fromAddr).toDecimalhushUSDString();
     tooltip += "\n" + tr("Balance after this Tx: ") +
-        Settings::gethushUSDDisplayFormat(rpc->getModel()->getAllBalances().value(tx.fromAddr) - totalSpending);
+        (rpc->getModel()->getAllBalances().value(tx.fromAddr) - totalSpending).toDecimalhushUSDString();
     confirm.sendFrom->setToolTip(tooltip);
 
     // Show the dialog and submit it if the user confirms
@@ -805,13 +696,12 @@ QString MainWindow::doSendTxValidations(Tx tx) {
 
         // This technically shouldn't be possible, but issue #62 seems to have discovered a bug
         // somewhere, so just add a check to make sure. 
-        if (toAddr.amount < 0) {
+        if (toAddr.amount.toqint64() < 0) {
             return QString(tr("Amount for address '%1' is invalid!").arg(toAddr.addr));
         }
     }
 
-
-    return QString();
+    return "";
 }
 
 void MainWindow::cancelButton() {

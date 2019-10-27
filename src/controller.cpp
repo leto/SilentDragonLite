@@ -3,6 +3,7 @@
 #include "addressbook.h"
 #include "settings.h"
 #include "version.h"
+#include "camount.h"
 #include "websockets.h"
 
 using json = nlohmann::json;
@@ -66,12 +67,7 @@ void Controller::setConnection(Connection* c) {
 
     ui->statusBar->showMessage("Connectet with https://hush-lightwallet.de");
 
-    // See if we need to remove the reindex/rescan flags from the hush.conf file
-    auto hushConfLocation = Settings::getInstance()->gethushdConfLocation();
-    Settings::removeFromhushConf(hushConfLocation, "rescan");
-    Settings::removeFromhushConf(hushConfLocation, "reindex");
-
-    // If we're allowed to get the hush Price, get the prices
+    // If we're allowed to get the Hush Price, get the prices
     if (Settings::getInstance()->getAllowFetchPrices())
         refreshhushPrice();
 
@@ -96,18 +92,12 @@ void Controller::fillTxJsonParams(json& allRecepients, Tx tx) {
         // Construct the JSON params
         json rec = json::object();
         rec["address"]      = toAddr.addr.toStdString();
-        rec["amount"]       = toAddr.amount * 100000000;
+        rec["amount"]       = toAddr.amount.toqint64();
         if (Settings::isZAddress(toAddr.addr) && !toAddr.memo.trimmed().isEmpty())
             rec["memo"]     = toAddr.memo.toStdString();
 
         allRecepients.push_back(rec);
     }
-
-    // // Add fees if custom fees are allowed.
-    // if (Settings::getInstance()->getAllowCustomFees()) {
-    //     params.push_back(1); // minconf
-    //     params.push_back(tx.fee);
-    // }
 }
 
 
@@ -120,9 +110,10 @@ void Controller::noConnection() {
     main->ui->statusBar->showMessage(QObject::tr("No Connection"), 1000);
 
     // Clear balances table.
-    QMap<QString, double> emptyBalances;
+    QMap<QString, CAmount> emptyBalances;
     QList<UnspentOutput>  emptyOutputs;
-    balancesTableModel->setNewData(emptyBalances, emptyOutputs);
+    QList<QString>        emptyAddresses;
+    balancesTableModel->setNewData(emptyAddresses, emptyAddresses, emptyBalances, emptyOutputs);
 
     // Clear Transactions table.
     QList<TransactionItem> emptyTxs;
@@ -136,9 +127,6 @@ void Controller::noConnection() {
     ui->balSheilded->setToolTip("");
     ui->balTransparent->setToolTip("");
     ui->balTotal->setToolTip("");
-
-    // Clear send tab from address
-    ui->inputsCombo->clear();
 }
 
 /// This will refresh all the balance data from hushd
@@ -177,12 +165,15 @@ void Controller::getInfoThenRefresh(bool force) {
         ui->blockHeight->setText(QString::number(curBlock));
 
         // Connected, so display checkmark.
+        auto tooltip = Settings::getInstance()->getSettings().server + "\n" + QString::fromStdString(reply.dump());
         QIcon i(":/icons/res/connected.gif");
-        main->statusLabel->setText( "connected" "(" + QString::number(curBlock) + ")");
+        main->statusLabel->setText(chainName + "(" + QString::number(curBlock) + ")");
         main->statusLabel->setText(" HUSH/USD=$" + QString::number( (double) Settings::getInstance()->gethushPrice() ));
+        main->statusLabel->setToolTip(tooltip);
         main->statusIcon->setPixmap(i.pixmap(16, 16));
-        
-      //int version = reply["version"].get<json::string_t>();
+        main->statusIcon->setToolTip(tooltip);
+
+        //int version = reply["version"].get<json::string_t>();
         int version = 1;
         Settings::getInstance()->sethushdVersion(version);
        ui->Version->setText(QString::fromStdString(reply["version"].get<json::string_t>())); 
@@ -255,33 +246,33 @@ void Controller::updateUI(bool anyUnconfirmed) {
     ui->unconfirmedWarning->setVisible(anyUnconfirmed);
 
     // Update balances model data, which will update the table too
-    balancesTableModel->setNewData(model->getAllBalances(), model->getUTXOs());
-
-    // Update from address
-    main->updateFromCombo();
+    balancesTableModel->setNewData(model->getAllZAddresses(), model->getAllTAddresses(), model->getAllBalances(), model->getUTXOs());
 };
 
 // Function to process reply of the listunspent and z_listunspent API calls, used below.
-bool Controller::processUnspent(const json& reply, QMap<QString, double>* balancesMap, QList<UnspentOutput>* newUtxos) {
-    bool anyUnconfirmed = false;
-
-    auto processFn = [=](const json& array) {
+void Controller::processUnspent(const json& reply, QMap<QString, CAmount>* balancesMap, QList<UnspentOutput>* unspentOutputs) {
+    auto processFn = [=](const json& array) {        
         for (auto& it : array) {
             QString qsAddr  = QString::fromStdString(it["address"]);
             int block       = it["created_in_block"].get<json::number_unsigned_t>();
             QString txid    = QString::fromStdString(it["created_in_txid"]);
-            QString amount  = Settings::getDecimalString(it["value"].get<json::number_float_t>());
+            CAmount amount  = CAmount::fromqint64(it["value"].get<json::number_unsigned_t>());
 
-            newUtxos->push_back(UnspentOutput{ qsAddr, txid, amount, block, true });
+            bool spendable = it["unconfirmed_spent"].is_null() && it["spent"].is_null();    // TODO: Wait for 4 confirmations
+            bool pending   = !it["unconfirmed_spent"].is_null();
 
-            (*balancesMap)[qsAddr] = ((*balancesMap)[qsAddr] + (it["value"].get<json::number_float_t>()) /100000000);
-        }    
+            unspentOutputs->push_back(UnspentOutput{ qsAddr, txid, amount, block, spendable, pending });
+            if (spendable) {
+                (*balancesMap)[qsAddr] = (*balancesMap)[qsAddr] +
+                                         CAmount::fromqint64(it["value"].get<json::number_unsigned_t>());
+            }
+        }
     };
 
     processFn(reply["unspent_notes"].get<json::array_t>());
     processFn(reply["utxos"].get<json::array_t>());
-
-    return anyUnconfirmed;
+    processFn(reply["pending_notes"].get<json::array_t>());
+    processFn(reply["pending_utxos"].get<json::array_t>());
 };
 
 void Controller::refreshBalances() {    
@@ -290,36 +281,53 @@ void Controller::refreshBalances() {
 
     // 1. Get the Balances
     zrpc->fetchBalance([=] (json reply) {    
-        auto balT      = reply["tbalance"].get<json::number_float_t>();
-        auto balZ      = reply["zbalance"].get<json::number_float_t>();
-        auto balTotal  = balT + balZ;
+        CAmount balT        = CAmount::fromqint64(reply["tbalance"].get<json::number_unsigned_t>());
+        CAmount balZ        = CAmount::fromqint64(reply["zbalance"].get<json::number_unsigned_t>());
+        CAmount balVerified = CAmount::fromqint64(reply["verified_zbalance"].get<json::number_unsigned_t>());
+        
+        CAmount balTotal     = balT + balZ;
+        CAmount balAvailable = balT + balVerified;
 
+        // This is for the websockets
         AppDataModel::getInstance()->setBalances(balT, balZ);
+        
+        // This is for the datamodel
+        model->setAvailableBalance(balAvailable);
 
-        ui->balSheilded   ->setText(Settings::gethushDisplayFormat(balZ /100000000));
-        ui->balTransparent->setText(Settings::gethushDisplayFormat(balT /100000000));
-        ui->balTotal      ->setText(Settings::gethushDisplayFormat(balTotal /100000000));
+        // Balances table
+        ui->balSheilded   ->setText(balZ.toDecimalhushString());
+        ui->balVerified   ->setText(balVerified.toDecimalhushString());
+        ui->balTransparent->setText(balT.toDecimalhushString());
+        ui->balTotal      ->setText(balTotal.toDecimalhushString());
 
+        ui->balSheilded   ->setToolTip(balZ.toDecimalUSDString());
+        ui->balVerified   ->setToolTip(balVerified.toDecimalUSDString());
+        ui->balTransparent->setToolTip(balT.toDecimalUSDString());
+        ui->balTotal      ->setToolTip(balTotal.toDecimalUSDString());
 
-        ui->balSheilded   ->setToolTip(Settings::gethushDisplayFormat(balZ /100000000));
-        ui->balTransparent->setToolTip(Settings::gethushDisplayFormat(balT /100000000));
-        ui->balTotal      ->setToolTip(Settings::gethushDisplayFormat(balTotal /100000000));
-
-      
+        // Send tab
+        ui->txtAvailablehush->setText(balAvailable.toDecimalhushString());
+        ui->txtAvailableUSD->setText(balAvailable.toDecimalUSDString());
     });
 
     // 2. Get the UTXOs
     // First, create a new UTXO list. It will be replacing the existing list when everything is processed.
-    auto newUtxos = new QList<UnspentOutput>();
-    auto newBalances = new QMap<QString, double>();
+    auto newUnspentOutputs = new QList<UnspentOutput>();
+    auto newBalances = new QMap<QString, CAmount>();
 
     // Call the Transparent and Z unspent APIs serially and then, once they're done, update the UI
     zrpc->fetchUnspent([=] (json reply) {
-        auto anyUnconfirmed = processUnspent(reply, newBalances, newUtxos);
+        processUnspent(reply, newBalances, newUnspentOutputs);
 
         // Swap out the balances and UTXOs
         model->replaceBalances(newBalances);
-        model->replaceUTXOs(newUtxos);
+        model->replaceUTXOs(newUnspentOutputs);
+
+        // Find if any output is not spendable or is pending
+        bool anyUnconfirmed = std::find_if(newUnspentOutputs->constBegin(), newUnspentOutputs->constEnd(), 
+                                    [=](const UnspentOutput& u) -> bool { 
+                                        return !u.spendable ||  u.pending; 
+                              }) != newUnspentOutputs->constEnd();
 
         updateUI(anyUnconfirmed);
 
@@ -336,7 +344,7 @@ void Controller::refreshTransactions() {
 
         for (auto& it : reply.get<json::array_t>()) {  
             QString address;
-            quint64 total_amount;
+            CAmount total_amount;
             QList<TransactionItemDetail> items;
 
             // First, check if there's outgoing metadata
@@ -344,7 +352,9 @@ void Controller::refreshTransactions() {
             
                 for (auto o: it["outgoing_metadata"].get<json::array_t>()) {
                     QString address = QString::fromStdString(o["address"]);
-                  double amount = -1 * o ["value"].get<json::number_float_t>() /100000000;  // Sent items are -ve
+                    
+                    // Sent items are -ve
+                    CAmount amount = CAmount::fromqint64(-1 * o["value"].get<json::number_unsigned_t>()); 
                     
                    // Check for Memos
                    
@@ -355,7 +365,7 @@ void Controller::refreshTransactions() {
                      }
                     
                     items.push_back(TransactionItemDetail{address, amount, memo});
-                    total_amount += amount;
+                    total_amount = total_amount + amount;
                 }
 
                 if (items.length() == 1) {
@@ -366,10 +376,10 @@ void Controller::refreshTransactions() {
 
                 txdata.push_back(TransactionItem{
                    "Sent",
-                   it["datetime"].get<json::number_unsigned_t>(),
+                   it["datetime"].get<json::number_integer_t>(),
                    address,
                    QString::fromStdString(it["txid"]),
-                   model->getLatestBlock() - it["block_height"].get<json::number_unsigned_t>(), 
+                   model->getLatestBlock() - it["block_height"].get<json::number_integer_t>(),
                    items
                 });
             } else {
@@ -379,17 +389,17 @@ void Controller::refreshTransactions() {
 
                 items.push_back(TransactionItemDetail{
                     address,
-                    it["amount"].get<json::number_float_t>() /100000000,
+                    CAmount::fromqint64(it["amount"].get<json::number_integer_t>()),
                     ""
                 });
 
   
                 TransactionItem tx{
                     "Receive",
-                    it["datetime"].get<json::number_unsigned_t>(),
+                    it["datetime"].get<json::number_integer_t>(),
                     address,
                     QString::fromStdString(it["txid"]),
-                    model->getLatestBlock() - it["block_height"].get<json::number_unsigned_t>(),
+                    model->getLatestBlock() - it["block_height"].get<json::number_integer_t>() + 1,
                     items
                 };
 
@@ -436,10 +446,10 @@ void Controller::executeTransaction(Tx tx,
     zrpc->sendTransaction(QString::fromStdString(params.dump()), [=](const json& reply) {
         if (reply.find("txid") == reply.end()) {
             error("", "Couldn't understand Response: " + QString::fromStdString(reply.dump()));
+        } else {
+            QString txid = QString::fromStdString(reply["txid"].get<json::string_t>());
+            submitted(txid);
         }
-
-        QString txid = QString::fromStdString(reply["txid"].get<json::string_t>());
-        submitted(txid);
     },
     [=](QString errStr) {
         error("", errStr);

@@ -3,6 +3,7 @@
 
 #include "precompiled.h"
 
+#include "camount.h"
 #include "datamodel.h"
 #include "balancestablemodel.h"
 #include "txtablemodel.h"
@@ -20,15 +21,6 @@ struct WatchedTx {
     std::function<void(QString, QString)> error;
 };
 
-
-struct MigrationStatus {
-    bool            available;     // Whether the underlying hushd supports migration?
-    bool            enabled;
-    QString         saplingAddress;
-    double          unmigrated;
-    double          migrated;
-    QList<QString>  txids;
-};
 
 class Controller
 {
@@ -78,7 +70,7 @@ private:
 
     void refreshTransactions();    
 
-    bool processUnspent     (const json& reply, QMap<QString, double>* newBalances, QList<UnspentOutput>* newUtxos);
+    void processUnspent     (const json& reply, QMap<QString, CAmount>* newBalances, QList<UnspentOutput>* newUnspentOutputs);
     void updateUI           (bool anyUnconfirmed);
 
     void getInfoThenRefresh(bool force);
@@ -89,7 +81,7 @@ private:
     BalancesTableModel*         balancesTableModel          = nullptr;
 
     DataModel*                  model;
-    LiteInterface*               zrpc;
+    LiteInterface*              zrpc;
 
     QTimer*                     timer;
     QTimer*                     txTimer;

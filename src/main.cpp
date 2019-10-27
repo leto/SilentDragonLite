@@ -150,9 +150,8 @@ public:
         parser.setApplicationDescription("Shielded desktop light wallet for hush");
         parser.addHelpOption();
 
-       
-        // Positional argument will specify a hush payment URI
-        parser.addPositionalArgument("HUSHURI", "An optional hush URI to pay");
+        // Positional argument will specify a zcash payment URI
+        parser.addPositionalArgument("zcashURI", "An optional hush URI to pay");
 
         parser.process(a);
 
@@ -173,7 +172,7 @@ public:
         qDebug() << "Loading locale " << locale;
         
         QTranslator translator;
-        translator.load(QString(":/translations/res/zec_qt_wallet_") + locale);
+        translator.load(QString(":/translations/res/hush_qt_wallet_") + locale);
         a.installTranslator(&translator);
 
         QIcon icon(":/icons/res/icon.ico");
@@ -203,9 +202,10 @@ public:
         }
 
         Settings::getInstance()->setUseEmbedded(false);
+        
 
         w = new MainWindow();
-        w->setWindowTitle("SilentDragonLite v" + QString(APP_VERSION));
+        w->setWindowTitle("SilentDragon Lite v" + QString(APP_VERSION));
 
         // If there was a payment URI on the command line, pay it
         if (parser.positionalArguments().length() > 0) {
