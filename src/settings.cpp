@@ -153,7 +153,7 @@ void Settings::saveRestoreTableHeader(QTableView* table, QDialog* d, QString tab
 }
 
 QString Settings::getDefaultServer() {
-    return "https://hush-lightwallet.de:439/";
+    return "https://hush-lightwallet.de:443";
 }
 
 void Settings::openAddressInExplorer(QString address) {

@@ -65,7 +65,7 @@ void Controller::setConnection(Connection* c) {
 
     this->zrpc->setConnection(c);
 
-    ui->statusBar->showMessage("Connectet with https://hush-lightwallet.de");
+    ui->statusBar->showMessage("");
 
     // If we're allowed to get the Hush Price, get the prices
     if (Settings::getInstance()->getAllowFetchPrices())
