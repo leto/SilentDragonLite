@@ -36,7 +36,7 @@ public:
     void refreshAddresses();    
     
     void checkForUpdate(bool silent = true);
-    void refreshhushPrice();
+    void refreshZECPrice();
     //void getZboardTopics(std::function<void(QMap<QString, QString>)> cb);
 
     void executeStandardUITransaction(Tx tx); 

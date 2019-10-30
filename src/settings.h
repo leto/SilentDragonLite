@@ -63,8 +63,8 @@ public:
 
     bool    isSaplingActive();
 
-    void    sethushPrice(double p) { hushPrice = p; }
-    double  gethushPrice();
+    void    setZECPrice(double p) { ZECPrice = p; }
+    double  getZECPrice();
 
     // Static stuff
     static const QString txidStatusMessage;
@@ -116,7 +116,7 @@ private:
     bool    _useEmbedded      = false;
     bool    _headless         = false;
     
-    double  hushPrice          = 0.0;
+    double  ZECPrice          = 0.0;
 };
 
 #endif // SETTINGS_H
