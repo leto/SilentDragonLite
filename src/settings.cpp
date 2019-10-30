@@ -102,8 +102,8 @@ bool Settings::isSaplingActive() {
     return  (isTestnet() && getBlockNumber() > 0) || (!isTestnet() && getBlockNumber() > 0);
 }
 
-double Settings::gethushPrice() { 
-    return hushPrice; 
+double Settings::getZECPrice() { 
+    return ZECPrice; 
 }
 
 bool Settings::getCheckForUpdates() {
