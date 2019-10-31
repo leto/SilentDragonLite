@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "addressbook.h"
 #include "viewalladdresses.h"
+#include "ui_encryption.h"
 #include "ui_mainwindow.h"
 #include "ui_mobileappconnector.h"
 #include "ui_addressbook.h"
@@ -22,8 +23,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-	    
-
 	// Include css    
     QString theme_name;
     try
@@ -59,7 +58,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // File a bug
     QObject::connect(ui->actionFile_a_bug, &QAction::triggered, [=]() {
-        QDesktopServices::openUrl(QUrl("https://github.com/MyHush/silentdragonlite/issues/new"));
+        QDesktopServices::openUrl(QUrl("https://github.com/DenioD/SilentDragonLite/issues/new"));
     });
 
     // Set up check for updates action
@@ -83,11 +82,20 @@ MainWindow::MainWindow(QWidget *parent) :
         payhushURI();
     });
 
+    // Wallet encryption
+    QObject::connect(ui->actionEncrypt_Wallet, &QAction::triggered, [=]() {
+        encryptWallet();
+    });
+
+    QObject::connect(ui->actionRemove_Wallet_Encryption, &QAction::triggered, [=]() {
+        removeWalletEncryption();
+    });
+
     // Export All Private Keys
     QObject::connect(ui->actionExport_All_Private_Keys, &QAction::triggered, this, &MainWindow::exportAllKeys);
 
     // Backup wallet.dat
-    QObject::connect(ui->actionBackup_wallet_dat, &QAction::triggered, this, &MainWindow::backupWalletDat);
+    QObject::connect(ui->actionExport_Seed, &QAction::triggered, this, &MainWindow::exportSeed);
 
     // Export transactions
     QObject::connect(ui->actionExport_transactions, &QAction::triggered, this, &MainWindow::exportTransactions);
@@ -213,6 +221,128 @@ void MainWindow::closeEvent(QCloseEvent* event) {
     // Bubble up
     if (event)
         QMainWindow::closeEvent(event);
+}
+
+
+void MainWindow::encryptWallet() {
+    // Check if wallet is already encrypted
+    auto encStatus = rpc->getModel()->getEncryptionStatus();
+    if (encStatus.first) {
+        QMessageBox::information(this, tr("Wallet is already encrypted"), 
+                    tr("Your wallet is already encrypted with a password.\nPlease use 'Remove Wallet Encryption' if you want to remove the wallet encryption."),
+                    QMessageBox::Ok
+                );
+        return;
+    }
+
+    QDialog d(this);
+    Ui_encryptionDialog ed;
+    ed.setupUi(&d);
+
+    // Handle edits on the password box
+    auto fnPasswordEdited = [=](const QString&) {
+        // Enable the OK button if the passwords match.
+        if (!ed.txtPassword->text().isEmpty() && 
+                ed.txtPassword->text() == ed.txtConfirmPassword->text()) {
+            ed.lblPasswordMatch->setText("");
+            ed.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+        } else {
+            ed.lblPasswordMatch->setText(tr("Passwords don't match"));
+            ed.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+        }
+    };
+
+    QObject::connect(ed.txtConfirmPassword, &QLineEdit::textChanged, fnPasswordEdited);
+    QObject::connect(ed.txtPassword, &QLineEdit::textChanged, fnPasswordEdited);
+
+    ed.txtPassword->setText("");
+    ed.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+
+    auto fnShowError = [=](QString title, const json& res) {
+        QMessageBox::critical(this, title,
+            tr("Error was:\n") + QString::fromStdString(res.dump()),
+            QMessageBox::Ok
+        );
+    };
+
+    if (d.exec() == QDialog::Accepted) {
+        rpc->encryptWallet(ed.txtPassword->text(), [=](json res) {
+            if (isJsonSuccess(res)) {
+                // Save the wallet
+                rpc->saveWallet([=] (json reply) {
+                    if (isJsonSuccess(reply)) {
+                        QMessageBox::information(this, tr("Wallet Encrypted"), 
+                            tr("Your wallet was successfully encrypted! The password will be needed to send funds or export private keys."),
+                            QMessageBox::Ok
+                        );
+                    } else {
+                        fnShowError(tr("Wallet Encryption Failed"), reply);
+                    }
+                });
+
+                // And then refresh the UI
+                rpc->refresh(true);
+            } else {
+                fnShowError(tr("Wallet Encryption Failed"), res);
+            }
+        });
+    }
+}
+
+void MainWindow::removeWalletEncryption() {
+    // Check if wallet is already encrypted
+    auto encStatus = rpc->getModel()->getEncryptionStatus();
+    if (!encStatus.first) {
+        QMessageBox::information(this, tr("Wallet is not encrypted"), 
+                    tr("Your wallet is not encrypted with a password."),
+                    QMessageBox::Ok
+                );
+        return;
+    }
+
+    bool ok;
+    QString password = QInputDialog::getText(this, tr("Wallet Password"), 
+                            tr("Please enter your wallet password"), QLineEdit::Password, "", &ok);
+
+    // If cancel was pressed, just return
+    if (!ok) {
+        return;
+    }
+
+    if (password.isEmpty()) {
+        QMessageBox::critical(this, tr("Wallet Decryption Failed"),
+            tr("Please enter a password to decrypt your wallet!"),
+            QMessageBox::Ok
+        );
+        return;
+    }
+
+    rpc->removeWalletEncryption(password, [=] (json res) {
+        if (isJsonSuccess(res)) {
+                // Save the wallet
+                rpc->saveWallet([=] (json reply) {
+                    if(isJsonSuccess(reply)) {
+                        QMessageBox::information(this, tr("Wallet Encryption Removed"), 
+                            tr("Your wallet was successfully decrypted! You will no longer need a password to send funds or export private keys."),
+                            QMessageBox::Ok
+                        );
+                    } else {
+                        QMessageBox::critical(this, tr("Wallet Decryption Failed"),
+                            QString::fromStdString(reply["error"].get<json::string_t>()),
+                            QMessageBox::Ok
+                        );
+                    }
+                });
+
+                // And then refresh the UI
+                rpc->refresh(true);
+            } else {
+                QMessageBox::critical(this, tr("Wallet Decryption Failed"),
+                    QString::fromStdString(res["error"].get<json::string_t>()),
+                    QMessageBox::Ok
+                );
+            }
+    });            
 }
 
 void MainWindow::setupStatusBar() {
@@ -531,44 +661,71 @@ void MainWindow::exportTransactions() {
 } 
 
 /**
- * Backup the wallet.dat file. This is kind of a hack, since it has to read from the filesystem rather than an RPC call
- * This might fail for various reasons - Remote hushd, non-standard locations, custom params passed to hushd, many others
+ * Export the seed phrase.
 */
-void MainWindow::backupWalletDat() {
+void MainWindow::exportSeed() {
     if (!rpc->getConnection())
         return;
+
+
+    QDialog d(this);
+    Ui_PrivKey pui;
+    pui.setupUi(&d);
+    
+    // Make the window big by default
+    auto ps = this->geometry();
+    QMargins margin = QMargins() + 50;
+    d.setGeometry(ps.marginsRemoved(margin));
+
+    Settings::saveRestore(&d);
+
+    pui.privKeyTxt->setPlainText(tr("This might take several minutes. Loading..."));
+    pui.privKeyTxt->setReadOnly(true);
+    pui.privKeyTxt->setLineWrapMode(QPlainTextEdit::LineWrapMode::NoWrap);
+
+    pui.helpLbl->setText(tr("This is your wallet seed. Please back it up carefully and safely."));
+
+    // Disable the save button until it finishes loading
+    pui.buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
+    pui.buttonBox->button(QDialogButtonBox::Ok)->setVisible(false);
+
+    // Wire up save button
+    QObject::connect(pui.buttonBox->button(QDialogButtonBox::Save), &QPushButton::clicked, [=] () {
+        QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
+                           "zcash-seed.txt");
+        QFile file(fileName);
+        if (!file.open(QIODevice::WriteOnly)) {
+            QMessageBox::information(this, tr("Unable to open file"), file.errorString());
+            return;
+        }        
+        QTextStream out(&file);
+        out << pui.privKeyTxt->toPlainText();
+    });
+
+    rpc->fetchSeed([=](json reply) {
+         if (isJsonError(reply)) {
+            pui.privKeyTxt->setPlainText(tr("Error loading wallet seed: ") + QString::fromStdString(reply["error"]));
+            pui.buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
+
+            return;
+        }
+
+        pui.privKeyTxt->setPlainText(QString::fromStdString(reply.dump()));
+        pui.buttonBox->button(QDialogButtonBox::Save)->setEnabled(true);
+    });
+
+    
+    d.exec();
 }
-
-    // QDir hushdir(rpc->getConnection()->config->hushDir);
-    // QString backupDefaultName = "hush-wallet-backup-" + QDateTime::currentDateTime().toString("yyyyMMdd") + ".dat";
-
-    // if (Settings::getInstance()->isTestnet()) {
-    //     hushdir.cd("testnet3");
-    //     backupDefaultName = "testnet-" + backupDefaultName;
-    // }
-    
-    // QFile wallet(hushdir.filePath("wallet.dat"));
-    // if (!wallet.exists()) {
-    //     QMessageBox::critical(this, tr("No wallet.dat"), tr("Couldn't find the wallet.dat on this computer") + "\n" +
-    //         tr("You need to back it up from the machine hushd is running on"), QMessageBox::Ok);
-    //     return;
-    // }
-    
-    // QUrl backupName = QFileDialog::getSaveFileUrl(this, tr("Backup wallet.dat"), backupDefaultName, "Data file (*.dat)");
-    // if (backupName.isEmpty())
-    //     return;
-
-    // if (!wallet.copy(backupName.toLocalFile())) {
-    //     QMessageBox::critical(this, tr("Couldn't backup"), tr("Couldn't backup the wallet.dat file.") + 
-    //         tr("You need to back it up manually."), QMessageBox::Ok);
-    // }
-
 
 void MainWindow::exportAllKeys() {
     exportKeys("");
 }
 
 void MainWindow::exportKeys(QString addr) {
+    if (!rpc->getConnection())
+        return;
+
     bool allKeys = addr.isEmpty() ? true : false;
 
     QDialog d(this);
@@ -616,7 +773,7 @@ void MainWindow::exportKeys(QString addr) {
         if (! *(isDialogAlive.get()) ) return;
 
         if (reply.is_discarded() || !reply.is_array()) {
-            pui.privKeyTxt->setPlainText(tr("Error loading private keys"));
+            pui.privKeyTxt->setPlainText(tr("Error loading private keys: ") + QString::fromStdString(reply.dump()));
             pui.buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
 
             return;
