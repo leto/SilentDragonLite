@@ -122,7 +122,7 @@ private:
     void importPrivKey();
     void exportAllKeys();
     void exportKeys(QString addr = "");
-    void backupWalletDat();
+    void exportSeed();
     void exportTransactions();
 
     void doImport(QList<QString>* keys);
