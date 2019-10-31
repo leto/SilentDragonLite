@@ -93,6 +93,7 @@ HEADERS += \
     lib/silentdragonlitelib.h 
 
 FORMS += \
+    src/encryption.ui \
     src/mainwindow.ui \
     src/migration.ui \
     src/newseed.ui \
@@ -146,6 +147,8 @@ else:win32:  librust.target   = $$PWD/lib/target/x86_64-pc-windows-gnu/release/s
 
 unix:        librust.commands = $(MAKE) -C $$PWD/lib 
 else:win32:  librust.commands = $(MAKE) -C $$PWD/lib winrelease
+
+librust.depends = lib/Cargo.toml lib/src/lib.rs
 
 librustclean.commands = "rm -rf $$PWD/lib/target"
 distclean.depends += librustclean
