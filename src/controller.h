@@ -3,6 +3,7 @@
 
 #include "precompiled.h"
 
+#include "camount.h"
 #include "datamodel.h"
 #include "balancestablemodel.h"
 #include "txtablemodel.h"
@@ -21,15 +22,6 @@ struct WatchedTx {
 };
 
 
-struct MigrationStatus {
-    bool            available;     // Whether the underlying hushd supports migration?
-    bool            enabled;
-    QString         saplingAddress;
-    double          unmigrated;
-    double          migrated;
-    QList<QString>  txids;
-};
-
 class Controller
 {
 public:
@@ -44,9 +36,8 @@ public:
     void refreshAddresses();    
     
     void checkForUpdate(bool silent = true);
-    void refreshhushPrice();
-    //void getZboardTopics(std::function<void(QMap<QString, QString>)> cb);
-
+    void refreshZECPrice();
+    
     void executeStandardUITransaction(Tx tx); 
 
     void executeTransaction(Tx tx, 
@@ -61,11 +52,52 @@ public:
     void noConnection();
     bool isEmbedded() { return ehushd != nullptr; }
 
-    void createNewZaddr(bool sapling, const std::function<void(json)>& cb) { zrpc->createNewZaddr(sapling, cb); }
-    void createNewTaddr(const std::function<void(json)>& cb) { zrpc->createNewTaddr(cb); }
+    void encryptWallet(QString password, const std::function<void(json)>& cb) { 
+        zrpc->encryptWallet(password, cb); 
+    }
+    
+    void removeWalletEncryption(QString password, const std::function<void(json)>& cb) { 
+                zrpc->removeWalletEncryption(password, cb); }
 
-    void fetchPrivKey(QString addr, const std::function<void(json)>& cb) { zrpc->fetchPrivKey(addr, cb); }
-    void fetchAllPrivKeys(const std::function<void(json)> cb) { zrpc->fetchAllPrivKeys(cb); }
+    void saveWallet(const std::function<void(json)>& cb) { zrpc->saveWallet(cb); }
+
+    void createNewZaddr(bool sapling, const std::function<void(json)>& cb) { 
+        unlockIfEncrypted([=] () {
+            zrpc->createNewZaddr(sapling, cb);
+        }, [=](){});
+    }
+    void createNewTaddr(const std::function<void(json)>& cb) { 
+        unlockIfEncrypted([=] () {
+            zrpc->createNewTaddr(cb); 
+        }, [=](){});
+    }
+
+    void fetchPrivKey(QString addr, const std::function<void(json)>& cb) { 
+        unlockIfEncrypted([=] () {
+            zrpc->fetchPrivKey(addr, cb); 
+        },
+        [=]() {
+            cb({ {"error", "Failed to unlock wallet"} });
+        });
+    }
+
+    void fetchAllPrivKeys(const std::function<void(json)> cb) { 
+        unlockIfEncrypted([=] () {
+            zrpc->fetchAllPrivKeys(cb); 
+        },
+        [=]() {
+            cb({ {"error", "Failed to unlock wallet"} });
+        });
+    }
+
+    void fetchSeed(const std::function<void(json)> cb) {
+        unlockIfEncrypted([=] () {
+            zrpc->fetchSeed(cb); 
+        },
+        [=]() {
+            cb({ {"error", "Failed to unlock wallet"} });
+        });
+    }
 
     // void importZPrivKey(QString addr, bool rescan, const std::function<void(json)>& cb) { zrpc->importZPrivKey(addr, rescan, cb); }
     // void importTPrivKey(QString addr, bool rescan, const std::function<void(json)>& cb) { zrpc->importTPrivKey(addr, rescan, cb); }
@@ -78,10 +110,13 @@ private:
 
     void refreshTransactions();    
 
-    bool processUnspent     (const json& reply, QMap<QString, double>* newBalances, QList<UnspentOutput>* newUtxos);
+    void processUnspent     (const json& reply, QMap<QString, CAmount>* newBalances, QList<UnspentOutput>* newUnspentOutputs);
     void updateUI           (bool anyUnconfirmed);
+    void updateUIBalances   ();
 
-    void getInfoThenRefresh(bool force);
+    void getInfoThenRefresh (bool force);
+
+    void unlockIfEncrypted  (std::function<void(void)> cb, std::function<void(void)> error);
     
     QProcess*                   ehushd                     = nullptr;
 
@@ -89,7 +124,7 @@ private:
     BalancesTableModel*         balancesTableModel          = nullptr;
 
     DataModel*                  model;
-    LiteInterface*               zrpc;
+    LiteInterface*              zrpc;
 
     QTimer*                     timer;
     QTimer*                     txTimer;

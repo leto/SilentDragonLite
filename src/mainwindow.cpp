@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "addressbook.h"
 #include "viewalladdresses.h"
+#include "ui_encryption.h"
 #include "ui_mainwindow.h"
 #include "ui_mobileappconnector.h"
 #include "ui_addressbook.h"
@@ -22,8 +23,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-	    
-
 	// Include css    
     QString theme_name;
     try
@@ -37,9 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->slot_change_theme(theme_name);
 
-	    
     ui->setupUi(this);
-    logger = new Logger(this, QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("silentdragonlite-cli-wallet.log"));
+    logger = new Logger(this, QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("silentdragonlite-wallet.log"));
 
     // Status Bar
     setupStatusBar();
@@ -59,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // File a bug
     QObject::connect(ui->actionFile_a_bug, &QAction::triggered, [=]() {
-        QDesktopServices::openUrl(QUrl("https://github.com/MyHush/silentdragonlite/issues/new"));
+        QDesktopServices::openUrl(QUrl("https://github.com/DenioD/SilentDragonLite/issues/new"));
     });
 
     // Set up check for updates action
@@ -83,11 +81,20 @@ MainWindow::MainWindow(QWidget *parent) :
         payhushURI();
     });
 
+    // Wallet encryption
+    QObject::connect(ui->actionEncrypt_Wallet, &QAction::triggered, [=]() {
+        encryptWallet();
+    });
+
+    QObject::connect(ui->actionRemove_Wallet_Encryption, &QAction::triggered, [=]() {
+        removeWalletEncryption();
+    });
+
     // Export All Private Keys
     QObject::connect(ui->actionExport_All_Private_Keys, &QAction::triggered, this, &MainWindow::exportAllKeys);
 
     // Backup wallet.dat
-    QObject::connect(ui->actionBackup_wallet_dat, &QAction::triggered, this, &MainWindow::backupWalletDat);
+    QObject::connect(ui->actionExport_Seed, &QAction::triggered, this, &MainWindow::exportSeed);
 
     // Export transactions
     QObject::connect(ui->actionExport_transactions, &QAction::triggered, this, &MainWindow::exportTransactions);
@@ -179,13 +186,19 @@ void MainWindow::restoreSavedStates() {
     QSettings s;
     restoreGeometry(s.value("geometry").toByteArray());
 
-    ui->balancesTable->horizontalHeader()->restoreState(s.value("baltablegeometry").toByteArray());
-    ui->transactionsTable->horizontalHeader()->restoreState(s.value("tratablegeometry").toByteArray());
+    auto balance_geom = s.value("baltablegeom");
+    if (balance_geom == QVariant()) {
+        ui->balancesTable->setColumnWidth(0, 500);
+    } else {
+        ui->balancesTable->horizontalHeader()->restoreState(balance_geom.toByteArray());
+    }
 
-    // Explicitly set the tx table resize headers, since some previous values may have made them
-    // non-expandable.
-    ui->transactionsTable->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Interactive);
-    ui->transactionsTable->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Interactive);
+    auto tx_geom = s.value("tratablegeom");
+    if (tx_geom == QVariant()) {
+        ui->transactionsTable->setColumnWidth(1, 500);
+    } else {
+        ui->transactionsTable->horizontalHeader()->restoreState(tx_geom.toByteArray());
+    }
 }
 
 void MainWindow::doClose() {
@@ -196,8 +209,8 @@ void MainWindow::closeEvent(QCloseEvent* event) {
     QSettings s;
 
     s.setValue("geometry", saveGeometry());
-    s.setValue("baltablegeometry", ui->balancesTable->horizontalHeader()->saveState());
-    s.setValue("tratablegeometry", ui->transactionsTable->horizontalHeader()->saveState());
+    s.setValue("baltablegeom", ui->balancesTable->horizontalHeader()->saveState());
+    s.setValue("tratablegeom", ui->transactionsTable->horizontalHeader()->saveState());
 
     s.sync();
 
@@ -207,6 +220,128 @@ void MainWindow::closeEvent(QCloseEvent* event) {
     // Bubble up
     if (event)
         QMainWindow::closeEvent(event);
+}
+
+
+void MainWindow::encryptWallet() {
+    // Check if wallet is already encrypted
+    auto encStatus = rpc->getModel()->getEncryptionStatus();
+    if (encStatus.first) {
+        QMessageBox::information(this, tr("Wallet is already encrypted"), 
+                    tr("Your wallet is already encrypted with a password.\nPlease use 'Remove Wallet Encryption' if you want to remove the wallet encryption."),
+                    QMessageBox::Ok
+                );
+        return;
+    }
+
+    QDialog d(this);
+    Ui_encryptionDialog ed;
+    ed.setupUi(&d);
+
+    // Handle edits on the password box
+    auto fnPasswordEdited = [=](const QString&) {
+        // Enable the OK button if the passwords match.
+        if (!ed.txtPassword->text().isEmpty() && 
+                ed.txtPassword->text() == ed.txtConfirmPassword->text()) {
+            ed.lblPasswordMatch->setText("");
+            ed.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+        } else {
+            ed.lblPasswordMatch->setText(tr("Passwords don't match"));
+            ed.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+        }
+    };
+
+    QObject::connect(ed.txtConfirmPassword, &QLineEdit::textChanged, fnPasswordEdited);
+    QObject::connect(ed.txtPassword, &QLineEdit::textChanged, fnPasswordEdited);
+
+    ed.txtPassword->setText("");
+    ed.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+
+    auto fnShowError = [=](QString title, const json& res) {
+        QMessageBox::critical(this, title,
+            tr("Error was:\n") + QString::fromStdString(res.dump()),
+            QMessageBox::Ok
+        );
+    };
+
+    if (d.exec() == QDialog::Accepted) {
+        rpc->encryptWallet(ed.txtPassword->text(), [=](json res) {
+            if (isJsonResultSuccess(res)) {
+                // Save the wallet
+                rpc->saveWallet([=] (json reply) {
+                    if (isJsonResultSuccess(reply)) {
+                        QMessageBox::information(this, tr("Wallet Encrypted"), 
+                            tr("Your wallet was successfully encrypted! The password will be needed to send funds or export private keys."),
+                            QMessageBox::Ok
+                        );
+                    } else {
+                        fnShowError(tr("Wallet Encryption Failed"), reply);
+                    }
+                });
+
+                // And then refresh the UI
+                rpc->refresh(true);
+            } else {
+                fnShowError(tr("Wallet Encryption Failed"), res);
+            }
+        });
+    }
+}
+
+void MainWindow::removeWalletEncryption() {
+    // Check if wallet is already encrypted
+    auto encStatus = rpc->getModel()->getEncryptionStatus();
+    if (!encStatus.first) {
+        QMessageBox::information(this, tr("Wallet is not encrypted"), 
+                    tr("Your wallet is not encrypted with a password."),
+                    QMessageBox::Ok
+                );
+        return;
+    }
+
+    bool ok;
+    QString password = QInputDialog::getText(this, tr("Wallet Password"), 
+                            tr("Please enter your wallet password"), QLineEdit::Password, "", &ok);
+
+    // If cancel was pressed, just return
+    if (!ok) {
+        return;
+    }
+
+    if (password.isEmpty()) {
+        QMessageBox::critical(this, tr("Wallet Decryption Failed"),
+            tr("Please enter a password to decrypt your wallet!"),
+            QMessageBox::Ok
+        );
+        return;
+    }
+
+    rpc->removeWalletEncryption(password, [=] (json res) {
+        if (isJsonResultSuccess(res)) {
+                // Save the wallet
+                rpc->saveWallet([=] (json reply) {
+                    if(isJsonResultSuccess(reply)) {
+                        QMessageBox::information(this, tr("Wallet Encryption Removed"), 
+                            tr("Your wallet was successfully decrypted! You will no longer need a password to send funds or export private keys."),
+                            QMessageBox::Ok
+                        );
+                    } else {
+                        QMessageBox::critical(this, tr("Wallet Decryption Failed"),
+                            QString::fromStdString(reply["error"].get<json::string_t>()),
+                            QMessageBox::Ok
+                        );
+                    }
+                });
+
+                // And then refresh the UI
+                rpc->refresh(true);
+            } else {
+                QMessageBox::critical(this, tr("Wallet Decryption Failed"),
+                    QString::fromStdString(res["error"].get<json::string_t>()),
+                    QMessageBox::Ok
+                );
+            }
+    });            
 }
 
 void MainWindow::setupStatusBar() {
@@ -259,11 +394,6 @@ void MainWindow::setupSettingsModal() {
         settings.setupUi(&settingsDialog);
         Settings::saveRestore(&settingsDialog);
 
-        // Setup save sent check box
-        QObject::connect(settings.chkSaveTxs, &QCheckBox::stateChanged, [=](auto checked) {
-            Settings::getInstance()->setSaveZtxs(checked);
-        });
-
         // Setup theme combo
         int theme_index = settings.comboBoxTheme->findText(Settings::getInstance()->get_theme_name(), Qt::MatchExactly);
         settings.comboBoxTheme->setCurrentIndex(theme_index);
@@ -274,55 +404,15 @@ void MainWindow::setupSettingsModal() {
             QMessageBox::information(this, tr("Restart"), tr("Please restart Silentdragonlite to have the theme apply"), QMessageBox::Ok);
         });
 
-        // Save sent transactions
-        settings.chkSaveTxs->setChecked(Settings::getInstance()->getSaveZtxs());
-
-        // Custom fees
-        settings.chkCustomFees->setChecked(Settings::getInstance()->getAllowCustomFees());
-
-        // Auto shielding
-        settings.chkAutoShield->setChecked(Settings::getInstance()->getAutoShield());
-
         // Check for updates
         settings.chkCheckUpdates->setChecked(Settings::getInstance()->getCheckForUpdates());
 
         // Fetch prices
         settings.chkFetchPrices->setChecked(Settings::getInstance()->getAllowFetchPrices());
-
-        // Use Tor
-        bool isUsingTor = false;
-        if (rpc->getConnection() != nullptr) {
-            isUsingTor = !rpc->getConnection()->config->proxy.isEmpty();
-        }
-        settings.chkTor->setChecked(isUsingTor);
         
-        // Connection Settings
-        QIntValidator validator(0, 65535);
-        settings.port->setValidator(&validator);
-
-        // If values are coming from hush.conf, then disable all the fields
-        auto hushConfLocation = Settings::getInstance()->gethushdConfLocation();
-        if (!hushConfLocation.isEmpty()) {
-            settings.confMsg->setText("Settings are being read from \n" + hushConfLocation);
-            settings.hostname->setEnabled(false);
-            settings.port->setEnabled(false);
-            settings.rpcuser->setEnabled(false);
-            settings.rpcpassword->setEnabled(false);
-        }
-        else {
-            settings.confMsg->setText("No local HUSH3.conf found. Please configure connection manually.");
-            settings.hostname->setEnabled(true);
-            settings.port->setEnabled(true);
-            settings.rpcuser->setEnabled(true);
-            settings.rpcpassword->setEnabled(true);
-        }
-
         // Load current values into the dialog        
         auto conf = Settings::getInstance()->getSettings();
-        settings.hostname->setText(conf.host);
-        settings.port->setText(conf.port);
-        settings.rpcuser->setText(conf.rpcuser);
-        settings.rpcpassword->setText(conf.rpcpassword);
+        settings.txtServer->setText(conf.server);
 
         // Connection tab by default
         settings.tabWidget->setCurrentIndex(0);
@@ -331,77 +421,24 @@ void MainWindow::setupSettingsModal() {
         if (!rpc->isEmbedded()) {
             settings.chkRescan->setEnabled(false);
             settings.chkRescan->setToolTip(tr("You're using an external hushd. Please restart hushd with -rescan"));
-
-            settings.chkReindex->setEnabled(false);
-            settings.chkReindex->setToolTip(tr("You're using an external hushd. Please restart hushd with -reindex"));
         }
 
         if (settingsDialog.exec() == QDialog::Accepted) {
-            // Custom fees
-            bool customFees = settings.chkCustomFees->isChecked();
-            Settings::getInstance()->setAllowCustomFees(customFees);
-            ui->minerFeeAmt->setReadOnly(!customFees);
-            if (!customFees)
-                ui->minerFeeAmt->setText(Settings::getDecimalString(Settings::getMinerFee()));
-
-            // Auto shield
-            Settings::getInstance()->setAutoShield(settings.chkAutoShield->isChecked());
-
             // Check for updates
             Settings::getInstance()->setCheckForUpdates(settings.chkCheckUpdates->isChecked());
 
             // Allow fetching prices
             Settings::getInstance()->setAllowFetchPrices(settings.chkFetchPrices->isChecked());
 
-            if (!isUsingTor && settings.chkTor->isChecked()) {
-                // If "use tor" was previously unchecked and now checked
-                Settings::addTohushConf(hushConfLocation, "proxy=127.0.0.1:9050");
-                rpc->getConnection()->config->proxy = "proxy=127.0.0.1:9050";
+            // Save the server
+            Settings::getInstance()->saveSettings(settings.txtServer->text().trimmed());
 
-                QMessageBox::information(this, tr("Enable Tor"), 
-                    tr("Connection over Tor has been enabled. To use this feature, you need to restart Silentdragonlite."), 
-                    QMessageBox::Ok);
-            }
-
-            if (isUsingTor && !settings.chkTor->isChecked()) {
-                // If "use tor" was previously checked and now is unchecked
-                Settings::removeFromhushConf(hushConfLocation, "proxy");
-                rpc->getConnection()->config->proxy.clear();
-
-                QMessageBox::information(this, tr("Disable Tor"),
-                    tr("Connection over Tor has been disabled. To fully disconnect from Tor, you need to restart silentdragon."),
-                    QMessageBox::Ok);
-            }
-
-            if (hushConfLocation.isEmpty()) {
+            if (false /* connection needs reloading?*/) {
                 // Save settings
-                Settings::getInstance()->saveSettings(
-                    settings.hostname->text(),
-                    settings.port->text(),
-                    settings.rpcuser->text(),
-                    settings.rpcpassword->text());
+                Settings::getInstance()->saveSettings(settings.txtServer->text());
                 
                 auto cl = new ConnectionLoader(this, rpc);
                 cl->loadConnection();
-            }
-
-            // Check to see if rescan or reindex have been enabled
-            bool showRestartInfo = false;
-            if (settings.chkRescan->isChecked()) {
-                Settings::addTohushConf(hushConfLocation, "rescan=1");
-                showRestartInfo = true;
-            }
-
-            if (settings.chkReindex->isChecked()) {
-                Settings::addTohushConf(hushConfLocation, "reindex=1");
-                showRestartInfo = true;
-            }
-
-            if (showRestartInfo) {
-                auto desc = tr("silentdragon needs to restart to rescan/reindex. silentdragon will now close, please restart silentdragon to continue");
-                
-                QMessageBox::information(this, tr("Restart silentdragon"), desc, QMessageBox::Ok);
-                QTimer::singleShot(1, [=]() { this->close(); });
             }
         }
     });
@@ -541,13 +578,9 @@ void MainWindow::payhushURI(QString uri, QString myAddr) {
     // Now, set the fields on the send tab
     clearSendForm();
 
-    if (!myAddr.isEmpty()) {
-        ui->inputsCombo->setCurrentText(myAddr);
-    }
-
     ui->Address1->setText(paymentInfo.addr);
     ui->Address1->setCursorPosition(0);
-    ui->Amount1->setText(Settings::getDecimalString(paymentInfo.amt.toDouble()));
+    ui->Amount1->setText(paymentInfo.amt);
     ui->MemoTxt1->setText(paymentInfo.memo);
 
     // And switch to the send tab.
@@ -627,97 +660,110 @@ void MainWindow::exportTransactions() {
 } 
 
 /**
- * Backup the wallet.dat file. This is kind of a hack, since it has to read from the filesystem rather than an RPC call
- * This might fail for various reasons - Remote hushd, non-standard locations, custom params passed to hushd, many others
+ * Export the seed phrase.
 */
-void MainWindow::backupWalletDat() {
+void MainWindow::exportSeed() {
     if (!rpc->getConnection())
         return;
+
+    
+
+    rpc->fetchSeed([=](json reply) {
+        if (isJsonError(reply)) {
+            return;
+        }
+        
+        QDialog d(this);
+        Ui_PrivKey pui;
+        pui.setupUi(&d);
+        
+        // Make the window big by default
+        auto ps = this->geometry();
+        QMargins margin = QMargins() + 50;
+        d.setGeometry(ps.marginsRemoved(margin));
+
+        Settings::saveRestore(&d);
+
+        pui.privKeyTxt->setReadOnly(true);
+        pui.privKeyTxt->setLineWrapMode(QPlainTextEdit::LineWrapMode::NoWrap);
+        pui.privKeyTxt->setPlainText(QString::fromStdString(reply.dump()));
+        
+        pui.helpLbl->setText(tr("This is your wallet seed. Please back it up carefully and safely."));
+
+        // Wire up save button
+        QObject::connect(pui.buttonBox->button(QDialogButtonBox::Save), &QPushButton::clicked, [=] () {
+            QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
+                            "Hush-seed.txt");
+            QFile file(fileName);
+            if (!file.open(QIODevice::WriteOnly)) {
+                QMessageBox::information(this, tr("Unable to open file"), file.errorString());
+                return;
+            }        
+            QTextStream out(&file);
+            out << pui.privKeyTxt->toPlainText();
+        });
+
+        pui.buttonBox->button(QDialogButtonBox::Save)->setEnabled(true);
+        
+        d.exec();
+    });
 }
-
-    // QDir hushdir(rpc->getConnection()->config->hushDir);
-    // QString backupDefaultName = "hush-wallet-backup-" + QDateTime::currentDateTime().toString("yyyyMMdd") + ".dat";
-
-    // if (Settings::getInstance()->isTestnet()) {
-    //     hushdir.cd("testnet3");
-    //     backupDefaultName = "testnet-" + backupDefaultName;
-    // }
-    
-    // QFile wallet(hushdir.filePath("wallet.dat"));
-    // if (!wallet.exists()) {
-    //     QMessageBox::critical(this, tr("No wallet.dat"), tr("Couldn't find the wallet.dat on this computer") + "\n" +
-    //         tr("You need to back it up from the machine hushd is running on"), QMessageBox::Ok);
-    //     return;
-    // }
-    
-    // QUrl backupName = QFileDialog::getSaveFileUrl(this, tr("Backup wallet.dat"), backupDefaultName, "Data file (*.dat)");
-    // if (backupName.isEmpty())
-    //     return;
-
-    // if (!wallet.copy(backupName.toLocalFile())) {
-    //     QMessageBox::critical(this, tr("Couldn't backup"), tr("Couldn't backup the wallet.dat file.") + 
-    //         tr("You need to back it up manually."), QMessageBox::Ok);
-    // }
-
 
 void MainWindow::exportAllKeys() {
     exportKeys("");
 }
 
 void MainWindow::exportKeys(QString addr) {
+    if (!rpc->getConnection())
+        return;
+
     bool allKeys = addr.isEmpty() ? true : false;
 
-    QDialog d(this);
-    Ui_PrivKey pui;
-    pui.setupUi(&d);
-    
-    // Make the window big by default
-    auto ps = this->geometry();
-    QMargins margin = QMargins() + 50;
-    d.setGeometry(ps.marginsRemoved(margin));
-
-    Settings::saveRestore(&d);
-
-    pui.privKeyTxt->setPlainText(tr("Loading..."));
-    pui.privKeyTxt->setReadOnly(true);
-    pui.privKeyTxt->setLineWrapMode(QPlainTextEdit::LineWrapMode::NoWrap);
-
-    if (allKeys)
-        pui.helpLbl->setText(tr("These are all the private keys for all the addresses in your wallet"));
-    else
-        pui.helpLbl->setText(tr("Private key for ") + addr);
-
-    // Disable the save button until it finishes loading
-    pui.buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
-    pui.buttonBox->button(QDialogButtonBox::Ok)->setVisible(false);
-
-    // Wire up save button
-    QObject::connect(pui.buttonBox->button(QDialogButtonBox::Save), &QPushButton::clicked, [=] () {
-        QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
-                           allKeys ? "hush-all-privatekeys.txt" : "hush-privatekey.txt");
-        QFile file(fileName);
-        if (!file.open(QIODevice::WriteOnly)) {
-            QMessageBox::information(this, tr("Unable to open file"), file.errorString());
-            return;
-        }        
-        QTextStream out(&file);
-        out << pui.privKeyTxt->toPlainText();
-    });
-
-    // Call the API
-    auto isDialogAlive = std::make_shared<bool>(true);
-
     auto fnUpdateUIWithKeys = [=](json reply) {
-        // Check to see if we are still showing.
-        if (! *(isDialogAlive.get()) ) return;
+        if (isJsonError(reply)) {
+            return;                
+        }
 
         if (reply.is_discarded() || !reply.is_array()) {
-            pui.privKeyTxt->setPlainText(tr("Error loading private keys"));
-            pui.buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
-
+            QMessageBox::critical(this, tr("Error getting private keys"),
+                tr("Error loading private keys: ") + QString::fromStdString(reply.dump()),
+                QMessageBox::Ok);
             return;
         }
+            
+        QDialog d(this);
+        Ui_PrivKey pui;
+        pui.setupUi(&d);
         
+        // Make the window big by default
+        auto ps = this->geometry();
+        QMargins margin = QMargins() + 50;
+        d.setGeometry(ps.marginsRemoved(margin));
+
+        Settings::saveRestore(&d);
+
+        pui.privKeyTxt->setReadOnly(true);
+        pui.privKeyTxt->setLineWrapMode(QPlainTextEdit::LineWrapMode::NoWrap);
+
+        if (allKeys)
+            pui.helpLbl->setText(tr("These are all the private keys for all the addresses in your wallet"));
+        else
+            pui.helpLbl->setText(tr("Private key for ") + addr);
+
+
+        // Wire up save button
+        QObject::connect(pui.buttonBox->button(QDialogButtonBox::Save), &QPushButton::clicked, [=] () {
+            QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
+                            allKeys ? "Hush-all-privatekeys.txt" : "Hush-privatekey.txt");
+            QFile file(fileName);
+            if (!file.open(QIODevice::WriteOnly)) {
+                QMessageBox::information(this, tr("Unable to open file"), file.errorString());
+                return;
+            }        
+            QTextStream out(&file);
+            out << pui.privKeyTxt->toPlainText();
+        });
+
         QString allKeysTxt;
         for (auto i : reply.get<json::array_t>()) {
             allKeysTxt = allKeysTxt % QString::fromStdString(i["private_key"]) % " # addr=" % QString::fromStdString(i["address"]) % "\n";
@@ -725,6 +771,8 @@ void MainWindow::exportKeys(QString addr) {
 
         pui.privKeyTxt->setPlainText(allKeysTxt);
         pui.buttonBox->button(QDialogButtonBox::Save)->setEnabled(true);
+
+        d.exec();
     };
 
     if (allKeys) {
@@ -732,10 +780,7 @@ void MainWindow::exportKeys(QString addr) {
     }
     else { 
         rpc->fetchPrivKey(addr, fnUpdateUIWithKeys);                
-    }
-    
-    d.exec();
-    *isDialogAlive = false;
+    }    
 }
 
 void MainWindow::setupBalancesTab() {
@@ -743,40 +788,6 @@ void MainWindow::setupBalancesTab() {
     ui->lblSyncWarning->setVisible(false);
     ui->lblSyncWarningReceive->setVisible(false);
 
-    // Double click on balances table
-    auto fnDoSendFrom = [=](const QString& addr, const QString& to = QString(), bool sendMax = false) {
-        // Find the inputs combo
-        for (int i = 0; i < ui->inputsCombo->count(); i++) {
-            auto inputComboAddress = ui->inputsCombo->itemText(i);
-            if (inputComboAddress.startsWith(addr)) {
-                ui->inputsCombo->setCurrentIndex(i);
-                break;
-            }
-        }
-
-        // If there's a to address, add that as well
-        if (!to.isEmpty()) {
-            // Remember to clear any existing address fields, because we are creating a new transaction.
-            this->clearSendForm();
-            ui->Address1->setText(to);
-        }
-
-        // See if max button has to be checked
-        if (sendMax) {
-            ui->Max1->setChecked(true);
-        }
-
-        // And switch to the send tab.
-        ui->tabWidget->setCurrentIndex(1);
-    };
-
-    // Double click opens up memo if one exists
-    QObject::connect(ui->balancesTable, &QTableView::doubleClicked, [=](auto index) {
-        index = index.sibling(index.row(), 0);
-        auto addr = AddressBook::addressFromAddressLabel(ui->balancesTable->model()->data(index).toString());
-        
-        fnDoSendFrom(addr);
-    });
 
     // Setup context menu on balances tab
     ui->balancesTable->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -800,18 +811,8 @@ void MainWindow::setupBalancesTab() {
             this->exportKeys(addr);
         });
 
-        menu.addAction("Send from " % addr.left(40) % (addr.size() > 40 ? "..." : ""), [=]() {
-            fnDoSendFrom(addr);
-        });
 
         if (Settings::isTAddress(addr)) {
-            auto defaultSapling = rpc->getDefaultSaplingAddress();
-            if (!defaultSapling.isEmpty()) {
-                menu.addAction(tr("Shield balance to Sapling"), [=] () {
-                    fnDoSendFrom(addr, defaultSapling, true);
-                });
-            }
-
             menu.addAction(tr("View on block explorer"), [=] () {
                 Settings::openAddressInExplorer(addr);
             });
@@ -1092,7 +1093,7 @@ void MainWindow::setupReceiveTab() {
         }
         
         ui->rcvLabel->setText(label);
-        ui->rcvBal->setText(Settings::gethushUSDDisplayFormat(rpc->getModel()->getAllBalances().value(addr)));
+        ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushUSDString());
         ui->txtReceive->setPlainText(addr);       
         ui->qrcodeDisplay->setQrcodeString(addr);
         if (rpc->getModel()->getUsedAddresses().value(addr, false)) {
@@ -1183,7 +1184,7 @@ void MainWindow::updateTAddrCombo(bool checked) {
             // If the address is in the address book, add it. 
             if (labels.contains(taddr) && !addrs.contains(taddr)) {
                 addrs.insert(taddr);
-                ui->listReceiveAddresses->addItem(taddr, 0);
+                ui->listReceiveAddresses->addItem(taddr, CAmount::fromqint64(0));
             }
         });
 
@@ -1194,7 +1195,7 @@ void MainWindow::updateTAddrCombo(bool checked) {
             if (!addrs.contains(addr))  {
                 addrs.insert(addr);
                 // Balance is zero since it has not been previously added
-                ui->listReceiveAddresses->addItem(addr, 0);
+                ui->listReceiveAddresses->addItem(addr, CAmount::fromqint64(0));
             }
         }
 
@@ -1211,7 +1212,7 @@ void MainWindow::updateTAddrCombo(bool checked) {
         // 5. Add a last, disabled item if there are remaining items
         if (allTaddrs.size() > addrs.size()) {
             auto num = QString::number(allTaddrs.size() - addrs.size());
-            ui->listReceiveAddresses->addItem("-- " + num + " more --", 0);
+            ui->listReceiveAddresses->addItem("-- " + num + " more --", CAmount::fromqint64(0));
 
             QStandardItemModel* model = qobject_cast<QStandardItemModel*>(ui->listReceiveAddresses->model());
             QStandardItem* item =  model->findItems("--", Qt::MatchStartsWith)[0];
@@ -1229,9 +1230,6 @@ void MainWindow::updateLabels() {
     else {
         addZAddrsToComboList(ui->rdioZSAddr->isChecked())(true);
     }
-
-    // Update the Send Tab
-    updateFromCombo();
 
     // Update the autocomplete
     updateLabelsAutoComplete();

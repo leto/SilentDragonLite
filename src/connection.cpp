@@ -43,20 +43,22 @@ void ConnectionLoader::doAutoConnect() {
 
     auto config = std::shared_ptr<ConnectionConfig>(new ConnectionConfig());
     config->dangerous = true;
-    config->server = QString("https://hush-lightwallet.de:439");
+    config->server = Settings::getInstance()->getSettings().server;
 
     // Initialize the library
-    main->logger->write(QObject::tr("Attempting to initialize"));
+    main->logger->write(QObject::tr("Attempting to initialize library with ") + config->server);
+
+
 
     // Check to see if there's an existing wallet
     if (litelib_wallet_exists(Settings::getChainName().toStdString().c_str())) {
         main->logger->write(QObject::tr("Using existing wallet."));
-         char* resp = litelib_initialize_existing(config->dangerous, config->server.toStdString().c_str());
+        char* resp = litelib_initialize_existing(config->dangerous, config->server.toStdString().c_str());
         QString response = litelib_process_response(resp);
 
         if (response.toUpper().trimmed() != "OK") {
             showError(response);
-               return;
+            return;
         }
     } else {
         main->logger->write(QObject::tr("Create/restore wallet."));
@@ -65,9 +67,10 @@ void ConnectionLoader::doAutoConnect() {
     }    
     
     auto connection = makeConnection(config);
+    auto me = this;
 
     // After the lib is initialized, try to do get info
-    connection->doRPC("info", "", [=](auto reply) {
+    connection->doRPC("info", "", [=](auto) {
         // If success, set the connection
         main->logger->write("Connection is online.");
 
@@ -95,7 +98,7 @@ void ConnectionLoader::doAutoConnect() {
                     if (isSyncing != nullptr && reply.find("synced_blocks") != reply.end()) {
                         qint64 synced = reply["synced_blocks"].get<json::number_unsigned_t>();
                         qint64 total = reply["total_blocks"].get<json::number_unsigned_t>();
-                        showInformation("Synced " + QString::number(synced) + " / " + QString::number(total));
+                        me->showInformation("Synced " + QString::number(synced) + " / " + QString::number(total));
                     }
                 },
                 [=](QString err) {
@@ -173,15 +176,11 @@ void Executor::run() {
 
     QString reply = litelib_process_response(resp);
 
-    qDebug() << "Reply=" << reply;
+    //qDebug() << "RPC Reply=" << reply;
     auto parsed = json::parse(reply.toStdString().c_str(), nullptr, false);
     if (parsed.is_discarded() || parsed.is_null()) {
         emit handleError(reply);
     } else {
-        const bool isGuiThread = 
-                QThread::currentThread() == QCoreApplication::instance()->thread();
-        qDebug() << "executing RPC: isGUI=" << isGuiThread;
-
         emit responseReady(parsed);
     }
 }
@@ -216,7 +215,7 @@ void Connection::doRPC(const QString cmd, const QString args, const std::functio
         return;
     }
 
-    qDebug() << "Doing RPC: " << cmd;
+    //qDebug() << "Doing RPC: " << cmd;
 
     // Create a runner.
     auto runner = new Executor(cmd, args);

@@ -7,6 +7,7 @@ use std::ffi::{CStr, CString};
 use std::sync::{Mutex, Arc};
 use std::cell::RefCell;
 
+
 use silentdragonlitelib::{commands, lightclient::{LightClient, LightClientConfig}};
 
 // We'll use a MUTEX to store a global lightclient instance, 
@@ -99,14 +100,6 @@ pub extern fn litelib_initialize_new_from_phrase(dangerous: bool, server: *const
 
     let lightclient = match LightClient::new_from_phrase(seed_str, &config, birthday) {
         Ok(l) => l,
-        Err(e) => {
-            let e_str = CString::new(format!("Error: {}", e)).unwrap();
-            return e_str.into_raw();
-        }
-    };
-
-    let seed = match lightclient.do_seed_phrase() {
-        Ok(s) => s.dump(),
         Err(e) => {
             let e_str = CString::new(format!("Error: {}", e)).unwrap();
             return e_str.into_raw();

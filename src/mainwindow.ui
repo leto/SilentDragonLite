@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>968</width>
-    <height>616</height>
+    <width>1274</width>
+    <height>779</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,7 +22,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>4</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -65,6 +65,37 @@
                  </item>
                  <item>
                   <widget class="QLabel" name="balSheilded">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_17">
+                 <item>
+                  <widget class="QLabel" name="label_15">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Notarized</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="balVerified">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                    </font>
+                   </property>
                    <property name="text">
                     <string/>
                    </property>
@@ -149,25 +180,12 @@
                 </layout>
                </item>
                <item>
-                <spacer name="verticalSpacer">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item>
                 <widget class="QLabel" name="lblSyncWarning">
                  <property name="styleSheet">
                   <string notr="true">color:red;</string>
                  </property>
                  <property name="text">
-                  <string>Your node is still syncing, balances may not be updated</string>
+                  <string>Your node is still syncing, balances may not be updated.</string>
                  </property>
                  <property name="wordWrap">
                   <bool>true</bool>
@@ -186,9 +204,25 @@
                   <string notr="true">color: red;</string>
                  </property>
                  <property name="text">
-                  <string>Some transactions are not yet confirmed</string>
+                  <string>Some transactions are not yet confirmed. Balances may change.</string>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
                  </property>
                 </widget>
+               </item>
+               <item>
+                <spacer name="verticalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
                </item>
               </layout>
              </item>
@@ -262,65 +296,64 @@
            <bool>false</bool>
           </property>
           <property name="title">
-           <string>From</string>
+           <string/>
           </property>
           <property name="flat">
            <bool>false</bool>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_6">
+          <layout class="QHBoxLayout" name="horizontalLayout_8">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_8">
-             <item>
-              <widget class="AddressCombo" name="inputsCombo"/>
-             </item>
-            </layout>
+            <spacer name="horizontalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_15">
-             <item>
-              <widget class="QLabel" name="label_5">
-               <property name="text">
-                <string>Address Balance</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="sendAddressBalance">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-               <property name="readOnly">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="sendAddressBalanceUSD">
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_6">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
+            <widget class="QLabel" name="label_5">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Total notarized funds available:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="txtAvailablehush">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="txtAvailableUSD">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_8">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </widget>
@@ -359,8 +392,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>920</width>
-                <height>301</height>
+                <width>1226</width>
+                <height>504</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="sendToLayout">
@@ -899,6 +932,9 @@
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
           </property>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>true</bool>
+          </attribute>
          </widget>
         </item>
        </layout>
@@ -1051,7 +1087,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>968</width>
+     <width>1274</width>
      <height>22</height>
     </rect>
    </property>
@@ -1063,7 +1099,7 @@
     <addaction name="actionPay_URI"/>
     <addaction name="separator"/>
     <addaction name="actionExport_All_Private_Keys"/>
-    <addaction name="actionBackup_wallet_dat"/>
+    <addaction name="actionExport_Seed"/>
     <addaction name="separator"/>
     <addaction name="actionExport_transactions"/>
     <addaction name="separator"/>
@@ -1093,6 +1129,9 @@
     <addaction name="action_Address_Book"/>
     <addaction name="actionSettings"/>
     <addaction name="action_Recurring_Payments"/>
+    <addaction name="separator"/>
+    <addaction name="actionEncrypt_Wallet"/>
+    <addaction name="actionRemove_Wallet_Encryption"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_Edit"/>
@@ -1151,9 +1190,9 @@
     <string>Ctrl+B</string>
    </property>
   </action>
-  <action name="actionBackup_wallet_dat">
+  <action name="actionExport_Seed">
    <property name="text">
-    <string>&amp;Backup wallet.dat</string>
+    <string>&amp;Export seed phrase</string>
    </property>
   </action>
   <action name="actionExport_transactions">
@@ -1189,6 +1228,16 @@
     <string>File a bug...</string>
    </property>
   </action>
+  <action name="actionEncrypt_Wallet">
+   <property name="text">
+    <string>Encrypt Wallet</string>
+   </property>
+  </action>
+  <action name="actionRemove_Wallet_Encryption">
+   <property name="text">
+    <string>Remove Wallet Encryption</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -1210,7 +1259,6 @@
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>inputsCombo</tabstop>
   <tabstop>Address1</tabstop>
   <tabstop>Amount1</tabstop>
   <tabstop>Max1</tabstop>
@@ -1229,7 +1277,6 @@
   <tabstop>transactionsTable</tabstop>
   <tabstop>balancesTable</tabstop>
   <tabstop>minerFeeAmt</tabstop>
-  <tabstop>sendAddressBalance</tabstop>
   <tabstop>sendToScrollArea</tabstop>
  </tabstops>
  <resources>

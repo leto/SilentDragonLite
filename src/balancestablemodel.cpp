@@ -1,31 +1,44 @@
 #include "balancestablemodel.h"
 #include "addressbook.h"
 #include "settings.h"
+#include "camount.h"
 
 BalancesTableModel::BalancesTableModel(QObject *parent)
     : QAbstractTableModel(parent) {    
 }
 
-void BalancesTableModel::setNewData(const QMap<QString, double> balances, 
-    const QList<UnspentOutput> outputs)
+void BalancesTableModel::setNewData(const QList<QString> zaddrs, const QList<QString> taddrs,
+    const QMap<QString, CAmount> balances, const QList<UnspentOutput> outputs)
 {    
     loading = false;
 
     int currentRows = rowCount(QModelIndex());
     // Copy over the utxos for our use
-    delete utxos;
-    utxos = new QList<UnspentOutput>();
+    delete unspentOutputs;
+    unspentOutputs = new QList<UnspentOutput>();
 
     // This is a QList deep copy.
-    *utxos = outputs;
+    *unspentOutputs = outputs;
 
     // Process the address balances into a list
     delete modeldata;
-    modeldata = new QList<std::tuple<QString, double>>();
+    modeldata = new QList<std::tuple<QString, CAmount>>();
     std::for_each(balances.keyBegin(), balances.keyEnd(), [=] (auto keyIt) {
-        if (balances.value(keyIt) > 0)
-            modeldata->push_back(std::make_tuple(keyIt, balances.value(keyIt)));
+        modeldata->push_back(std::make_tuple(keyIt, balances.value(keyIt)));
     });
+
+    // Add all addresses that have no balances as well
+    for (auto zaddr: zaddrs) {
+        if (!balances.contains(zaddr)) {
+            modeldata->push_back(std::make_tuple(zaddr, CAmount::fromqint64(0)));
+        }
+    }
+
+    for (auto taddr: taddrs) {
+        if (!balances.contains(taddr)) {
+            modeldata->push_back(std::make_tuple(taddr, CAmount::fromqint64(0)));
+        }
+    }
 
     // And then update the data
     dataChanged(index(0, 0), index(modeldata->size()-1, columnCount(index(0,0))-1));
@@ -37,7 +50,7 @@ void BalancesTableModel::setNewData(const QMap<QString, double> balances,
 
 BalancesTableModel::~BalancesTableModel() {
     delete modeldata;
-    delete utxos;
+    delete unspentOutputs;
 }
 
 int BalancesTableModel::rowCount(const QModelIndex&) const
@@ -70,8 +83,9 @@ QVariant BalancesTableModel::data(const QModelIndex &index, int role) const
     if (role == Qt::ForegroundRole) {
         // If any of the UTXOs for this address has zero confirmations, paint it in red
         const auto& addr = std::get<0>(modeldata->at(index.row()));
-        for (auto utxo : *utxos) {
-            if (utxo.address == addr && !utxo.spendable) {
+        for (auto unconfirmedOutput : *unspentOutputs) {
+            if (unconfirmedOutput.address == addr && 
+                    (!unconfirmedOutput.spendable || unconfirmedOutput.pending)) {
                 QBrush b;
                 b.setColor(Qt::red);
                 return b;
@@ -87,14 +101,14 @@ QVariant BalancesTableModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole) {
         switch (index.column()) {
         case 0: return AddressBook::addLabelToAddress(std::get<0>(modeldata->at(index.row())));
-        case 1: return Settings::gethushDisplayFormat(std::get<1>(modeldata->at(index.row())));
+        case 1: return std::get<1>(modeldata->at(index.row())).toDecimalhushString();
         }
     }
 
     if(role == Qt::ToolTipRole) {
         switch (index.column()) {
         case 0: return AddressBook::addLabelToAddress(std::get<0>(modeldata->at(index.row())));
-        case 1: return Settings::getUSDFormat(std::get<1>(modeldata->at(index.row())));
+        case 1: return std::get<1>(modeldata->at(index.row())).toDecimalhushString();
         }
     }
     

@@ -3,6 +3,7 @@
 
 #include "precompiled.h"
 
+#include "camount.h"
 #include "connection.h"
 
 using json = nlohmann::json;
@@ -11,7 +12,7 @@ using json = nlohmann::json;
 // into a struct with address, amount, memo
 struct TransactionItemDetail {
     QString         address;
-    double          amount;
+    CAmount         amount;
     QString         memo;
 };
 
@@ -52,8 +53,14 @@ public:
 
     void fetchPrivKey(QString addr, const std::function<void(json)>& cb);
     void fetchAllPrivKeys(const std::function<void(json)>);
+    void fetchSeed(const std::function<void(json)>&);
 
     void saveWallet(const std::function<void(json)>& cb);
+
+    void fetchWalletEncryptionStatus(const std::function<void(json)>& cb);
+    void encryptWallet(QString password, const std::function<void(json)>& cb);
+    void unlockWallet(QString password, const std::function<void(json)>& cb);
+    void removeWalletEncryption(QString password, const std::function<void(json)>& cb);
 
     //void importZPrivKey(QString addr, bool rescan, const std::function<void(json)>& cb);
     //void importTPrivKey(QString addr, bool rescan, const std::function<void(json)>& cb);

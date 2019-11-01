@@ -12,11 +12,11 @@ src/ui_*.h
 *.autosave
 src/precompiled.h.cpp
 .qmake.stash
-silentdragon
-silentdragon.app
+silentdragonlite
+silentdragonlite.app
 silentdragon-lite-mingw*
 silentdragon-lite.vcxproj*
-silentdragon.vcxproj*
+silentdragonlite.vcxproj*
 silentdragon-lite.sln
 silentdragon-lite.pro.user
 /Makefile
@@ -37,3 +37,6 @@ IDEWorkspaceChecks.plist
 *.sln
 node_modules
 silentdragonlite.pro.user.4.10-pre1
+silentdragonlite
+silentdragonlite_plugin_import.cpp
+silentdragonlite_resource.rc
