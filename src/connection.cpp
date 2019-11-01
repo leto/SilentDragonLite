@@ -48,6 +48,8 @@ void ConnectionLoader::doAutoConnect() {
     // Initialize the library
     main->logger->write(QObject::tr("Attempting to initialize library with ") + config->server);
 
+
+
     // Check to see if there's an existing wallet
     if (litelib_wallet_exists(Settings::getChainName().toStdString().c_str())) {
         main->logger->write(QObject::tr("Using existing wallet."));

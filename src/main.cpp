@@ -164,8 +164,8 @@ public:
             return 0;            
         } 
 
-        QCoreApplication::setOrganizationName("myhush.org");
-        QCoreApplication::setApplicationName("SilentDragonLite");
+        QCoreApplication::setOrganizationName("Hush");
+        QCoreApplication::setApplicationName("Silentdragonlite");
 
         QString locale = QLocale::system().name();
         locale.truncate(locale.lastIndexOf('_'));   // Get the language code
