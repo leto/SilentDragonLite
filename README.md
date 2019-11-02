@@ -1,3 +1,5 @@
+# SilentDragonLite
+
 SilentDragonLite is a GUI wallet for the Hush cryptocoin, which does not require you to download the full blockchain!
 
 ## Compiling from source
