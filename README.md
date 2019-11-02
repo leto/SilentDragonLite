@@ -1,4 +1,4 @@
-SilenDragonLite is z-Addr first, Sapling compatible wallet lightwallet for Hush.
+SilentDragonLite is a GUI wallet for the Hush cryptocoin, which does not require you to download the full blockchain!
 
 ## Compiling from source
 * silentdragon is written in C++ 14, and can be compiled with g++/clang++/visual c++. 
@@ -16,4 +16,3 @@ make -j$(nproc)
 ./silentdragonlite
 ```
 
-_PS: SilentDragonLite is NOT an official wallet, and is not affiliated with the Electric Coin Company in any way._
