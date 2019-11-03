@@ -17,7 +17,7 @@ using json = nlohmann::json;
 // Struct used to hold destination info when sending a Tx. 
 struct ToFields {
     QString addr;
-    double  amount;
+    CAmount amount;
     QString memo;
 };
 
@@ -25,7 +25,7 @@ struct ToFields {
 struct Tx {
     QString         fromAddr;
     QList<ToFields> toAddrs;
-    double         fee;
+    CAmount         fee;
 };
 
 namespace Ui {
@@ -47,7 +47,6 @@ public:
     QRegExpValidator*   getAmountValidator() { return amtValidator; }
 
     QString doSendTxValidations(Tx tx);
-    void setDefaultPayFrom();
 
     void replaceWormholeClient(WormholeClient* newClient);
     bool isWebsocketListening();
@@ -59,7 +58,6 @@ public:
 
     void updateLabels();
     void updateTAddrCombo(bool checked);
-    void updateFromCombo();
 
     // Disable recurring on mainnet
     void disableRecurring();
@@ -98,9 +96,11 @@ private:
     Tx   createTxFromSendPage();
     bool confirmTx(Tx tx, RecurringPaymentInfo* rpi);
 
+    void encryptWallet();
+    void removeWalletEncryption();
+
     void cancelButton();
     void sendButton();
-    void inputComboTextChanged(int index);
     void addAddressSection();
     void maxAmountChecked(int checked);
 
@@ -122,7 +122,7 @@ private:
     void importPrivKey();
     void exportAllKeys();
     void exportKeys(QString addr = "");
-    void backupWalletDat();
+    void exportSeed();
     void exportTransactions();
 
     void doImport(QList<QString>* keys);

@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include "controller.h"
 #include "settings.h"
+#include "camount.h"
 #include "ui_newrecurring.h"
 #include "ui_recurringdialog.h"
 #include "ui_recurringpayments.h"
@@ -69,7 +70,7 @@ QJsonObject RecurringPaymentInfo::toJson() {
         {"desc", desc},
         {"from", fromAddr},
         {"to", toAddr},
-        {"amt", Settings::getDecimalString(amt)},
+        {"amt", amt},
         {"memo", memo},
         {"currency", currency},
         {"schedule", (int)schedule},
@@ -81,7 +82,8 @@ QJsonObject RecurringPaymentInfo::toJson() {
 }
 
 QString RecurringPaymentInfo::getAmountPretty() const {
-    return currency == "USD" ? Settings::getUSDFormat(amt) : Settings::gethushDisplayFormat(amt);
+    CAmount amount = CAmount::fromDouble(amt);
+    return currency == "USD" ? amount.toDecimalUSDString() : amount.toDecimalhushString();
 }
 
 QString RecurringPaymentInfo::getScheduleDescription() const {
@@ -135,7 +137,7 @@ RecurringPaymentInfo* Recurring::getNewRecurringFromTx(QWidget* parent, MainWind
         ui.lblTo->setText(tx.toAddrs[0].addr);
 
         // Default is USD
-        ui.lblAmt->setText(Settings::getUSDFormat(tx.toAddrs[0].amount));
+        ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalUSDString());
 
         ui.txtMemo->setPlainText(tx.toAddrs[0].memo);
         ui.txtMemo->setEnabled(false);
@@ -147,10 +149,10 @@ RecurringPaymentInfo* Recurring::getNewRecurringFromTx(QWidget* parent, MainWind
             return;
 
         if (c == "USD") {
-            ui.lblAmt->setText(Settings::getUSDFormat(tx.toAddrs[0].amount));
+            ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalUSDString());
         }
         else {
-            ui.lblAmt->setText(Settings::getDecimalString(tx.toAddrs[0].amount));
+            ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalString());
         }
     });
 
@@ -201,13 +203,13 @@ void Recurring::updateInfoWithTx(RecurringPaymentInfo* r, Tx tx) {
     r->toAddr = tx.toAddrs[0].addr;
     r->memo = tx.toAddrs[0].memo;
     r->fromAddr = tx.fromAddr;
-    if (r->currency.isEmpty() || r->currency == "usd") {
-        r->currency = "usd";
-        r->amt = tx.toAddrs[0].amount * Settings::getInstance()->gethushPrice();
+    if (r->currency.isEmpty() || r->currency == "USD") {
+        r->currency = "USD";
+        r->amt = tx.toAddrs[0].amount.toqint64() * Settings::getInstance()->getZECPrice();
     }
     else {
         r->currency = Settings::getTokenName();
-        r->amt = tx.toAddrs[0].amount;
+        r->amt = tx.toAddrs[0].amount.toqint64();
     }
 
     // Make sure that the number of payments is properly listed in the array
@@ -459,11 +461,11 @@ void Recurring::processMultiplePending(RecurringPaymentInfo rpi, MainWindow* mai
 }
 
 void Recurring::executeRecurringPayment(MainWindow* main, RecurringPaymentInfo rpi, QList<int> paymentNumbers) {
-    // Amount is in USD or hush?
-    auto amt = rpi.amt;
-    if (rpi.currency == "usd") {
+    // Amount is in USD or Hush?
+    double amount = rpi.amt;
+    if (rpi.currency == "USD") {
         // If there is no price, then fail the payment
-        if (Settings::getInstance()->gethushPrice() == 0) {
+        if (Settings::getInstance()->getZECPrice() == 0) {
             for (auto paymentNumber: paymentNumbers) {
                 updatePaymentItem(rpi.getHash(), paymentNumber, 
                     "", QObject::tr("No hush price was available to convert from USD"),
@@ -473,7 +475,7 @@ void Recurring::executeRecurringPayment(MainWindow* main, RecurringPaymentInfo r
         }
         
         // Translate it into hush
-        amt = rpi.amt / Settings::getInstance()->gethushPrice();
+        amount = rpi.amt / Settings::getInstance()->getZECPrice();
     }
 
     // Build a Tx
@@ -483,9 +485,9 @@ void Recurring::executeRecurringPayment(MainWindow* main, RecurringPaymentInfo r
     
     // If this is a multiple payment, we'll add up all the amounts
     if (paymentNumbers.size() > 1)
-        amt *= paymentNumbers.size();
+        amount *= paymentNumbers.size();
 
-    tx.toAddrs.append(ToFields { rpi.toAddr, amt, rpi.memo });
+    tx.toAddrs.append(ToFields { rpi.toAddr, CAmount::fromDouble(amount), rpi.memo });
 
     // To prevent some weird race conditions, we immediately mark the payment as paid.
     // If something goes wrong, we'll get the error callback below, and the status will be 

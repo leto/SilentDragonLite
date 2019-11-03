@@ -2,12 +2,12 @@
 #define SETTINGS_H
 
 #include "precompiled.h"
+#include "camount.h"
+
+using json = nlohmann::json;
 
 struct Config {
-    QString host;
-    QString port;
-    QString rpcuser;
-    QString rpcpassword;
+    QString server;
 };
 
 struct ToFields;
@@ -29,7 +29,7 @@ public:
     static  Settings* getInstance();
 
     Config  getSettings();
-    void    saveSettings(const QString& host, const QString& port, const QString& username, const QString& password);
+    void    saveSettings(const QString& server);
 
     bool    isTestnet();
     void    setTestnet(bool isTestnet);
@@ -54,15 +54,6 @@ public:
     int     getBlockNumber();
     void    setBlockNumber(int number);
             
-    bool    getSaveZtxs();
-    void    setSaveZtxs(bool save);
-
-    bool    getAutoShield();
-    void    setAutoShield(bool allow);
-
-    bool    getAllowCustomFees();
-    void    setAllowCustomFees(bool allow);
-
     bool    getAllowFetchPrices();
     void    setAllowFetchPrices(bool allow);
 
@@ -74,15 +65,9 @@ public:
 
     bool    isSaplingActive();
 
-    void    setUsinghushConf(QString confLocation);
-    const   QString& gethushdConfLocation() { return _confLocation; }
+    void    setZECPrice(double p) { ZECPrice = p; }
+    double  getZECPrice();
 
-    void    sethushPrice(double p) { hushPrice = p; }
-    double  gethushPrice();
-
-    void    setPeers(int peers);
-    int     getPeers();
-       
     // Static stuff
     static const QString txidStatusMessage;
     
@@ -98,26 +83,17 @@ public:
     static bool    isZAddress(QString addr);
     static bool    isTAddress(QString addr);
 
-    static QString getDecimalString(double amt);
-    static QString getUSDFormat(double bal);
-
-    
-    static QString gethushDisplayFormat(double bal);
-    static QString gethushUSDDisplayFormat(double bal);
-
     static QString getTokenName();
     static QString getDonationAddr();
 
-    static double  getMinerFee();
-    static double  getZboardAmount();
-    static QString getZboardAddr();
+    static QString getDefaultServer();
+    static CAmount getMinerFee();
 
     static int     getMaxMobileAppTxns() { return 30; }
+
+    static int     getNumberOfDecimalPlaces() {return 8;}
     
     static bool    isValidAddress(QString addr);
-
-    static bool    addTohushConf(QString confLocation, QString line);
-    static bool    removeFromhushConf(QString confLocation, QString option);
 
     static QString getChainName() { return QString("main"); }
 
@@ -134,7 +110,6 @@ private:
 
     static Settings* instance;
 
-    QString _confLocation;
     QString _executable;
     bool    _isTestnet        = false;
     bool    _isSyncing        = false;
@@ -142,9 +117,19 @@ private:
     int     _hushdVersion    = 0;
     bool    _useEmbedded      = false;
     bool    _headless         = false;
-    int     _peerConnections  = 0;
     
-    double  hushPrice          = 0.0;
+    double  ZECPrice          = 0.0;
 };
+
+
+inline bool isJsonResultSuccess(const json& res) {
+    return res.find("result") != res.end() && 
+                    QString::fromStdString(res["result"].get<json::string_t>()) == "success";
+}
+
+inline bool isJsonError(const json& res) {
+    return res.find("error") != res.end();
+}
+
 
 #endif // SETTINGS_H

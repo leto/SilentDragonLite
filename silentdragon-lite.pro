@@ -13,7 +13,7 @@ PRECOMPILED_HEADER = src/precompiled.h
 QT += widgets
 QT += websockets
 
-TARGET = silentdragonlite
+TARGET = Silentdragonlite
 
 TEMPLATE = app
 
@@ -60,7 +60,8 @@ SOURCES += \
     src/viewalladdresses.cpp \
     src/datamodel.cpp \
     src/controller.cpp \
-    src/liteinterface.cpp 
+    src/liteinterface.cpp \
+    src/camount.cpp
 
 HEADERS += \
     src/firsttimewizard.h \
@@ -88,9 +89,11 @@ HEADERS += \
     src/datamodel.h \
     src/controller.h \
     src/liteinterface.h \
+    src/camount.h \
     lib/silentdragonlitelib.h 
 
 FORMS += \
+    src/encryption.ui \
     src/mainwindow.ui \
     src/migration.ui \
     src/newseed.ui \
@@ -110,7 +113,7 @@ FORMS += \
     src/recurringdialog.ui \
     src/newrecurring.ui \
     src/requestdialog.ui \
-    src/recurringmultiple.ui
+    src/recurringmultiple.ui 
 
 
 TRANSLATIONS = res/zec_qt_wallet_es.ts \
@@ -144,6 +147,8 @@ else:win32:  librust.target   = $$PWD/lib/target/x86_64-pc-windows-gnu/release/s
 
 unix:        librust.commands = $(MAKE) -C $$PWD/lib 
 else:win32:  librust.commands = $(MAKE) -C $$PWD/lib winrelease
+
+librust.depends = lib/Cargo.toml lib/src/lib.rs
 
 librustclean.commands = "rm -rf $$PWD/lib/target"
 distclean.depends += librustclean

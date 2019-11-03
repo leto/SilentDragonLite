@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "settings.h"
+#include "camount.h"
 
 Settings* Settings::instance = nullptr;
 
@@ -18,31 +19,22 @@ Config Settings::getSettings() {
     // Load from the QT Settings. 
     QSettings s;
     
-    auto host        = s.value("connection/host").toString();
-    auto port        = s.value("connection/port").toString();
-    auto username    = s.value("connection/rpcuser").toString();
-    auto password    = s.value("connection/rpcpassword").toString();    
+    auto server        = s.value("connection/server").toString();
+    if (server.trimmed().isEmpty()) {
+        server = Settings::getDefaultServer();
+    }
 
-    return Config{host, port, username, password};
+    return Config{server};
 }
 
-void Settings::saveSettings(const QString& host, const QString& port, const QString& username, const QString& password) {
+void Settings::saveSettings(const QString& server) {
     QSettings s;
 
-    s.setValue("connection/host", host);
-    s.setValue("connection/port", port);
-    s.setValue("connection/rpcuser", username);
-    s.setValue("connection/rpcpassword", password);
-
+    s.setValue("connection/server", server);
     s.sync();
 
     // re-init to load correct settings
     init();
-}
-
-void Settings::setUsinghushConf(QString confLocation) {
-    if (!confLocation.isEmpty())
-        _confLocation = confLocation;
 }
 
 bool Settings::isTestnet() {
@@ -72,7 +64,7 @@ bool Settings::isZAddress(QString addr) {
     if (!isValidAddress(addr))
         return false;
         
-    return addr.startsWith("z");
+    return addr.startsWith("zs");
 }
 
 bool Settings::isTAddress(QString addr) {
@@ -110,17 +102,8 @@ bool Settings::isSaplingActive() {
     return  (isTestnet() && getBlockNumber() > 0) || (!isTestnet() && getBlockNumber() > 0);
 }
 
-double Settings::gethushPrice() { 
-    return hushPrice; 
-}
-
-bool Settings::getAutoShield() {
-    // Load from Qt settings
-    return QSettings().value("options/autoshield", false).toBool();
-}
-
-void Settings::setAutoShield(bool allow) {
-    QSettings().setValue("options/autoshield", allow);
+double Settings::getZECPrice() { 
+    return ZECPrice; 
 }
 
 bool Settings::getCheckForUpdates() {
@@ -139,15 +122,6 @@ void Settings::setAllowFetchPrices(bool allow) {
      QSettings().setValue("options/allowfetchprices", allow);
 }
 
-bool Settings::getAllowCustomFees() {
-    // Load from the QT Settings. 
-    return QSettings().value("options/customfees", false).toBool();
-}
-
-void Settings::setAllowCustomFees(bool allow) {
-    QSettings().setValue("options/customfees", allow);
-}
-
 QString Settings::get_theme_name() {
     // Load from the QT Settings.
     return QSettings().value("options/theme_name", false).toString();
@@ -157,22 +131,7 @@ void Settings::set_theme_name(QString theme_name) {
     QSettings().setValue("options/theme_name", theme_name);
 }
 
-bool Settings::getSaveZtxs() {
-    // Load from the QT Settings. 
-    return QSettings().value("options/savesenttx", true).toBool();
-}
 
-void Settings::setSaveZtxs(bool save) {
-    QSettings().setValue("options/savesenttx", save);
-}
-
-void Settings::setPeers(int peers) {
-    _peerConnections = peers;
-}
-
-int Settings::getPeers() {
-    return _peerConnections;
-}
 //=================================
 // Static Stuff
 //=================================
@@ -191,6 +150,10 @@ void Settings::saveRestoreTableHeader(QTableView* table, QDialog* d, QString tab
     QObject::connect(d, &QDialog::finished, [=](auto) {
         QSettings().setValue(tablename, table->horizontalHeader()->saveState());
     });
+}
+
+QString Settings::getDefaultServer() {
+    return "https://hush-lightwallet.de:443";
 }
 
 void Settings::openAddressInExplorer(QString address) {
@@ -216,37 +179,6 @@ void Settings::openTxInExplorer(QString txid) {
 
 
 
-
-QString Settings::getUSDFormat(double bal) {
-    return "$" + QLocale(QLocale::English).toString(bal * Settings::getInstance()->gethushPrice(), 'f', 2);
-}
-
-QString Settings::getDecimalString(double amt) {
-    QString f = QString::number(amt, 'f', 8);
-
-    while (f.contains(".") && (f.right(1) == "0" || f.right(1) == ".")) {
-        f = f.left(f.length() - 1);
-    }
-    if (f == "-0")
-        f = "0";
-
-    return f;
-}
-
-QString Settings::gethushDisplayFormat(double bal) {
-    // This is idiotic. Why doesn't QString have a way to do this?
-    return getDecimalString(bal) % " " % Settings::getTokenName();
-}
-
-QString Settings::gethushUSDDisplayFormat(double bal) {
-    auto usdFormat = getUSDFormat(bal);
-    if (!usdFormat.isEmpty())
-        return gethushDisplayFormat(bal) % " (" % getUSDFormat(bal) % ")";
-    else
-        return gethushDisplayFormat(bal);
-}
-
-
 const QString Settings::txidStatusMessage = QString(QObject::tr("Tx submitted (right click to copy) txid:"));
 
 QString Settings::getTokenName() {
@@ -261,72 +193,12 @@ QString Settings::getDonationAddr() {
     if (Settings::getInstance()->isTestnet()) 
             return "ztestsaplingXXX";
     else 
-            return "zs1aq4xnrkjlnxx0zesqye7jz3dfrf3rjh7q5z6u8l6mwyqqaam3gx3j2fkqakp33v93yavq46j83q";
+            return "zs1kwp3h4rwz76zfqzmwqqextq696kndtjskg4fzc80l9ygfal4hchcsst83ua8tjwzzy9nja7v5rr";
 
 }
 
-bool Settings::addTohushConf(QString confLocation, QString line) {
-    QFile file(confLocation);
-    if (!file.open(QIODevice::ReadWrite | QIODevice::Append))
-        return false;
-    
-
-    QTextStream out(&file);
-    out << line << "\n";
-    file.close();
-
-    return true;
-}
-
-bool Settings::removeFromhushConf(QString confLocation, QString option) {
-    if (confLocation.isEmpty())
-        return false;
-
-    // To remove an option, we'll create a new file, and copy over everything but the option.
-    QFile file(confLocation);
-    if (!file.open(QIODevice::ReadOnly)) 
-        return false;
-    
-    QList<QString> lines;
-    QTextStream in(&file);
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-        auto s = line.indexOf("=");
-        QString name = line.left(s).trimmed().toLower();
-        if (name != option) {
-            lines.append(line);
-        }
-    }    
-    file.close();
-    
-    QFile newfile(confLocation);
-    if (!newfile.open(QIODevice::ReadWrite | QIODevice::Truncate))
-        return false;
-
-    QTextStream out(&newfile);
-    for (QString line : lines) {
-        out << line << endl;
-    }
-    newfile.close();
-
-    return true;
-}
-
-double Settings::getMinerFee() {
-    return 0.0001;
-}
-
-double Settings::getZboardAmount() {
-    return 0.0001;
-}
-
-QString Settings::getZboardAddr() {
-    if (Settings::getInstance()->isTestnet()) {
-        return getDonationAddr();
-    }
-    else {
-        return "zs10m00rvkhfm4f7n23e4sxsx275r7ptnggx39ygl0vy46j9mdll5c97gl6dxgpk0njuptg2mn9w5s";
-    }
+CAmount Settings::getMinerFee() {
+    return CAmount::fromqint64(10000);
 }
 
 bool Settings::isValidSaplingPrivateKey(QString pk) {
@@ -349,7 +221,8 @@ bool Settings::isValidAddress(QString addr) {
 
 // Get a pretty string representation of this Payment URI
 QString Settings::paymentURIPretty(PaymentURI uri) {
-    return QString() + "Payment Request\n" + "Pay: " + uri.addr + "\nAmount: " + gethushDisplayFormat(uri.amt.toDouble()) 
+    CAmount amount = CAmount::fromDecimalString(uri.amt);
+    return QString() + "Payment Request\n" + "Pay: " + uri.addr + "\nAmount: " + amount.toDecimalhushString() 
         + "\nMemo:" + QUrl::fromPercentEncoding(uri.memo.toUtf8());
 }
 
