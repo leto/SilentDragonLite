@@ -1159,7 +1159,7 @@
   </action>
   <action name="actionDonate">
    <property name="text">
-    <string>&amp;Send Duke Feedback</string>
+    <string>&amp;Send DenioD Feedback</string>
    </property>
   </action>
   <action name="actionDiscord">
