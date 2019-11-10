@@ -37,7 +37,7 @@ sudo apt install clang g++ build-essential make mingw-w64 git pkg-config libc6-d
 sudo apt install bash bison bzip2 flex gettext git gperf intltool libc6-dev-i386 libgdk-pixbuf2.0-dev libltdl-dev libtool-bin libxml-parser-perl make openssl p7zip-full patch perl pkg-config python ruby sed unzip wget xz-utils
 
 ```
-Compile OpenSSL
+# Compile OpenSSL
 
 ```
 # Download openssl 1.0.2
@@ -46,7 +46,7 @@ cd openssl
 ./Configure linux-x86_64
 make
 ```
-Static build of Qt5
+## Static build of Qt5
 
 # Download Qt5 sources
 ```
