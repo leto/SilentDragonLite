@@ -74,5 +74,8 @@ make -j$(nproc) MXE_TARGETS=x86_64-w64-mingw32.static qtbase qtwebsockets
 
 ```
 # Build SilentDragonLite .exe
+```
 cd SilentDragonLite
 ./win-static-build.sh
+
+```
