@@ -8,6 +8,7 @@ echo "Compiling SilentDragonLite $VERSION .exe with $JOBS threads..."
 CONF=silentdragon-lite.pro
 
 set -e
+echo 'source $HOME/.cargo/env' >> $HOME/.bashrc
 CC_x86_64_pc_windows_gnu="x86_64-w64-mingw32.static-gcc"
 PATH="/home/$USER/github/mxe/usr/bin:${PATH}"
 mkdir release
