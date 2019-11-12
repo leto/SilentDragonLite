@@ -409,7 +409,7 @@ void Controller::refreshTransactions() {
                 }
 
                 txdata.push_back(TransactionItem{
-                   "Sent", datetime, address, txid,confirmations, items
+                   "send", datetime, address, txid,confirmations, items
                 });
             } else {
                 // Incoming Transaction

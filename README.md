@@ -28,10 +28,9 @@ Go to the releases page and grab the latest installers or binary. https://github
 ```
 git clone https://github.com/MyHush/SilenDragonLite.git
 cd silentdragonlite
-/path/to/qt5/bin/qmake silentdragon-lite.pro CONFIG+=debug
-make -j$(nproc)
+./build.sh
+./Silentdragonlite
 
-./silentdragonlite
 ```
 
 
