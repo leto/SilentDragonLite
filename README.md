@@ -2,6 +2,12 @@
 
 SilentDragonLite is a lightwallet for HUSH ($HUSH) runs on Linux and Windows which does not require you to download the full blockchain. This is experimental software under active development!
 
+[![Front.png](https://i.postimg.cc/KjNpvVGk/Front.png)](https://postimg.cc/fSVf880D)
+
+[![Sendtab.png](https://i.postimg.cc/25hwSJTk/Sendtab.png)](https://postimg.cc/mcZMdm0J)
+
+[![Neueslogo.png](https://i.postimg.cc/63j67MH5/Neueslogo.png)](https://postimg.cc/KkThwDSd)
+
 ## PRIVACY NOTICE
 
 SilentDragonLite contacts a few different external websites to get various bits of data. * coingecko.com for price data API * explorer.myhush.org for explorer links * dexstats.info for address utilities, hush-lightwallet.de to get Data.
@@ -26,3 +32,5 @@ cd silentdragonlite
 ./Silentdragonlite
 
 ```
+
+
