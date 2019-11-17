@@ -58,7 +58,6 @@ Controller::~Controller() {
     delete zrpc;
 }
 
-
 // Called when a connection to hushd is available. 
 void Controller::setConnection(Connection* c) {
     if (c == nullptr) return;
@@ -80,7 +79,6 @@ void Controller::setConnection(Connection* c) {
     refresh(true);
 }
 
-
 // Build the RPC JSON Parameters for this tx
 void Controller::fillTxJsonParams(json& allRecepients, Tx tx) {   
     Q_ASSERT(allRecepients.is_array());
@@ -99,7 +97,6 @@ void Controller::fillTxJsonParams(json& allRecepients, Tx tx) {
         allRecepients.push_back(rec);
     }
 }
-
 
 void Controller::noConnection() {    
     QIcon i = QApplication::style()->standardIcon(QStyle::SP_MessageBoxCritical);
@@ -166,7 +163,18 @@ void Controller::getInfoThenRefresh(bool force) {
         auto tooltip = Settings::getInstance()->getSettings().server + "\n" + QString::fromStdString(reply.dump());
         QIcon i(":/icons/res/connected.gif");
         main->statusLabel->setText(chainName + "(" + QString::number(curBlock) + ")");
+
+        // use currency ComboBox as input 
+
+        if (Settings::getInstance()->get_currency_name() == "USD") {
         main->statusLabel->setText(" HUSH/USD=$" + QString::number( (double) Settings::getInstance()->getZECPrice() ));
+    }   else if (Settings::getInstance()->get_currency_name() == "EUR") {
+        main->statusLabel->setText(" HUSH/EUR=€" + QString::number( (double) Settings::getInstance()->getEURPrice() ));
+    }   else if  (Settings::getInstance()->get_currency_name() == "BTC") {
+        main->statusLabel->setText(" HUSH/BTC=BTC" + QString::number( (double) Settings::getInstance()->getBTCPrice() ));
+    } else {
+    main->statusLabel->setText(" Fehler=KACKE" + QString::number( (double) Settings::getInstance()->getEURPrice() ));
+    }
         main->statusLabel->setToolTip(tooltip);
         main->statusIcon->setPixmap(i.pixmap(16, 16));
         main->statusIcon->setToolTip(tooltip);
@@ -176,10 +184,7 @@ void Controller::getInfoThenRefresh(bool force) {
         Settings::getInstance()->sethushdVersion(version);
        ui->Version->setText(QString::fromStdString(reply["version"].get<json::string_t>())); 
        ui->Vendor->setText(QString::fromStdString(reply["vendor"].get<json::string_t>()));
-
-       
-    
-    
+   
         // See if recurring payments needs anything
         Recurring::getInstance()->processPending(main);
 
@@ -659,14 +664,28 @@ void Controller::refreshZECPrice() {
             const json& item  = parsed.get<json::object_t>();
             const json& hush  = item["hush"].get<json::object_t>();
 
-                  if (hush["usd"] >= 0) {
+            if (hush["usd"] >= 0) {
                 qDebug() << "Found hush key in price json";
                 // TODO: support BTC/EUR prices as well
                 //QString price = QString::fromStdString(hush["usd"].get<json::string_t>());
                 qDebug() << "HUSH = $" << QString::number((double)hush["usd"]);
                 Settings::getInstance()->setZECPrice( hush["usd"] );
-                  return;
             }
+            if (hush["eur"] >= 0)
+            {
+                // TODO: support BTC/EUR prices as well
+                //QString price = QString::fromStdString(hush["usd"].get<json::string_t>());
+                qDebug() << "HUSH = €" << QString::number((double)hush["eur"]);
+                Settings::getInstance()->setEURPrice(hush["eur"]);
+            }
+            if (hush["btc"] >= 0)
+            {
+                // TODO: support BTC/EUR prices as well
+                //QString price = QString::fromStdString(hush["usd"].get<json::string_t>());
+                qDebug() << "HUSH = BTC" << QString::number((double)hush["btc"]);
+                Settings::getInstance()->setBTCPrice( hush["btc"]);
+            }
+            return;
          } catch (const std::exception& e) {
             // If anything at all goes wrong, just set the price to 0 and move on.
             qDebug() << QString("Caught something nasty: ") << e.what();
@@ -674,6 +693,8 @@ void Controller::refreshZECPrice() {
 
         // If nothing, then set the price to 0;
         Settings::getInstance()->setZECPrice(0);
+        Settings::getInstance()->setEURPrice(0);
+        Settings::getInstance()->setBTCPrice(0);
     });
 
 }

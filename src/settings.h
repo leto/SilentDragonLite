@@ -63,10 +63,18 @@ public:
     QString get_theme_name();
     void set_theme_name(QString theme_name);
 
+    QString get_currency_name();
+    void set_currency_name(QString currency_name);
+
+
     bool    isSaplingActive();
 
     void    setZECPrice(double p) { ZECPrice = p; }
+    void    setEURPrice(double p) { EURPrice = p; }
+    void    setBTCPrice(double p) { BTCPrice = p; }
     double  getZECPrice();
+    double  getEURPrice();
+    double  getBTCPrice();
 
     // Static stuff
     static const QString txidStatusMessage;
@@ -119,6 +127,8 @@ private:
     bool    _headless         = false;
     
     double  ZECPrice          = 0.0;
+    double  BTCPrice          = 0.0;
+    double  EURPrice          = 0.0;
 };
 
 
