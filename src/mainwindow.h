@@ -79,8 +79,7 @@ public:
 public slots:
     void slot_change_theme(const QString& themeName);
     void slot_change_currency(const QString& currencyName);
-    
-    
+     
 private:    
     void closeEvent(QCloseEvent* event);
 

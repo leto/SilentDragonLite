@@ -425,15 +425,11 @@ void MainWindow::setupSettingsModal() {
         int currency_index = settings.comboBoxCurrency->findText(Settings::getInstance()->get_currency_name(), Qt::MatchExactly);
         settings.comboBoxCurrency->setCurrentIndex(currency_index);
         
-
-
        QObject::connect(settings.comboBoxCurrency, &QComboBox::currentTextChanged, [=] (QString currency_name) {
             this->slot_change_currency(currency_name);
             
              // Tell the user to restart
-            QMessageBox::information(this, tr("Currency Change"), tr("Please restart SilentDragonLite to have new currencies apply"), QMessageBox::Ok);
-          
-            
+            QMessageBox::information(this, tr("Currency Change"), tr("Please restart SilentDragonLite to have new currencies apply"), QMessageBox::Ok);  
              });
       
         // Check for updates
@@ -1126,27 +1122,27 @@ void MainWindow::setupReceiveTab() {
         
         ui->rcvLabel->setText(label);
         if (Settings::getInstance()->get_currency_name() == "USD") {
-        ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushUSDString());
+             ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushUSDString());
         } else if (Settings::getInstance()->get_currency_name() == "EUR") {
-            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushEURString());
-            } else if (Settings::getInstance()->get_currency_name() == "BTC") {
-                ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushBTCString());
-                } else if (Settings::getInstance()->get_currency_name() == "CNY") {
+             ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushEURString());
+        } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+             ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushBTCString());
+        } else if (Settings::getInstance()->get_currency_name() == "CNY") {
             ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushCNYString());
-            } else if (Settings::getInstance()->get_currency_name() == "RUB") {
-                ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushRUBString());
-                } else if (Settings::getInstance()->get_currency_name() == "CAD") {
+        } else if (Settings::getInstance()->get_currency_name() == "RUB") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushRUBString());
+        } else if (Settings::getInstance()->get_currency_name() == "CAD") {
             ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushCADString());
-            } else if (Settings::getInstance()->get_currency_name() == "SGD") {
-                ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushSGDString());
-                } else if (Settings::getInstance()->get_currency_name() == "CHF") {
+        } else if (Settings::getInstance()->get_currency_name() == "SGD") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushSGDString());
+        } else if (Settings::getInstance()->get_currency_name() == "CHF") {
             ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushCHFString());
-            } else if (Settings::getInstance()->get_currency_name() == "INR") {
-                ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushINRString());
-                } else if (Settings::getInstance()->get_currency_name() == "GBP") {
+        } else if (Settings::getInstance()->get_currency_name() == "INR") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushINRString());
+        } else if (Settings::getInstance()->get_currency_name() == "GBP") {
             ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushGBPString());
-            } else if (Settings::getInstance()->get_currency_name() == "AUD") {
-                ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushAUDString());
+        } else if (Settings::getInstance()->get_currency_name() == "AUD") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushAUDString());
             }
 
         ui->txtReceive->setPlainText(addr);       
@@ -1309,18 +1305,9 @@ void MainWindow::slot_change_currency(const QString& currency_name)
         saved_currency_name = "USD";
         
     }
-
-    
-    
- 
-
 }
 
-
-
-
 void MainWindow::slot_change_theme(const QString& theme_name)
-
 
 {
     Settings::getInstance()->set_theme_name(theme_name);

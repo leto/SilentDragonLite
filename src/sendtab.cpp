@@ -65,15 +65,15 @@ void MainWindow::setupSendTab() {
         ui->lblMinerFeeUSD->setText(fee.toDecimalEURString());
     } else if (Settings::getInstance()->get_currency_name() == "BTC") {
         ui->lblMinerFeeUSD->setText(fee.toDecimalBTCString());
-         } else if (Settings::getInstance()->get_currency_name() == "CNY") {
+    } else if (Settings::getInstance()->get_currency_name() == "CNY") {
         ui->lblMinerFeeUSD->setText(fee.toDecimalCNYString());
     } else if (Settings::getInstance()->get_currency_name() == "RUB") {
         ui->lblMinerFeeUSD->setText(fee.toDecimalRUBString());
-         } else if (Settings::getInstance()->get_currency_name() == "CAD") {
+    } else if (Settings::getInstance()->get_currency_name() == "CAD") {
         ui->lblMinerFeeUSD->setText(fee.toDecimalCADString());
     } else if (Settings::getInstance()->get_currency_name() == "SGD") {
         ui->lblMinerFeeUSD->setText(fee.toDecimalSGDString());
-         } else if (Settings::getInstance()->get_currency_name() == "CHF") {
+    } else if (Settings::getInstance()->get_currency_name() == "CHF") {
         ui->lblMinerFeeUSD->setText(fee.toDecimalCHFString());
     } else if (Settings::getInstance()->get_currency_name() == "INR") {
         ui->lblMinerFeeUSD->setText(fee.toDecimalINRString());
@@ -91,37 +91,37 @@ void MainWindow::setupSendTab() {
             QString txt = ui->minerFeeAmt->text();
         if (Settings::getInstance()->get_currency_name() == "USD") {
             QString feeUSD = CAmount::fromDecimalString(txt).toDecimalUSDString();
-             ui->lblMinerFeeUSD->setText(feeUSD);
+            ui->lblMinerFeeUSD->setText(feeUSD);
     } else if (Settings::getInstance()->get_currency_name() == "EUR") {
             QString feeUSD = CAmount::fromDecimalString(txt).toDecimalEURString();
-             ui->lblMinerFeeUSD->setText(feeUSD);
+            ui->lblMinerFeeUSD->setText(feeUSD);
     } else if (Settings::getInstance()->get_currency_name() == "BTC") {
-        QString feeUSD = CAmount::fromDecimalString(txt).toDecimalEURString();
-         ui->lblMinerFeeUSD->setText(feeUSD);
+            QString feeUSD = CAmount::fromDecimalString(txt).toDecimalEURString();
+            ui->lblMinerFeeUSD->setText(feeUSD);
     } else if (Settings::getInstance()->get_currency_name() == "CNY") {
             QString feeUSD = CAmount::fromDecimalString(txt).toDecimalCNYString();
-             ui->lblMinerFeeUSD->setText(feeUSD);
+            ui->lblMinerFeeUSD->setText(feeUSD);
     } else if (Settings::getInstance()->get_currency_name() == "RUB") {
-        QString feeUSD = CAmount::fromDecimalString(txt).toDecimalRUBString();
-         ui->lblMinerFeeUSD->setText(feeUSD);
+            QString feeUSD = CAmount::fromDecimalString(txt).toDecimalRUBString();
+            ui->lblMinerFeeUSD->setText(feeUSD);
     } else if (Settings::getInstance()->get_currency_name() == "CAD") {
             QString feeUSD = CAmount::fromDecimalString(txt).toDecimalCADString();
-             ui->lblMinerFeeUSD->setText(feeUSD);
+            ui->lblMinerFeeUSD->setText(feeUSD);
     } else if (Settings::getInstance()->get_currency_name() == "SGD") {
-        QString feeUSD = CAmount::fromDecimalString(txt).toDecimalSGDString();
-         ui->lblMinerFeeUSD->setText(feeUSD);
+            QString feeUSD = CAmount::fromDecimalString(txt).toDecimalSGDString();
+            ui->lblMinerFeeUSD->setText(feeUSD);
     } else if (Settings::getInstance()->get_currency_name() == "CHF") {
             QString feeUSD = CAmount::fromDecimalString(txt).toDecimalCHFString();
-             ui->lblMinerFeeUSD->setText(feeUSD);
+            ui->lblMinerFeeUSD->setText(feeUSD);
     } else if (Settings::getInstance()->get_currency_name() == "INR") {
-        QString feeUSD = CAmount::fromDecimalString(txt).toDecimalINRString();
-         ui->lblMinerFeeUSD->setText(feeUSD);
-         } else if (Settings::getInstance()->get_currency_name() == "GBP") {
+            QString feeUSD = CAmount::fromDecimalString(txt).toDecimalINRString();
+            ui->lblMinerFeeUSD->setText(feeUSD);
+    } else if (Settings::getInstance()->get_currency_name() == "GBP") {
             QString feeUSD = CAmount::fromDecimalString(txt).toDecimalGBPString();
-             ui->lblMinerFeeUSD->setText(feeUSD);
+            ui->lblMinerFeeUSD->setText(feeUSD);
     } else if (Settings::getInstance()->get_currency_name() == "AUD") {
-        QString feeUSD = CAmount::fromDecimalString(txt).toDecimalAUDString();
-         ui->lblMinerFeeUSD->setText(feeUSD);
+            QString feeUSD = CAmount::fromDecimalString(txt).toDecimalAUDString();
+            ui->lblMinerFeeUSD->setText(feeUSD);
     }  
     }
 
@@ -748,27 +748,27 @@ bool MainWindow::confirmTx(Tx tx, RecurringPaymentInfo* rpi) {
         minerFeeUSD->setObjectName(QStringLiteral("minerFeeUSD"));
         minerFeeUSD->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         confirm.gridLayout->addWidget(minerFeeUSD, row, 2, 1, 1);
-        if (Settings::getInstance()->get_currency_name() == "USD") {
-        minerFeeUSD->setText(tx.fee.toDecimalUSDString());
-      } else if (Settings::getInstance()->get_currency_name() == "EUR") {
-          minerFeeUSD->setText(tx.fee.toDecimalEURString());
-          } else if (Settings::getInstance()->get_currency_name() == "BTC") {
-              minerFeeUSD->setText(tx.fee.toDecimalBTCString());
-               } else if (Settings::getInstance()->get_currency_name() == "CNY") {
+     if (Settings::getInstance()->get_currency_name() == "USD") {
+            minerFeeUSD->setText(tx.fee.toDecimalUSDString());
+    } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+            minerFeeUSD->setText(tx.fee.toDecimalEURString());
+    } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+            minerFeeUSD->setText(tx.fee.toDecimalBTCString());
+    } else if (Settings::getInstance()->get_currency_name() == "CNY") {
           minerFeeUSD->setText(tx.fee.toDecimalCNYString());
-          } else if (Settings::getInstance()->get_currency_name() == "RUB") {
-              minerFeeUSD->setText(tx.fee.toDecimalRUBString());
-               } else if (Settings::getInstance()->get_currency_name() == "CAD") {
+    } else if (Settings::getInstance()->get_currency_name() == "RUB") {
+          minerFeeUSD->setText(tx.fee.toDecimalRUBString());
+    } else if (Settings::getInstance()->get_currency_name() == "CAD") {
           minerFeeUSD->setText(tx.fee.toDecimalCADString());
-          } else if (Settings::getInstance()->get_currency_name() == "SGD") {
-              minerFeeUSD->setText(tx.fee.toDecimalSGDString());
-           } else if (Settings::getInstance()->get_currency_name() == "CHF") {
+    } else if (Settings::getInstance()->get_currency_name() == "SGD") {
+          minerFeeUSD->setText(tx.fee.toDecimalSGDString());
+    } else if (Settings::getInstance()->get_currency_name() == "CHF") {
           minerFeeUSD->setText(tx.fee.toDecimalCHFString());
-          } else if (Settings::getInstance()->get_currency_name() == "INR") {
-              minerFeeUSD->setText(tx.fee.toDecimalINRString());
-               } else if (Settings::getInstance()->get_currency_name() == "GBP") {
+    } else if (Settings::getInstance()->get_currency_name() == "INR") {
+          minerFeeUSD->setText(tx.fee.toDecimalINRString());
+    } else if (Settings::getInstance()->get_currency_name() == "GBP") {
           minerFeeUSD->setText(tx.fee.toDecimalGBPString());
-          } else if (Settings::getInstance()->get_currency_name() == "AUD") {
+    } else if (Settings::getInstance()->get_currency_name() == "AUD") {
               minerFeeUSD->setText(tx.fee.toDecimalAUDString());
     }
     }
