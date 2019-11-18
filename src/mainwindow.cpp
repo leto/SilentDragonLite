@@ -430,8 +430,8 @@ void MainWindow::setupSettingsModal() {
        QObject::connect(settings.comboBoxCurrency, &QComboBox::currentTextChanged, [=] (QString currency_name) {
             this->slot_change_currency(currency_name);
             
-             // Tell the user that it will take some seconds
-            QMessageBox::information(this, tr("Currency Change"), tr("This change will take some seconds"), QMessageBox::Ok);
+             // Tell the user to restart
+            QMessageBox::information(this, tr("Currency Change"), tr("Please restart SilentDragonLite to have new currencies apply"), QMessageBox::Ok);
           
             
              });
