@@ -168,13 +168,13 @@ void Controller::getInfoThenRefresh(bool force) {
         // use currency ComboBox as input 
 
         if (Settings::getInstance()->get_currency_name() == "USD") {
-        main->statusLabel->setText(" HUSH/USD=$ " + QString::number( (double) Settings::getInstance()->getZECPrice() ));
+        main->statusLabel->setText(" HUSH/USD=$ " + QString::number( (double) Settings::getInstance()->getZECPrice() ,'f',2));
     }   else if (Settings::getInstance()->get_currency_name() == "EUR") {
-        main->statusLabel->setText(" HUSH/EUR=€ " + QString::number( (double) Settings::getInstance()->getEURPrice() ));
+        main->statusLabel->setText(" HUSH/EUR=€ " + QString::number( (double) Settings::getInstance()->getEURPrice() ,'f',2));
     }   else if  (Settings::getInstance()->get_currency_name() == "BTC") {
-        main->statusLabel->setText(" HUSH/BTC=BTC " + QString::number((double)  Settings::getInstance()->getBTCPrice() ));
+        main->statusLabel->setText(" HUSH/BTC=BTC " + QString::number((double)  Settings::getInstance()->getBTCPrice() ,'f',8));
     } else {
-    main->statusLabel->setText(" error Input" + QString::number( (double) Settings::getInstance()->getEURPrice() ));
+    main->statusLabel->setText(" error Input" + QString::number(Settings::getInstance()->getEURPrice() ));
     }
         main->statusLabel->setToolTip(tooltip);
         main->statusIcon->setPixmap(i.pixmap(16, 16));
