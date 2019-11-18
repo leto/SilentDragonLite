@@ -37,9 +37,21 @@ QString CAmount::toDecimalUSDString() const {
     double dblAmount = static_cast<double>(this->amount) / COIN;
     double price = Settings::getInstance()->getZECPrice();
 
-    return "$" + QLocale(QLocale::English).toString(dblAmount*price, 'f', 2);
+    return "$ " + QLocale(QLocale::English).toString(dblAmount*price, 'f', 2);
 }
 
+QString CAmount::toDecimalEURString() const {
+    double dblAmount = static_cast<double>(this->amount) / COIN;
+    double price = Settings::getInstance()->getEURPrice();
+
+    return QLocale(QLocale::German).toString(dblAmount*price, 'f', 2) + " €";
+}
+QString CAmount::toDecimalBTCString() const {
+    double dblAmount = static_cast<double>(this->amount) / COIN;
+    double price = Settings::getInstance()->getBTCPrice();
+
+    return "BTC " + QLocale(QLocale::English).toString(dblAmount*price, 'f', 9);
+}
 QString CAmount::toDecimalhushString() const {
     return this->toDecimalString() % " " % Settings::getTokenName();
 }
@@ -48,6 +60,23 @@ QString CAmount::toDecimalhushUSDString() const {
     auto usdString = this->toDecimalUSDString();
     if (!usdString.isEmpty())
         return this->toDecimalhushString() % " (" % usdString % ")";
+    else
+        return this->toDecimalhushString();
+}
+
+
+QString CAmount::toDecimalhushEURString() const {
+    auto eurString = this->toDecimalEURString();
+    if (!eurString.isEmpty())
+        return this->toDecimalhushString() % " (" % eurString % ")";
+    else
+        return this->toDecimalhushString();
+}
+
+QString CAmount::toDecimalhushBTCString() const {
+    auto btcString = this->toDecimalBTCString();
+    if (!btcString.isEmpty())
+        return this->toDecimalhushString() % " (" % btcString % ")";
     else
         return this->toDecimalhushString();
 }

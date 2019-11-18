@@ -429,6 +429,7 @@ void MainWindow::setupSettingsModal() {
 
        QObject::connect(settings.comboBoxCurrency, &QComboBox::currentTextChanged, [=] (QString currency_name) {
             this->slot_change_currency(currency_name);
+            
              // Tell the user that it will take some seconds
             QMessageBox::information(this, tr("Currency Change"), tr("This change will take some seconds"), QMessageBox::Ok);
           
@@ -1124,7 +1125,14 @@ void MainWindow::setupReceiveTab() {
         }
         
         ui->rcvLabel->setText(label);
+        if (Settings::getInstance()->get_currency_name() == "USD") {
         ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushUSDString());
+        } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushEURString());
+            } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+                ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushBTCString());
+            }
+
         ui->txtReceive->setPlainText(addr);       
         ui->qrcodeDisplay->setQrcodeString(addr);
         if (rpc->getModel()->getUsedAddresses().value(addr, false)) {

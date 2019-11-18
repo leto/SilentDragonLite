@@ -58,7 +58,14 @@ void MainWindow::setupSendTab() {
     ui->minerFeeAmt->setReadOnly(true);
     QObject::connect(ui->minerFeeAmt, &QLineEdit::textChanged, [=](auto txt) {
         CAmount fee = CAmount::fromDecimalString(txt);
+
+    if (Settings::getInstance()->get_currency_name() == "USD") {
         ui->lblMinerFeeUSD->setText(fee.toDecimalUSDString());
+    } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+        ui->lblMinerFeeUSD->setText(fee.toDecimalEURString());
+    } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+        ui->lblMinerFeeUSD->setText(fee.toDecimalBTCString());
+    }
     });
     ui->minerFeeAmt->setText(Settings::getMinerFee().toDecimalString());    
 
@@ -66,9 +73,18 @@ void MainWindow::setupSendTab() {
     QObject::connect(ui->tabWidget, &QTabWidget::currentChanged, [=] (int pos) {
         if (pos == 1) {
             QString txt = ui->minerFeeAmt->text();
+        if (Settings::getInstance()->get_currency_name() == "USD") {
             QString feeUSD = CAmount::fromDecimalString(txt).toDecimalUSDString();
-            ui->lblMinerFeeUSD->setText(feeUSD);
-        }
+             ui->lblMinerFeeUSD->setText(feeUSD);
+    } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+            QString feeUSD = CAmount::fromDecimalString(txt).toDecimalEURString();
+             ui->lblMinerFeeUSD->setText(feeUSD);
+    } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+        QString feeUSD = CAmount::fromDecimalString(txt).toDecimalEURString();
+         ui->lblMinerFeeUSD->setText(feeUSD);
+    }  
+    }
+
     });
     
     //Fees validator
@@ -275,7 +291,14 @@ void MainWindow::addressChanged(int itemNumber, const QString& text) {
 void MainWindow::amountChanged(int item, const QString& text) {
     auto usd = ui->sendToWidgets->findChild<QLabel*>(QString("AmtUSD") % QString::number(item));
     CAmount amt = CAmount::fromDecimalString(text);
+
+    if (Settings::getInstance()->get_currency_name() == "USD") {
     usd->setText(amt.toDecimalUSDString());
+    } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+    usd->setText(amt.toDecimalEURString());
+    } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+    usd->setText(amt.toDecimalBTCString());
+    }
 
     // If there is a recurring payment, update the info there as well
     if (sendTxRecurringInfo != nullptr) {
@@ -535,12 +558,29 @@ bool MainWindow::confirmTx(Tx tx, RecurringPaymentInfo* rpi) {
             totalSpending = totalSpending + toAddr.amount;
 
             // Amount (USD)
+            if (Settings::getInstance()->get_currency_name() == "USD") {
             auto AmtUSD = new QLabel(confirm.sendToAddrs);
             AmtUSD->setObjectName(QString("AmtUSD") % QString::number(i + 1));
             AmtUSD->setText(toAddr.amount.toDecimalUSDString());
             AmtUSD->setAlignment(Qt::AlignRight | Qt::AlignTrailing | Qt::AlignVCenter);
-            confirm.gridLayout->addWidget(AmtUSD, row, 2, 1, 1);            
+            confirm.gridLayout->addWidget(AmtUSD, row, 2, 1, 1);       
 
+            // Amount (EUR)
+            } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+            auto AmtUSD = new QLabel(confirm.sendToAddrs);
+            AmtUSD->setObjectName(QString("AmtUSD") % QString::number(i + 1));
+            AmtUSD->setText(toAddr.amount.toDecimalEURString());
+            AmtUSD->setAlignment(Qt::AlignRight | Qt::AlignTrailing | Qt::AlignVCenter);
+            confirm.gridLayout->addWidget(AmtUSD, row, 2, 1, 1);  
+
+            // Amount (EUR)
+             } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+            auto AmtUSD = new QLabel(confirm.sendToAddrs);
+            AmtUSD->setObjectName(QString("AmtUSD") % QString::number(i + 1));
+            AmtUSD->setText(toAddr.amount.toDecimalBTCString());
+            AmtUSD->setAlignment(Qt::AlignRight | Qt::AlignTrailing | Qt::AlignVCenter);
+            confirm.gridLayout->addWidget(AmtUSD, row, 2, 1, 1);  
+             }
             // Memo
             if (Settings::isZAddress(toAddr.addr) && !toAddr.memo.isEmpty()) {
                 row++;
@@ -588,7 +628,13 @@ bool MainWindow::confirmTx(Tx tx, RecurringPaymentInfo* rpi) {
         minerFeeUSD->setObjectName(QStringLiteral("minerFeeUSD"));
         minerFeeUSD->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         confirm.gridLayout->addWidget(minerFeeUSD, row, 2, 1, 1);
+        if (Settings::getInstance()->get_currency_name() == "USD") {
         minerFeeUSD->setText(tx.fee.toDecimalUSDString());
+      } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+          minerFeeUSD->setText(tx.fee.toDecimalEURString());
+          } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+              minerFeeUSD->setText(tx.fee.toDecimalBTCString());
+          }
     }
 
     // Recurring payment info, show only if there is exactly one destination address

@@ -83,7 +83,13 @@ QJsonObject RecurringPaymentInfo::toJson() {
 
 QString RecurringPaymentInfo::getAmountPretty() const {
     CAmount amount = CAmount::fromDouble(amt);
+    if (Settings::getInstance()->get_currency_name() == "USD") {
     return currency == "USD" ? amount.toDecimalUSDString() : amount.toDecimalhushString();
+  } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+    return currency == "EUR" ? amount.toDecimalEURString() : amount.toDecimalhushString();
+  } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+    return currency == "BTC" ? amount.toDecimalBTCString() : amount.toDecimalhushString();
+}
 }
 
 QString RecurringPaymentInfo::getScheduleDescription() const {
@@ -136,8 +142,14 @@ RecurringPaymentInfo* Recurring::getNewRecurringFromTx(QWidget* parent, MainWind
     if (tx.toAddrs.length() > 0) {
         ui.lblTo->setText(tx.toAddrs[0].addr);
 
-        // Default is USD
+        // Change it with currency in Settings
+        if (Settings::getInstance()->get_currency_name() == "USD") {
         ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalUSDString());
+         } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+             ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalEURString());
+             } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+                 ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalBTCString());
+             }
 
         ui.txtMemo->setPlainText(tx.toAddrs[0].memo);
         ui.txtMemo->setEnabled(false);
@@ -147,10 +159,16 @@ RecurringPaymentInfo* Recurring::getNewRecurringFromTx(QWidget* parent, MainWind
     QObject::connect(ui.cmbCurrency, &QComboBox::currentTextChanged, [&](QString c) {
         if (tx.toAddrs.length() < 1)
             return;
-
         if (c == "USD") {
             ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalUSDString());
+            
+              }  else if (c == "EUR") {
+            ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalEURString());
+               } else if 
+                (c == "BTC") {
+            ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalBTCString());
         }
+        
         else {
             ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalString());
         }
@@ -472,6 +490,8 @@ void Recurring::executeRecurringPayment(MainWindow* main, RecurringPaymentInfo r
                     PaymentStatus::ERROR);
             }
             return;
+        
+      
         }
         
         // Translate it into hush

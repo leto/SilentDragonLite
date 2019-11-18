@@ -131,7 +131,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Fetch hush / USD prices</string>
+        <string>Fetch hush prices</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="chkCheckUpdates">

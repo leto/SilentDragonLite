@@ -27,8 +27,12 @@ public:
     double  toDecimalDouble() const;
     QString toDecimalString() const;
     QString toDecimalUSDString() const;
+    QString toDecimalEURString() const;
+    QString toDecimalBTCString() const;
     QString toDecimalhushString() const;
     QString toDecimalhushUSDString() const;
+    QString toDecimalhushEURString() const;
+    QString toDecimalhushBTCString() const;
     qint64  toqint64() const { return amount; };
 
     CAmount operator+ (const CAmount& other) const {

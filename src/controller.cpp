@@ -28,10 +28,11 @@ Controller::Controller(MainWindow* main) {
     // Set up timer to refresh Price
     priceTimer = new QTimer(main);
     QObject::connect(priceTimer, &QTimer::timeout, [=]() {
-        if (Settings::getInstance()->getAllowFetchPrices())
-            refreshZECPrice();
+        if (Settings::getInstance()->getAllowFetchPrices()) 
+            refreshZECPrice();          
+        
     });
-    priceTimer->start(Settings::priceRefreshSpeed);  // Every hour
+    priceTimer->start(Settings::priceRefreshSpeed);  // Every 5 Min
 
     // Set up a timer to refresh the UI every few seconds
     timer = new QTimer(main);
@@ -167,18 +168,18 @@ void Controller::getInfoThenRefresh(bool force) {
         // use currency ComboBox as input 
 
         if (Settings::getInstance()->get_currency_name() == "USD") {
-        main->statusLabel->setText(" HUSH/USD=$" + QString::number( (double) Settings::getInstance()->getZECPrice() ));
+        main->statusLabel->setText(" HUSH/USD=$ " + QString::number( (double) Settings::getInstance()->getZECPrice() ));
     }   else if (Settings::getInstance()->get_currency_name() == "EUR") {
-        main->statusLabel->setText(" HUSH/EUR=€" + QString::number( (double) Settings::getInstance()->getEURPrice() ));
+        main->statusLabel->setText(" HUSH/EUR=€ " + QString::number( (double) Settings::getInstance()->getEURPrice() ));
     }   else if  (Settings::getInstance()->get_currency_name() == "BTC") {
-        main->statusLabel->setText(" HUSH/BTC=BTC" + QString::number( (double) Settings::getInstance()->getBTCPrice() ));
+        main->statusLabel->setText(" HUSH/BTC=BTC " + QString::number((double)  Settings::getInstance()->getBTCPrice() ));
     } else {
-    main->statusLabel->setText(" Fehler=KACKE" + QString::number( (double) Settings::getInstance()->getEURPrice() ));
+    main->statusLabel->setText(" error Input" + QString::number( (double) Settings::getInstance()->getEURPrice() ));
     }
         main->statusLabel->setToolTip(tooltip);
         main->statusIcon->setPixmap(i.pixmap(16, 16));
         main->statusIcon->setToolTip(tooltip);
-
+        
         //int version = reply["version"].get<json::string_t>();
         int version = 1;
         Settings::getInstance()->sethushdVersion(version);
@@ -302,14 +303,35 @@ void Controller::updateUIBalances() {
     ui->balTransparent->setText(balT.toDecimalhushString());
     ui->balTotal      ->setText(balTotal.toDecimalhushString());
 
+    if (Settings::getInstance()->get_currency_name() == "USD") {
     ui->balSheilded   ->setToolTip(balZ.toDecimalUSDString());
     ui->balVerified   ->setToolTip(balVerified.toDecimalUSDString());
     ui->balTransparent->setToolTip(balT.toDecimalUSDString());
     ui->balTotal      ->setToolTip(balTotal.toDecimalUSDString());
 
+   } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+    ui->balSheilded   ->setToolTip(balZ.toDecimalEURString());
+    ui->balVerified   ->setToolTip(balVerified.toDecimalEURString());
+    ui->balTransparent->setToolTip(balT.toDecimalEURString());
+    ui->balTotal      ->setToolTip(balTotal.toDecimalEURString());
+
+    } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+    ui->balSheilded   ->setToolTip(balZ.toDecimalBTCString());
+    ui->balVerified   ->setToolTip(balVerified.toDecimalBTCString());
+    ui->balTransparent->setToolTip(balT.toDecimalBTCString());
+    ui->balTotal      ->setToolTip(balTotal.toDecimalBTCString()); 
+    }
     // Send tab
     ui->txtAvailablehush->setText(balAvailable.toDecimalhushString());
-    ui->txtAvailableUSD->setText(balAvailable.toDecimalUSDString());
+
+    if (Settings::getInstance()->get_currency_name() == "USD") {
+        ui->txtAvailableUSD->setText(balAvailable.toDecimalUSDString());
+   } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+        ui->txtAvailableUSD->setText(balAvailable.toDecimalEURString()); 
+    } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+        ui->txtAvailableUSD->setText(balAvailable.toDecimalBTCString()); 
+    } else 
+    ui->txtAvailableUSD->setText(balAvailable.toDecimalBTCString()); 
 }
 
 void Controller::refreshBalances() {    
@@ -647,6 +669,8 @@ void Controller::refreshZECPrice() {
                     qDebug() << reply->errorString();
                 }
                 Settings::getInstance()->setZECPrice(0);
+                Settings::getInstance()->setEURPrice(0);
+                Settings::getInstance()->setBTCPrice(0);
                 return;
             }
 
@@ -656,6 +680,8 @@ void Controller::refreshZECPrice() {
             auto parsed = json::parse(all, nullptr, false);
             if (parsed.is_discarded()) {
                 Settings::getInstance()->setZECPrice(0);
+                Settings::getInstance()->setEURPrice(0);
+                Settings::getInstance()->setBTCPrice(0);
                 return;
             }
 

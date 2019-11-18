@@ -37,6 +37,8 @@ public:
     
     void checkForUpdate(bool silent = true);
     void refreshZECPrice();
+    void refreshEURPrice();
+    void refreshBTCPrice();
     
     void executeStandardUITransaction(Tx tx); 
 
