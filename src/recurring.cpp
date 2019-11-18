@@ -90,21 +90,21 @@ QString RecurringPaymentInfo::getAmountPretty() const {
   } else if (Settings::getInstance()->get_currency_name() == "BTC") {
     return currency == "BTC" ? amount.toDecimalBTCString() : amount.toDecimalhushString();
      } else if (Settings::getInstance()->get_currency_name() == "CNY") {
-    return currency == "EUR" ? amount.toDecimalCNYString() : amount.toDecimalhushString();
+    return currency == "CNY" ? amount.toDecimalCNYString() : amount.toDecimalhushString();
   } else if (Settings::getInstance()->get_currency_name() == "RUB") {
-    return currency == "BTC" ? amount.toDecimalRUBString() : amount.toDecimalhushString();
+    return currency == "RUB" ? amount.toDecimalRUBString() : amount.toDecimalhushString();
      } else if (Settings::getInstance()->get_currency_name() == "CAD") {
-    return currency == "EUR" ? amount.toDecimalCADString() : amount.toDecimalhushString();
+    return currency == "CAD" ? amount.toDecimalCADString() : amount.toDecimalhushString();
   } else if (Settings::getInstance()->get_currency_name() == "SGD") {
-    return currency == "BTC" ? amount.toDecimalSGDString() : amount.toDecimalhushString();
+    return currency == "SGD" ? amount.toDecimalSGDString() : amount.toDecimalhushString();
      } else if (Settings::getInstance()->get_currency_name() == "CHF") {
-    return currency == "EUR" ? amount.toDecimalCHFString() : amount.toDecimalhushString();
+    return currency == "CHF" ? amount.toDecimalCHFString() : amount.toDecimalhushString();
   } else if (Settings::getInstance()->get_currency_name() == "INR") {
-    return currency == "BTC" ? amount.toDecimalINRString() : amount.toDecimalhushString();
+    return currency == "INR" ? amount.toDecimalINRString() : amount.toDecimalhushString();
      } else if (Settings::getInstance()->get_currency_name() == "GBP") {
-    return currency == "EUR" ? amount.toDecimalGBPString() : amount.toDecimalhushString();
+    return currency == "GBP" ? amount.toDecimalGBPString() : amount.toDecimalhushString();
   } else if (Settings::getInstance()->get_currency_name() == "AUD") {
-    return currency == "BTC" ? amount.toDecimalAUDString() : amount.toDecimalhushString();
+    return currency == "AUD" ? amount.toDecimalAUDString() : amount.toDecimalhushString();
 }
 }
 
@@ -163,24 +163,24 @@ RecurringPaymentInfo* Recurring::getNewRecurringFromTx(QWidget* parent, MainWind
         ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalUSDString());
          } else if (Settings::getInstance()->get_currency_name() == "EUR") {
              ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalEURString());
-             } else if (Settings::getInstance()->get_currency_name() == "BTC") {
-                 ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalBTCString());
-                  } else if (Settings::getInstance()->get_currency_name() == "CNY") {
+         } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+             ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalBTCString());
+         } else if (Settings::getInstance()->get_currency_name() == "CNY") {
              ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalCNYString());
-             } else if (Settings::getInstance()->get_currency_name() == "RUB") {
-                 ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalRUBString());
-                  } else if (Settings::getInstance()->get_currency_name() == "CAD") {
+         } else if (Settings::getInstance()->get_currency_name() == "RUB") {
+            ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalRUBString());
+         } else if (Settings::getInstance()->get_currency_name() == "CAD") {
              ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalCADString());
-             } else if (Settings::getInstance()->get_currency_name() == "SGD") {
-                 ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalSGDString());
-                  } else if (Settings::getInstance()->get_currency_name() == "CHF") {
+         } else if (Settings::getInstance()->get_currency_name() == "SGD") {
+             ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalSGDString());
+         } else if (Settings::getInstance()->get_currency_name() == "CHF") {
              ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalCHFString());
-             } else if (Settings::getInstance()->get_currency_name() == "INR") {
-                 ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalINRString());
-                  } else if (Settings::getInstance()->get_currency_name() == "GBP") {
-             ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalGBPString());
-             } else if (Settings::getInstance()->get_currency_name() == "AUD") {
-                 ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalAUDString());
+         } else if (Settings::getInstance()->get_currency_name() == "INR") {
+            ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalINRString());
+         } else if (Settings::getInstance()->get_currency_name() == "GBP") {
+            ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalGBPString());
+         } else if (Settings::getInstance()->get_currency_name() == "AUD") {
+            ui.lblAmt->setText(tx.toAddrs[0].amount.toDecimalAUDString());
             
              }
 
