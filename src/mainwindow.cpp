@@ -1131,6 +1131,22 @@ void MainWindow::setupReceiveTab() {
             ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushEURString());
             } else if (Settings::getInstance()->get_currency_name() == "BTC") {
                 ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushBTCString());
+                } else if (Settings::getInstance()->get_currency_name() == "CNY") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushCNYString());
+            } else if (Settings::getInstance()->get_currency_name() == "RUB") {
+                ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushRUBString());
+                } else if (Settings::getInstance()->get_currency_name() == "CAD") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushCADString());
+            } else if (Settings::getInstance()->get_currency_name() == "SGD") {
+                ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushSGDString());
+                } else if (Settings::getInstance()->get_currency_name() == "CHF") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushCHFString());
+            } else if (Settings::getInstance()->get_currency_name() == "INR") {
+                ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushINRString());
+                } else if (Settings::getInstance()->get_currency_name() == "GBP") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushGBPString());
+            } else if (Settings::getInstance()->get_currency_name() == "AUD") {
+                ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushAUDString());
             }
 
         ui->txtReceive->setPlainText(addr);       
