@@ -72,9 +72,25 @@ public:
     void    setZECPrice(double p) { ZECPrice = p; }
     void    setEURPrice(double p) { EURPrice = p; }
     void    setBTCPrice(double p) { BTCPrice = p; }
+    void    setCNYPrice(double p) { CNYPrice = p; }
+    void    setRUBPrice(double p) { RUBPrice = p; }
+    void    setCADPrice(double p) { CADPrice = p; }
+    void    setSGDPrice(double p) { SGDPrice = p; }
+    void    setCHFPrice(double p) { CHFPrice = p; }
+    void    setINRPrice(double p) { INRPrice = p; }
+    void    setGBPPrice(double p) { GBPPrice = p; }
+    void    setAUDPrice(double p) { AUDPrice = p; }
     double  getZECPrice();
     double  getEURPrice();
     double  getBTCPrice();
+    double  getCNYPrice();
+    double  getRUBPrice();
+    double  getCADPrice();
+    double  getSGDPrice();
+    double  getCHFPrice();
+    double  getINRPrice();
+    double  getGBPPrice();
+    double  getAUDPrice();
 
     // Static stuff
     static const QString txidStatusMessage;
@@ -129,6 +145,14 @@ private:
     double  ZECPrice          = 0.0;
     double  BTCPrice          = 0.0;
     double  EURPrice          = 0.0;
+    double  CNYPrice          = 0.0;
+    double  RUBPrice          = 0.0;
+    double  CADPrice          = 0.0;
+    double  SGDPrice          = 0.0;
+    double  CHFPrice          = 0.0;
+    double  INRPrice          = 0.0;
+    double  GBPPrice          = 0.0;
+    double  AUDPrice          = 0.0;
 };
 
 

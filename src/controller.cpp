@@ -173,6 +173,23 @@ void Controller::getInfoThenRefresh(bool force) {
         main->statusLabel->setText(" HUSH/EUR=€ " + QString::number( (double) Settings::getInstance()->getEURPrice() ,'f',2));
     }   else if  (Settings::getInstance()->get_currency_name() == "BTC") {
         main->statusLabel->setText(" HUSH/BTC=BTC " + QString::number((double)  Settings::getInstance()->getBTCPrice() ,'f',8));
+    }   else if (Settings::getInstance()->get_currency_name() == "CNY") {
+        main->statusLabel->setText(" HUSH/CNY=¥ /元 " + QString::number( (double) Settings::getInstance()->getCNYPrice() ,'f',2));
+    }   else if  (Settings::getInstance()->get_currency_name() == "RUB") {
+        main->statusLabel->setText(" HUSH/RUB=₽ " + QString::number((double)  Settings::getInstance()->getRUBPrice() ,'f',2));
+    }   else if (Settings::getInstance()->get_currency_name() == "CAD") {
+        main->statusLabel->setText(" HUSH/CAD=$ " + QString::number( (double) Settings::getInstance()->getCADPrice() ,'f',2));
+    }   else if  (Settings::getInstance()->get_currency_name() == "SGD") {
+        main->statusLabel->setText(" HUSH/SGD=$ " + QString::number((double)  Settings::getInstance()->getSGDPrice() ,'f',2));
+    }   else if  (Settings::getInstance()->get_currency_name() == "CHF") {
+        main->statusLabel->setText(" HUSH/CHF=CHF " + QString::number((double)  Settings::getInstance()->getCHFPrice() ,'f',2));
+    }   else if (Settings::getInstance()->get_currency_name() == "INR") {
+        main->statusLabel->setText(" HUSH/INR=₹ " + QString::number( (double) Settings::getInstance()->getINRPrice() ,'f',2));
+    }   else if  (Settings::getInstance()->get_currency_name() == "GBP") {
+        main->statusLabel->setText(" HUSH/GBP=£ " + QString::number((double)  Settings::getInstance()->getGBPPrice() ,'f',2));
+        }else if  (Settings::getInstance()->get_currency_name() == "AUD") {
+        main->statusLabel->setText(" HUSH/AUD=$ " + QString::number((double)  Settings::getInstance()->getAUDPrice() ,'f',2));
+        
     } else {
     main->statusLabel->setText(" error Input" + QString::number(Settings::getInstance()->getEURPrice() ));
     }
@@ -320,6 +337,54 @@ void Controller::updateUIBalances() {
     ui->balVerified   ->setToolTip(balVerified.toDecimalBTCString());
     ui->balTransparent->setToolTip(balT.toDecimalBTCString());
     ui->balTotal      ->setToolTip(balTotal.toDecimalBTCString()); 
+    
+     } else if (Settings::getInstance()->get_currency_name() == "CNY") {
+    ui->balSheilded   ->setToolTip(balZ.toDecimalCNYString());
+    ui->balVerified   ->setToolTip(balVerified.toDecimalCNYString());
+    ui->balTransparent->setToolTip(balT.toDecimalCNYString());
+    ui->balTotal      ->setToolTip(balTotal.toDecimalCNYString()); 
+
+    } else if (Settings::getInstance()->get_currency_name() == "RUB") {
+    ui->balSheilded   ->setToolTip(balZ.toDecimalRUBString());
+    ui->balVerified   ->setToolTip(balVerified.toDecimalRUBString());
+    ui->balTransparent->setToolTip(balT.toDecimalRUBString());
+    ui->balTotal      ->setToolTip(balTotal.toDecimalRUBString()); 
+
+    } else if (Settings::getInstance()->get_currency_name() == "CAD") {
+    ui->balSheilded   ->setToolTip(balZ.toDecimalCADString());
+    ui->balVerified   ->setToolTip(balVerified.toDecimalCADString());
+    ui->balTransparent->setToolTip(balT.toDecimalCADString());
+    ui->balTotal      ->setToolTip(balTotal.toDecimalCADString()); 
+
+    } else if (Settings::getInstance()->get_currency_name() == "SGD") {
+    ui->balSheilded   ->setToolTip(balZ.toDecimalSGDString());
+    ui->balVerified   ->setToolTip(balVerified.toDecimalSGDString());
+    ui->balTransparent->setToolTip(balT.toDecimalSGDString());
+    ui->balTotal      ->setToolTip(balTotal.toDecimalSGDString()); 
+
+    } else if (Settings::getInstance()->get_currency_name() == "CHF") {
+    ui->balSheilded   ->setToolTip(balZ.toDecimalCHFString());
+    ui->balVerified   ->setToolTip(balVerified.toDecimalCHFString());
+    ui->balTransparent->setToolTip(balT.toDecimalCHFString());
+    ui->balTotal      ->setToolTip(balTotal.toDecimalCHFString()); 
+
+    } else if (Settings::getInstance()->get_currency_name() == "INR") {
+    ui->balSheilded   ->setToolTip(balZ.toDecimalINRString());
+    ui->balVerified   ->setToolTip(balVerified.toDecimalINRString());
+    ui->balTransparent->setToolTip(balT.toDecimalINRString());
+    ui->balTotal      ->setToolTip(balTotal.toDecimalINRString()); 
+
+    } else if (Settings::getInstance()->get_currency_name() == "GBP") {
+    ui->balSheilded   ->setToolTip(balZ.toDecimalGBPString());
+    ui->balVerified   ->setToolTip(balVerified.toDecimalGBPString());
+    ui->balTransparent->setToolTip(balT.toDecimalGBPString());
+    ui->balTotal      ->setToolTip(balTotal.toDecimalGBPString()); 
+
+    } else if (Settings::getInstance()->get_currency_name() == "AUD") {
+    ui->balSheilded   ->setToolTip(balZ.toDecimalAUDString());
+    ui->balVerified   ->setToolTip(balVerified.toDecimalAUDString());
+    ui->balTransparent->setToolTip(balT.toDecimalAUDString());
+    ui->balTotal      ->setToolTip(balTotal.toDecimalAUDString()); 
     }
     // Send tab
     ui->txtAvailablehush->setText(balAvailable.toDecimalhushString());
@@ -330,8 +395,23 @@ void Controller::updateUIBalances() {
         ui->txtAvailableUSD->setText(balAvailable.toDecimalEURString()); 
     } else if (Settings::getInstance()->get_currency_name() == "BTC") {
         ui->txtAvailableUSD->setText(balAvailable.toDecimalBTCString()); 
-    } else 
-    ui->txtAvailableUSD->setText(balAvailable.toDecimalBTCString()); 
+     } else if (Settings::getInstance()->get_currency_name() == "CNY") {
+        ui->txtAvailableUSD->setText(balAvailable.toDecimalCNYString()); 
+    } else if (Settings::getInstance()->get_currency_name() == "RUB") {
+        ui->txtAvailableUSD->setText(balAvailable.toDecimalRUBString()); 
+     } else if (Settings::getInstance()->get_currency_name() == "CAD") {
+        ui->txtAvailableUSD->setText(balAvailable.toDecimalCADString()); 
+    } else if (Settings::getInstance()->get_currency_name() == "SGD") {
+        ui->txtAvailableUSD->setText(balAvailable.toDecimalSGDString()); 
+     } else if (Settings::getInstance()->get_currency_name() == "CHF") {
+        ui->txtAvailableUSD->setText(balAvailable.toDecimalCHFString()); 
+    } else if (Settings::getInstance()->get_currency_name() == "INR") {
+        ui->txtAvailableUSD->setText(balAvailable.toDecimalINRString()); 
+    } else if (Settings::getInstance()->get_currency_name() == "GBP") {
+        ui->txtAvailableUSD->setText(balAvailable.toDecimalGBPString()); 
+    } else if (Settings::getInstance()->get_currency_name() == "AUD") {
+        ui->txtAvailableUSD->setText(balAvailable.toDecimalAUDString()); 
+    }
 }
 
 void Controller::refreshBalances() {    
@@ -648,7 +728,7 @@ void Controller::refreshZECPrice() {
         return noConnection();
 
        // TODO: use/render all this data
-    QUrl cmcURL("https://api.coingecko.com/api/v3/simple/price?ids=hush&vs_currencies=btc%2Cusd%2Ceur&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true");
+    QUrl cmcURL("https://api.coingecko.com/api/v3/simple/price?ids=hush&vs_currencies=btc%2Cusd%2Ceur%2Ceth%2Cgbp%2Ccny%2Cjpy%2Crub%2Ccad%2Csgd%2Cchf%2Cinr%2Caud%2Cinr&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true");
    
     QNetworkRequest req;
     req.setUrl(cmcURL);
@@ -671,6 +751,15 @@ void Controller::refreshZECPrice() {
                 Settings::getInstance()->setZECPrice(0);
                 Settings::getInstance()->setEURPrice(0);
                 Settings::getInstance()->setBTCPrice(0);
+                Settings::getInstance()->setCNYPrice(0);
+                Settings::getInstance()->setRUBPrice(0);
+                Settings::getInstance()->setCADPrice(0);
+                Settings::getInstance()->setSGDPrice(0);
+                Settings::getInstance()->setCHFPrice(0);
+                Settings::getInstance()->setGBPPrice(0);
+                Settings::getInstance()->setAUDPrice(0);
+                Settings::getInstance()->setINRPrice(0);
+               
                 return;
             }
 
@@ -682,6 +771,14 @@ void Controller::refreshZECPrice() {
                 Settings::getInstance()->setZECPrice(0);
                 Settings::getInstance()->setEURPrice(0);
                 Settings::getInstance()->setBTCPrice(0);
+                Settings::getInstance()->setCNYPrice(0);
+                Settings::getInstance()->setRUBPrice(0);
+                Settings::getInstance()->setCADPrice(0);
+                Settings::getInstance()->setSGDPrice(0);
+                Settings::getInstance()->setCHFPrice(0);
+                Settings::getInstance()->setGBPPrice(0);
+                Settings::getInstance()->setAUDPrice(0);
+                Settings::getInstance()->setINRPrice(0);
                 return;
             }
 
@@ -692,25 +789,71 @@ void Controller::refreshZECPrice() {
 
             if (hush["usd"] >= 0) {
                 qDebug() << "Found hush key in price json";
-                // TODO: support BTC/EUR prices as well
-                //QString price = QString::fromStdString(hush["usd"].get<json::string_t>());
+                
                 qDebug() << "HUSH = $" << QString::number((double)hush["usd"]);
                 Settings::getInstance()->setZECPrice( hush["usd"] );
             }
             if (hush["eur"] >= 0)
             {
-                // TODO: support BTC/EUR prices as well
-                //QString price = QString::fromStdString(hush["usd"].get<json::string_t>());
+               
                 qDebug() << "HUSH = €" << QString::number((double)hush["eur"]);
                 Settings::getInstance()->setEURPrice(hush["eur"]);
             }
             if (hush["btc"] >= 0)
             {
-                // TODO: support BTC/EUR prices as well
-                //QString price = QString::fromStdString(hush["usd"].get<json::string_t>());
+            
                 qDebug() << "HUSH = BTC" << QString::number((double)hush["btc"]);
                 Settings::getInstance()->setBTCPrice( hush["btc"]);
             }
+            if (hush["cny"] >= 0)
+              
+            {
+                qDebug() << "HUSH = CNY" << QString::number((double)hush["cny"]);
+                Settings::getInstance()->setCNYPrice( hush["cny"]);
+            }
+            if (hush["rub"] >= 0)
+            {
+                qDebug() << "HUSH = RUB" << QString::number((double)hush["rub"]);
+                Settings::getInstance()->setRUBPrice( hush["rub"]);
+            }
+             if (hush["cad"] >= 0)
+            
+            {
+                qDebug() << "HUSH = CAD" << QString::number((double)hush["cad"]);
+                Settings::getInstance()->setCADPrice( hush["cad"]);
+            }
+            if (hush["sgd"] >= 0)
+            {
+              
+                qDebug() << "HUSH = SGD" << QString::number((double)hush["sgd"]);
+                Settings::getInstance()->setSGDPrice( hush["sgd"]);
+            }
+            if (hush["chf"] >= 0)
+            {
+              
+                qDebug() << "HUSH = CHF" << QString::number((double)hush["chf"]);
+                Settings::getInstance()->setCADPrice( hush["chf"]);
+            }
+            if (hush["inr"] >= 0)
+            {
+              
+                qDebug() << "HUSH = INR" << QString::number((double)hush["inr"]);
+                Settings::getInstance()->setINRPrice( hush["inr"]);
+            }
+            if (hush["gbp"] >= 0)
+            {
+              
+                qDebug() << "HUSH = GBP" << QString::number((double)hush["gbp"]);
+                Settings::getInstance()->setGBPPrice( hush["gbp"]);
+            }
+            if (hush["aud"] >= 0)
+            {
+              
+                qDebug() << "HUSH = AUD" << QString::number((double)hush["aud"]);
+                Settings::getInstance()->setAUDPrice( hush["aud"]);
+            }
+
+
             return;
          } catch (const std::exception& e) {
             // If anything at all goes wrong, just set the price to 0 and move on.
@@ -718,9 +861,17 @@ void Controller::refreshZECPrice() {
         }
 
         // If nothing, then set the price to 0;
-        Settings::getInstance()->setZECPrice(0);
-        Settings::getInstance()->setEURPrice(0);
-        Settings::getInstance()->setBTCPrice(0);
+                Settings::getInstance()->setZECPrice(0);
+                Settings::getInstance()->setEURPrice(0);
+                Settings::getInstance()->setBTCPrice(0);
+                Settings::getInstance()->setCNYPrice(0);
+                Settings::getInstance()->setRUBPrice(0);
+                Settings::getInstance()->setCADPrice(0);
+                Settings::getInstance()->setSGDPrice(0);
+                Settings::getInstance()->setCHFPrice(0);
+                Settings::getInstance()->setGBPPrice(0);
+                Settings::getInstance()->setAUDPrice(0);
+                Settings::getInstance()->setINRPrice(0);
     });
 
 }

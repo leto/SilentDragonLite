@@ -111,6 +111,30 @@ double Settings::getEURPrice() {
 double Settings::getBTCPrice() { 
     return BTCPrice; 
 }
+double Settings::getCNYPrice() { 
+    return CNYPrice; 
+}
+double Settings::getRUBPrice() { 
+    return RUBPrice; 
+}
+double Settings::getCADPrice() { 
+    return CADPrice; 
+}
+double Settings::getSGDPrice() { 
+    return SGDPrice; 
+}
+double Settings::getCHFPrice() { 
+    return CHFPrice; 
+}
+double Settings::getINRPrice() { 
+    return INRPrice; 
+}
+double Settings::getGBPPrice() { 
+    return GBPPrice; 
+}
+double Settings::getAUDPrice() { 
+    return AUDPrice; 
+}
 
 bool Settings::getCheckForUpdates() {
     return QSettings().value("options/allowcheckupdates", true).toBool();

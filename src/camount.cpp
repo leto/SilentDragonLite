@@ -44,7 +44,7 @@ QString CAmount::toDecimalEURString() const {
     double dblAmount = static_cast<double>(this->amount) / COIN;
     double price = Settings::getInstance()->getEURPrice();
 
-    return QLocale(QLocale::German).toString(dblAmount*price, 'f', 2) + " €";
+    return QLocale(QLocale::English).toString(dblAmount*price, 'f', 2) + " €";
 }
 QString CAmount::toDecimalBTCString() const {
     double dblAmount = static_cast<double>(this->amount) / COIN;
@@ -52,6 +52,55 @@ QString CAmount::toDecimalBTCString() const {
 
     return "BTC " + QLocale(QLocale::English).toString(dblAmount*price, 'f', 9);
 }
+QString CAmount::toDecimalCNYString() const {
+    double dblAmount = static_cast<double>(this->amount) / COIN;
+    double price = Settings::getInstance()->getCNYPrice();
+
+    return "¥ /元  " + QLocale(QLocale::English).toString(dblAmount*price, 'f', 2);
+}
+QString CAmount::toDecimalRUBString() const {
+    double dblAmount = static_cast<double>(this->amount) / COIN;
+    double price = Settings::getInstance()->getRUBPrice();
+
+    return "₽ " + QLocale(QLocale::English).toString(dblAmount*price, 'f', 2);
+}
+QString CAmount::toDecimalCADString() const {
+    double dblAmount = static_cast<double>(this->amount) / COIN;
+    double price = Settings::getInstance()->getCADPrice();
+
+    return "$ " + QLocale(QLocale::English).toString(dblAmount*price, 'f', 2);
+}
+QString CAmount::toDecimalSGDString() const {
+    double dblAmount = static_cast<double>(this->amount) / COIN;
+    double price = Settings::getInstance()->getSGDPrice();
+
+    return "$ " + QLocale(QLocale::English).toString(dblAmount*price, 'f', 2);
+}
+QString CAmount::toDecimalCHFString() const {
+    double dblAmount = static_cast<double>(this->amount) / COIN;
+    double price = Settings::getInstance()->getCHFPrice();
+
+    return "CHF " + QLocale(QLocale::English).toString(dblAmount*price, 'f', 2);
+}
+QString CAmount::toDecimalINRString() const {
+    double dblAmount = static_cast<double>(this->amount) / COIN;
+    double price = Settings::getInstance()->getINRPrice();
+
+    return "₹ " + QLocale(QLocale::English).toString(dblAmount*price, 'f', 2);
+}
+QString CAmount::toDecimalGBPString() const {
+    double dblAmount = static_cast<double>(this->amount) / COIN;
+    double price = Settings::getInstance()->getGBPPrice();
+
+    return "£ " + QLocale(QLocale::English).toString(dblAmount*price, 'f', 2);
+}
+QString CAmount::toDecimalAUDString() const {
+    double dblAmount = static_cast<double>(this->amount) / COIN;
+    double price = Settings::getInstance()->getAUDPrice();
+
+    return " $" + QLocale(QLocale::English).toString(dblAmount*price, 'f', 2);
+}
+
 QString CAmount::toDecimalhushString() const {
     return this->toDecimalString() % " " % Settings::getTokenName();
 }
@@ -80,6 +129,71 @@ QString CAmount::toDecimalhushBTCString() const {
     else
         return this->toDecimalhushString();
 }
+
+QString CAmount::toDecimalhushCNYString() const {
+    auto cnyString = this->toDecimalCNYString();
+    if (!cnyString.isEmpty())
+        return this->toDecimalhushString() % " (" % cnyString % ")";
+    else
+        return this->toDecimalhushString();
+}
+
+QString CAmount::toDecimalhushRUBString() const {
+    auto rubString = this->toDecimalRUBString();
+    if (!rubString.isEmpty())
+        return this->toDecimalhushString() % " (" % rubString % ")";
+    else
+        return this->toDecimalhushString();
+}
+
+QString CAmount::toDecimalhushCADString() const {
+    auto cadString = this->toDecimalCADString();
+    if (!cadString.isEmpty())
+        return this->toDecimalhushString() % " (" % cadString % ")";
+    else
+        return this->toDecimalhushString();
+}
+
+QString CAmount::toDecimalhushSGDString() const {
+    auto sgdString = this->toDecimalSGDString();
+    if (!sgdString.isEmpty())
+        return this->toDecimalhushString() % " (" % sgdString % ")";
+    else
+        return this->toDecimalhushString();
+}
+
+QString CAmount::toDecimalhushCHFString() const {
+    auto chfString = this->toDecimalCHFString();
+    if (!chfString.isEmpty())
+        return this->toDecimalhushString() % " (" % chfString % ")";
+    else
+        return this->toDecimalhushString();
+}
+
+QString CAmount::toDecimalhushINRString() const {
+    auto inrString = this->toDecimalINRString();
+    if (!inrString.isEmpty())
+        return this->toDecimalhushString() % " (" % inrString % ")";
+    else
+        return this->toDecimalhushString();
+}
+
+QString CAmount::toDecimalhushGBPString() const {
+    auto gbpString = this->toDecimalGBPString();
+    if (!gbpString.isEmpty())
+        return this->toDecimalhushString() % " (" % gbpString % ")";
+    else
+        return this->toDecimalhushString();
+}
+
+QString CAmount::toDecimalhushAUDString() const {
+    auto audString = this->toDecimalAUDString();
+    if (!audString.isEmpty())
+        return this->toDecimalhushString() % " (" % audString % ")";
+    else
+        return this->toDecimalhushString();
+}
+
 
 CAmount CAmount::fromDecimalString(QString decimalString) {
     auto amtParts = decimalString.split(".");

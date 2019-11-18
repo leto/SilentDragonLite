@@ -253,7 +253,27 @@
        </property>
        <item>
         <property name="text">
-         <string>USD</string>
+         <string>AUD</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BTC</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>CAD</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>CHF</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>CNY</string>
         </property>
        </item>
        <item>
@@ -263,7 +283,17 @@
        </item>
        <item>
         <property name="text">
-         <string>BTC</string>
+         <string>GBP</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>INR</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>USD</string>
         </property>
        </item>
       </widget>
