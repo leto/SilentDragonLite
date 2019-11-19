@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string>logo.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.silentdragon</string>
+	<string>com.yourcompany.SilentDragonLite</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>

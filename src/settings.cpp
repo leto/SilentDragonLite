@@ -74,11 +74,11 @@ bool Settings::isTAddress(QString addr) {
     return addr.startsWith("R");
 }
 
-int Settings::gethushdVersion() {
+QString Settings::gethushdVersion() {
     return _hushdVersion;
 }
 
-void Settings::sethushdVersion(int version) {
+void Settings::sethushdVersion(QString version) {
     _hushdVersion = version;
 }
 

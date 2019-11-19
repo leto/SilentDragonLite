@@ -42,8 +42,8 @@ public:
     bool    isSyncing();
     void    setSyncing(bool syncing);
 
-    int     gethushdVersion();
-    void    sethushdVersion(int version);
+    QString gethushdVersion();
+    void    sethushdVersion(QString version);
     
     void    setUseEmbedded(bool r) { _useEmbedded = r; }
     bool    useEmbedded() { return _useEmbedded; }
@@ -119,13 +119,12 @@ public:
     
     static bool    isValidAddress(QString addr);
 
-    static QString getChainName() { return QString("main"); }
+    static QString getDefaultChainName() { return QString("main"); }
 
     static const QString labelRegExp;
 
-    static const int     updateSpeed         = 20 * 1000;        // 20 sec
-    static const int     quickUpdateSpeed    = 5  * 1000;        // 5 sec
-    static const int     priceRefreshSpeed   = 5 * 60 * 1000;   // 5 mins
+    static const int     updateSpeed         = 30 * 1000;        // 30 sec
+    static const int     priceRefreshSpeed   = 5 * 60 * 1000;   // 1 hr
 
 private:
     // This class can only be accessed through Settings::getInstance()
@@ -138,7 +137,7 @@ private:
     bool    _isTestnet        = false;
     bool    _isSyncing        = false;
     int     _blockNumber      = 0;
-    int     _hushdVersion    = 0;
+    QString     _hushdVersion    = 0;
     bool    _useEmbedded      = false;
     bool    _headless         = false;
     

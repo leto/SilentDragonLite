@@ -12,8 +12,8 @@ case $key in
     shift # past argument
     shift # past value
     ;;
-    -z|--hush_path)
-    hush_DIR="$2"
+    -c|--certificate)
+    CERTIFICATE="$2"
     shift # past argument
     shift # past value
     ;;
@@ -32,6 +32,11 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 
 if [ -z $QT_PATH ]; then 
     echo "QT_PATH is not set. Please set it to the base directory of Qt"; 
+    exit 1; 
+fi
+
+if [ -z $CERTIFICATE ]; then 
+    echo "CERTIFICATE is not set. Please set it the name of the MacOS developer certificate to sign the binary with"; 
     exit 1; 
 fi
 
@@ -70,7 +75,8 @@ echo -n "Deploying.............."
 mkdir artifacts >/dev/null 2>&1
 rm -f artifcats/Silentdragonlite.dmg >/dev/null 2>&1
 rm -f artifacts/rw* >/dev/null 2>&1
-$QT_PATH/bin/macdeployqt Silentdragonlite.app 
+$QT_PATH/bin/macdeployqt SilentDragonLite.app 
+codesign --deep --force --verify --verbose -s "$CERTIFICATE" --options runtime --timestamp SilentDragonLite.app/
 echo "[OK]"
 
 

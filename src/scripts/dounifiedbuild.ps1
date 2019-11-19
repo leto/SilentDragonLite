@@ -2,16 +2,17 @@
 param (
     [Parameter(Mandatory=$true)][string]$version,
     [Parameter(Mandatory=$true)][string]$prev,
+    [Parameter(Mandatory=$true)][string]$certificate,
     [Parameter(Mandatory=$true)][string]$server,
     [Parameter(Mandatory=$true)][string]$winserver
 )
 
 Write-Host "[Initializing]"
-Remove-Item -Force -ErrorAction Ignore ./artifacts/linux-binaries-silentdragon-v$version.tar.gz
-Remove-Item -Force -ErrorAction Ignore ./artifacts/linux-deb-silentdragon-v$version.deb
-Remove-Item -Force -ErrorAction Ignore ./artifacts/Windows-binaries-silentdragon-v$version.zip
-Remove-Item -Force -ErrorAction Ignore ./artifacts/Windows-installer-silentdragon-v$version.msi
-Remove-Item -Force -ErrorAction Ignore ./artifacts/macOS-silentdragon-v$version.dmg
+Remove-Item -Force -ErrorAction Ignore ./artifacts/linux-binaries-SilentDragonLite-v$version.tar.gz
+Remove-Item -Force -ErrorAction Ignore ./artifacts/linux-deb-SilentDragonLite-v$version.deb
+Remove-Item -Force -ErrorAction Ignore ./artifacts/Windows-binaries-SilentDragonLite-v$version.zip
+Remove-Item -Force -ErrorAction Ignore ./artifacts/Windows-installer-SilentDragonLite-v$version.msi
+Remove-Item -Force -ErrorAction Ignore ./artifacts/macOS-SilentDragonLite-v$version.dmg
 Remove-Item -Force -ErrorAction Ignore ./artifacts/signatures-v$version.tar.gz
 
 
@@ -27,7 +28,7 @@ Write-Host ""
 
 
 Write-Host "[Building on Mac]"
-bash src/scripts/mkmacdmg.sh --qt_path ~/Qt/5.11.1/clang_64/ --version $version --hush_path ~/prod/hush 
+bash src/scripts/mkmacdmg.sh --qt_path ~/Qt/5.11.1/clang_64/ --version $version --certificate "$certificate"
 if (! $?) {
     Write-Output "[Error]"
     exit 1;
@@ -37,9 +38,11 @@ Write-Host ""
 
 Write-Host "[Building Linux + Windows]"
 Write-Host -NoNewline "Copying files.........."
+# Cleanup some local files to aid copying
+rm -rf lib/target/
 ssh $server "rm -rf /tmp/zqwbuild"
 ssh $server "mkdir /tmp/zqwbuild"
-scp -r src/ singleapplication/ res/ ./silentdragonlite.pro ./application.qrc ./LICENSE ./README.md ${server}:/tmp/zqwbuild/ | Out-Null
+scp -r src/ singleapplication/ res/ ./silentdragon-lite.pro ./application.qrc ./LICENSE ./README.md ${server}:/tmp/zqwbuild/ | Out-Null
 ssh $server "dos2unix -q /tmp/zqwbuild/src/scripts/mkrelease.sh" | Out-Null
 ssh $server "dos2unix -q /tmp/zqwbuild/src/version.h"
 Write-Host "[OK]"
@@ -86,11 +89,11 @@ Write-Host "[OK]"
 
 # Finally, test to make sure all files exist
 Write-Host -NoNewline "Checking Build........."
-if (! (Test-Path ./artifacts/linux-binaries-silentdragon-v$version.tar.gz) -or
-    ! (Test-Path ./artifacts/linux-deb-silentdragon-v$version.deb) -or
-    ! (Test-Path ./artifacts/Windows-binaries-silentdragon-v$version.zip) -or
-    ! (Test-Path ./artifacts/macOS-silentdragon-v$version.dmg) -or 
-    ! (Test-Path ./artifacts/Windows-installer-silentdragon-v$version.msi) ) {
+if (! (Test-Path ./artifacts/linux-binaries-SilentDragonLite-v$version.tar.gz) -or
+    ! (Test-Path ./artifacts/linux-deb-SilentDragonLite-v$version.deb) -or
+    ! (Test-Path ./artifacts/Windows-binaries-SilentDragonLite-v$version.zip) -or
+    ! (Test-Path ./artifacts/macOS-SilentDragonLite-v$version.dmg) -or 
+    ! (Test-Path ./artifacts/Windows-installer-SilentDragonLite-v$version.msi) ) {
         Write-Host "[Error]"
         exit 1;
     }
