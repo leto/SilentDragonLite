@@ -159,13 +159,30 @@ QVariant TxTableModel::data(const QModelIndex &index, int role) const {
                 total = total + dat.items[i].amount;
             }
         if (Settings::getInstance()->get_currency_name() == "USD") {
-            return total.toDecimalUSDString();
+                return total.toDecimalUSDString();
         } else if (Settings::getInstance()->get_currency_name() == "EUR") {
             return total.toDecimalEURString();
-             } else if (Settings::getInstance()->get_currency_name() == "BTC") {
-                 return total.toDecimalBTCString();
-             }
-
+        } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+                return total.toDecimalBTCString();
+        } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+                return total.toDecimalEURString();
+        } else if (Settings::getInstance()->get_currency_name() == "CNY") {
+                return total.toDecimalCNYString();
+        } else if (Settings::getInstance()->get_currency_name() == "RUB") {
+                return total.toDecimalRUBString();
+        } else if (Settings::getInstance()->get_currency_name() == "CAD") {
+                return total.toDecimalCADString();
+        } else if (Settings::getInstance()->get_currency_name() == "SGD") {
+                return total.toDecimalSGDString();
+        } else if (Settings::getInstance()->get_currency_name() == "CHF") {
+                return total.toDecimalCHFString();
+        } else if (Settings::getInstance()->get_currency_name() == "INR") {
+                return total.toDecimalINRString();
+        } else if (Settings::getInstance()->get_currency_name() == "GBP") {
+                return total.toDecimalGBPString();
+        } else if (Settings::getInstance()->get_currency_name() == "AUD") {
+                return total.toDecimalAUDString();
+              }  
         }    
         }
     }
