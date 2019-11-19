@@ -112,7 +112,7 @@ void WormholeClient::connect() {
     QObject::connect(m_webSocket, &QWebSocket::connected, this, &WormholeClient::onConnected);
     QObject::connect(m_webSocket, &QWebSocket::disconnected, this, &WormholeClient::closed);
 
-    m_webSocket->open(QUrl("wss://wormhole.silentdragonlite.com:443"));
+    m_webSocket->open(QUrl("wss://wormhole.myhush.org:443"));
     //m_webSocket->open(QUrl("ws://127.0.0.1:7070"));
 }
 

@@ -74,7 +74,13 @@ void RequestDialog::showPaymentConfirmation(MainWindow* main, QString paymentURI
     req.txtMemo->setPlainText(payInfo.memo);
     req.txtAmount->setText(payInfo.amt);
     CAmount amount = CAmount::fromDecimalString(req.txtAmount->text());
+    if (Settings::getInstance()->get_currency_name() == "USD") {
     req.txtAmountUSD->setText(amount.toDecimalUSDString());
+    } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+        req.txtAmountUSD->setText(amount.toDecimalEURString());
+        } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+            req.txtAmountUSD->setText(amount.toDecimalBTCString());
+        }
 
     req.buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Pay"));
 
@@ -114,11 +120,54 @@ void RequestDialog::showRequesthush(MainWindow* main) {
     req.txtAmount->setValidator(main->getAmountValidator());
     QObject::connect(req.txtAmount, &QLineEdit::textChanged, [=] (auto text) {
         CAmount amount = CAmount::fromDecimalString(text);
-        req.txtAmountUSD->setText(amount.toDecimalUSDString());
+     if (Settings::getInstance()->get_currency_name() == "USD") {
+         req.txtAmountUSD->setText(amount.toDecimalUSDString());
+    } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+        req.txtAmountUSD->setText(amount.toDecimalEURString());
+    } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+        req.txtAmountUSD->setText(amount.toDecimalBTCString());
+    } else if (Settings::getInstance()->get_currency_name() == "CNY") {
+        req.txtAmountUSD->setText(amount.toDecimalCNYString());
+    } else if (Settings::getInstance()->get_currency_name() == "RUB") {
+        req.txtAmountUSD->setText(amount.toDecimalRUBString());
+    } else if (Settings::getInstance()->get_currency_name() == "CAD") {
+        req.txtAmountUSD->setText(amount.toDecimalCADString());
+    } else if (Settings::getInstance()->get_currency_name() == "SGD") {
+        req.txtAmountUSD->setText(amount.toDecimalSGDString());
+    } else if (Settings::getInstance()->get_currency_name() == "CHF") {
+        req.txtAmountUSD->setText(amount.toDecimalCHFString());
+    } else if (Settings::getInstance()->get_currency_name() == "INR") {
+        req.txtAmountUSD->setText(amount.toDecimalINRString());
+    } else if (Settings::getInstance()->get_currency_name() == "GBP") {
+        req.txtAmountUSD->setText(amount.toDecimalGBPString());
+    } else if (Settings::getInstance()->get_currency_name() == "AUD") {
+        req.txtAmountUSD->setText(amount.toDecimalBTCString());
+        }
     });
     CAmount amount = CAmount::fromDecimalString(req.txtAmount->text());
-    req.txtAmountUSD->setText(amount.toDecimalUSDString());
-
+    if (Settings::getInstance()->get_currency_name() == "USD") {
+         req.txtAmountUSD->setText(amount.toDecimalUSDString());
+    } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+        req.txtAmountUSD->setText(amount.toDecimalEURString());
+    } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+        req.txtAmountUSD->setText(amount.toDecimalBTCString());
+    } else if (Settings::getInstance()->get_currency_name() == "CNY") {
+        req.txtAmountUSD->setText(amount.toDecimalCNYString());
+    } else if (Settings::getInstance()->get_currency_name() == "RUB") {
+        req.txtAmountUSD->setText(amount.toDecimalRUBString());
+    } else if (Settings::getInstance()->get_currency_name() == "CAD") {
+        req.txtAmountUSD->setText(amount.toDecimalCADString());
+    } else if (Settings::getInstance()->get_currency_name() == "SGD") {
+        req.txtAmountUSD->setText(amount.toDecimalSGDString());
+    } else if (Settings::getInstance()->get_currency_name() == "CHF") {
+        req.txtAmountUSD->setText(amount.toDecimalCHFString());
+    } else if (Settings::getInstance()->get_currency_name() == "INR") {
+        req.txtAmountUSD->setText(amount.toDecimalINRString());
+    } else if (Settings::getInstance()->get_currency_name() == "GBP") {
+        req.txtAmountUSD->setText(amount.toDecimalGBPString());
+    } else if (Settings::getInstance()->get_currency_name() == "AUD") {
+        req.txtAmountUSD->setText(amount.toDecimalBTCString());
+        }
     req.txtMemo->setAcceptButton(req.buttonBox->button(QDialogButtonBox::Ok));
     req.txtMemo->setLenDisplayLabel(req.lblMemoLen);
     req.txtMemo->setMaxLen(400);

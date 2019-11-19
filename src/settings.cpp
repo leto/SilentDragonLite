@@ -74,11 +74,11 @@ bool Settings::isTAddress(QString addr) {
     return addr.startsWith("R");
 }
 
-int Settings::gethushdVersion() {
+QString Settings::gethushdVersion() {
     return _hushdVersion;
 }
 
-void Settings::sethushdVersion(int version) {
+void Settings::sethushdVersion(QString version) {
     _hushdVersion = version;
 }
 
@@ -105,6 +105,36 @@ bool Settings::isSaplingActive() {
 double Settings::getZECPrice() { 
     return ZECPrice; 
 }
+double Settings::getEURPrice() { 
+    return EURPrice; 
+}
+double Settings::getBTCPrice() { 
+    return BTCPrice; 
+}
+double Settings::getCNYPrice() { 
+    return CNYPrice; 
+}
+double Settings::getRUBPrice() { 
+    return RUBPrice; 
+}
+double Settings::getCADPrice() { 
+    return CADPrice; 
+}
+double Settings::getSGDPrice() { 
+    return SGDPrice; 
+}
+double Settings::getCHFPrice() { 
+    return CHFPrice; 
+}
+double Settings::getINRPrice() { 
+    return INRPrice; 
+}
+double Settings::getGBPPrice() { 
+    return GBPPrice; 
+}
+double Settings::getAUDPrice() { 
+    return AUDPrice; 
+}
 
 bool Settings::getCheckForUpdates() {
     return QSettings().value("options/allowcheckupdates", true).toBool();
@@ -121,6 +151,19 @@ bool Settings::getAllowFetchPrices() {
 void Settings::setAllowFetchPrices(bool allow) {
      QSettings().setValue("options/allowfetchprices", allow);
 }
+
+QString Settings::get_currency_name() {
+    // Load from the QT Settings.
+    return QSettings().value("options/currency_name", false).toString();
+}
+
+void Settings::set_currency_name(QString currency_name) {
+    QSettings().setValue("options/currency_name", currency_name);
+
+  
+    
+}
+
 
 QString Settings::get_theme_name() {
     // Load from the QT Settings.

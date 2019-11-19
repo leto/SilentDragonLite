@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>silentdragon</string>
+   <string>SilentDragonLite</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../application.qrc">
@@ -22,7 +22,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -79,9 +79,16 @@
                 <layout class="QHBoxLayout" name="horizontalLayout_17">
                  <item>
                   <widget class="QLabel" name="label_15">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
                    <property name="font">
                     <font>
-                     <pointsize>10</pointsize>
+                     <pointsize>11</pointsize>
+                     <kerning>true</kerning>
                     </font>
                    </property>
                    <property name="text">
@@ -93,7 +100,7 @@
                   <widget class="QLabel" name="balVerified">
                    <property name="font">
                     <font>
-                     <pointsize>10</pointsize>
+                     <pointsize>11</pointsize>
                     </font>
                    </property>
                    <property name="text">
@@ -392,8 +399,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1226</width>
-                <height>504</height>
+                <width>1162</width>
+                <height>344</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="sendToLayout">
@@ -1088,7 +1095,7 @@
      <x>0</x>
      <y>0</y>
      <width>1274</width>
-     <height>22</height>
+     <height>39</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1132,6 +1139,8 @@
     <addaction name="separator"/>
     <addaction name="actionEncrypt_Wallet"/>
     <addaction name="actionRemove_Wallet_Encryption"/>
+    <addaction name="separator"/>
+    <addaction name="actionRescan"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menu_Edit"/>
@@ -1236,6 +1245,11 @@
   <action name="actionRemove_Wallet_Encryption">
    <property name="text">
     <string>Remove Wallet Encryption</string>
+   </property>
+  </action>
+  <action name="actionRescan">
+   <property name="text">
+    <string>Rescan</string>
    </property>
   </action>
  </widget>
