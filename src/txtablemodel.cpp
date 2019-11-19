@@ -155,7 +155,14 @@ QVariant TxTableModel::data(const QModelIndex &index, int role) const {
             for (int i=0; i < dat.items.length(); i++) {
                 total = total + dat.items[i].amount;
             }
+        if (Settings::getInstance()->get_currency_name() == "USD") {
             return total.toDecimalUSDString();
+        } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+            return total.toDecimalEURString();
+             } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+                 return total.toDecimalBTCString();
+             }
+
         }    
         }
     }

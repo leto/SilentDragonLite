@@ -165,7 +165,7 @@ public:
         } 
 
         QCoreApplication::setOrganizationName("Hush");
-        QCoreApplication::setApplicationName("Silentdragonlite");
+        QCoreApplication::setApplicationName("SilentDragonLite");
 
         QString locale = QLocale::system().name();
         locale.truncate(locale.lastIndexOf('_'));   // Get the language code

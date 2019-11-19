@@ -105,6 +105,36 @@ bool Settings::isSaplingActive() {
 double Settings::getZECPrice() { 
     return ZECPrice; 
 }
+double Settings::getEURPrice() { 
+    return EURPrice; 
+}
+double Settings::getBTCPrice() { 
+    return BTCPrice; 
+}
+double Settings::getCNYPrice() { 
+    return CNYPrice; 
+}
+double Settings::getRUBPrice() { 
+    return RUBPrice; 
+}
+double Settings::getCADPrice() { 
+    return CADPrice; 
+}
+double Settings::getSGDPrice() { 
+    return SGDPrice; 
+}
+double Settings::getCHFPrice() { 
+    return CHFPrice; 
+}
+double Settings::getINRPrice() { 
+    return INRPrice; 
+}
+double Settings::getGBPPrice() { 
+    return GBPPrice; 
+}
+double Settings::getAUDPrice() { 
+    return AUDPrice; 
+}
 
 bool Settings::getCheckForUpdates() {
     return QSettings().value("options/allowcheckupdates", true).toBool();
@@ -121,6 +151,19 @@ bool Settings::getAllowFetchPrices() {
 void Settings::setAllowFetchPrices(bool allow) {
      QSettings().setValue("options/allowfetchprices", allow);
 }
+
+QString Settings::get_currency_name() {
+    // Load from the QT Settings.
+    return QSettings().value("options/currency_name", false).toString();
+}
+
+void Settings::set_currency_name(QString currency_name) {
+    QSettings().setValue("options/currency_name", currency_name);
+
+  
+    
+}
+
 
 QString Settings::get_theme_name() {
     // Load from the QT Settings.
@@ -193,7 +236,7 @@ QString Settings::getDonationAddr() {
     if (Settings::getInstance()->isTestnet()) 
             return "ztestsaplingXXX";
     else 
-            return "zs1aq4xnrkjlnxx0zesqye7jz3dfrf3rjh7q5z6u8l6mwyqqaam3gx3j2fkqakp33v93yavq46j83q";
+            return "zs1kwp3h4rwz76zfqzmwqqextq696kndtjskg4fzc80l9ygfal4hchcsst83ua8tjwzzy9nja7v5rr";
 
 }
 

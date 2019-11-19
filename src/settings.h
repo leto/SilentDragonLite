@@ -63,10 +63,34 @@ public:
     QString get_theme_name();
     void set_theme_name(QString theme_name);
 
+    QString get_currency_name();
+    void set_currency_name(QString currency_name);
+
+
     bool    isSaplingActive();
 
     void    setZECPrice(double p) { ZECPrice = p; }
+    void    setEURPrice(double p) { EURPrice = p; }
+    void    setBTCPrice(double p) { BTCPrice = p; }
+    void    setCNYPrice(double p) { CNYPrice = p; }
+    void    setRUBPrice(double p) { RUBPrice = p; }
+    void    setCADPrice(double p) { CADPrice = p; }
+    void    setSGDPrice(double p) { SGDPrice = p; }
+    void    setCHFPrice(double p) { CHFPrice = p; }
+    void    setINRPrice(double p) { INRPrice = p; }
+    void    setGBPPrice(double p) { GBPPrice = p; }
+    void    setAUDPrice(double p) { AUDPrice = p; }
     double  getZECPrice();
+    double  getEURPrice();
+    double  getBTCPrice();
+    double  getCNYPrice();
+    double  getRUBPrice();
+    double  getCADPrice();
+    double  getSGDPrice();
+    double  getCHFPrice();
+    double  getINRPrice();
+    double  getGBPPrice();
+    double  getAUDPrice();
 
     // Static stuff
     static const QString txidStatusMessage;
@@ -99,9 +123,9 @@ public:
 
     static const QString labelRegExp;
 
-    static const int     updateSpeed         = 20 * 1000;        // 10 sec
-    static const int     quickUpdateSpeed    = 5  * 1000;        // 3 sec
-    static const int     priceRefreshSpeed   = 60 * 60 * 1000;   // 15 mins
+    static const int     updateSpeed         = 20 * 1000;        // 20 sec
+    static const int     quickUpdateSpeed    = 5  * 1000;        // 5 sec
+    static const int     priceRefreshSpeed   = 5 * 60 * 1000;   // 5 mins
 
 private:
     // This class can only be accessed through Settings::getInstance()
@@ -119,6 +143,16 @@ private:
     bool    _headless         = false;
     
     double  ZECPrice          = 0.0;
+    double  BTCPrice          = 0.0;
+    double  EURPrice          = 0.0;
+    double  CNYPrice          = 0.0;
+    double  RUBPrice          = 0.0;
+    double  CADPrice          = 0.0;
+    double  SGDPrice          = 0.0;
+    double  CHFPrice          = 0.0;
+    double  INRPrice          = 0.0;
+    double  GBPPrice          = 0.0;
+    double  AUDPrice          = 0.0;
 };
 
 

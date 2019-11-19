@@ -37,6 +37,17 @@ public:
     
     void checkForUpdate(bool silent = true);
     void refreshZECPrice();
+    void refreshEURPrice();
+    void refreshBTCPrice();
+    void refreshCNYPrice();
+    void refreshRUBPrice();
+    void refreshCADPrice();
+    void refreshSGDPrice();
+    void refreshCHFPrice();
+    void refreshINRPrice();
+    void refreshGBPPrice();
+    void refreshAUDPrice();
+    
     
     void executeStandardUITransaction(Tx tx); 
 

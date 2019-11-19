@@ -36,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->slot_change_theme(theme_name);
 
+ 
     ui->setupUi(this);
     logger = new Logger(this, QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath("silentdragonlite-wallet.log"));
 
@@ -393,6 +394,21 @@ void MainWindow::setupSettingsModal() {
         Ui_Settings settings;
         settings.setupUi(&settingsDialog);
         Settings::saveRestore(&settingsDialog);
+    
+     // Include currencies 
+
+    QString currency_name;
+    try
+    {
+       currency_name = Settings::getInstance()->get_currency_name();
+    }
+    catch (...)
+    {
+        currency_name = "USD";
+    }
+
+    this->slot_change_currency(currency_name);
+
 
         // Setup theme combo
         int theme_index = settings.comboBoxTheme->findText(Settings::getInstance()->get_theme_name(), Qt::MatchExactly);
@@ -404,6 +420,18 @@ void MainWindow::setupSettingsModal() {
             QMessageBox::information(this, tr("Restart"), tr("Please restart Silentdragonlite to have the theme apply"), QMessageBox::Ok);
         });
 
+        // Get Currency Data
+       
+        int currency_index = settings.comboBoxCurrency->findText(Settings::getInstance()->get_currency_name(), Qt::MatchExactly);
+        settings.comboBoxCurrency->setCurrentIndex(currency_index);
+        
+       QObject::connect(settings.comboBoxCurrency, &QComboBox::currentTextChanged, [=] (QString currency_name) {
+            this->slot_change_currency(currency_name);
+            
+             // Tell the user to restart
+            QMessageBox::information(this, tr("Currency Change"), tr("Please restart SilentDragonLite to have new currencies apply"), QMessageBox::Ok);  
+             });
+      
         // Check for updates
         settings.chkCheckUpdates->setChecked(Settings::getInstance()->getCheckForUpdates());
 
@@ -1093,7 +1121,30 @@ void MainWindow::setupReceiveTab() {
         }
         
         ui->rcvLabel->setText(label);
-        ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushUSDString());
+        if (Settings::getInstance()->get_currency_name() == "USD") {
+             ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushUSDString());
+        } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+             ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushEURString());
+        } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+             ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushBTCString());
+        } else if (Settings::getInstance()->get_currency_name() == "CNY") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushCNYString());
+        } else if (Settings::getInstance()->get_currency_name() == "RUB") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushRUBString());
+        } else if (Settings::getInstance()->get_currency_name() == "CAD") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushCADString());
+        } else if (Settings::getInstance()->get_currency_name() == "SGD") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushSGDString());
+        } else if (Settings::getInstance()->get_currency_name() == "CHF") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushCHFString());
+        } else if (Settings::getInstance()->get_currency_name() == "INR") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushINRString());
+        } else if (Settings::getInstance()->get_currency_name() == "GBP") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushGBPString());
+        } else if (Settings::getInstance()->get_currency_name() == "AUD") {
+            ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushAUDString());
+            }
+
         ui->txtReceive->setPlainText(addr);       
         ui->qrcodeDisplay->setQrcodeString(addr);
         if (rpc->getModel()->getUsedAddresses().value(addr, false)) {
@@ -1235,9 +1286,32 @@ void MainWindow::updateLabels() {
     updateLabelsAutoComplete();
 }
 
+void MainWindow::slot_change_currency(const QString& currency_name)
+
+{
+    
+    Settings::getInstance()->set_currency_name(currency_name);
+
+    // Include currency
+
+    QString saved_currency_name;
+    try
+    {
+       saved_currency_name = Settings::getInstance()->get_currency_name();
+       
+    }
+    catch (...)
+    {
+        saved_currency_name = "USD";
+        
+    }
+}
+
 void MainWindow::slot_change_theme(const QString& theme_name)
+
 {
     Settings::getInstance()->set_theme_name(theme_name);
+    
 
     // Include css
     QString saved_theme_name;

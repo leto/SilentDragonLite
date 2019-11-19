@@ -1,19 +1,36 @@
-SilenDragonLite is z-Addr first, Sapling compatible wallet lightwallet for Hush.
+# SilentDragonLite
+
+SilentDragonLite is a lightwallet for HUSH ($HUSH) runs on Linux and Windows which does not require you to download the full blockchain. This is experimental software under active development!
+
+[![Front.png](https://i.postimg.cc/KjNpvVGk/Front.png)](https://postimg.cc/fSVf880D)
+
+[![Sendtab.png](https://i.postimg.cc/25hwSJTk/Sendtab.png)](https://postimg.cc/mcZMdm0J)
+
+[![Neueslogo.png](https://i.postimg.cc/63j67MH5/Neueslogo.png)](https://postimg.cc/KkThwDSd)
+
+## PRIVACY NOTICE
+
+SilentDragonLite contacts a few different external websites to get various bits of data. * coingecko.com for price data API * explorer.myhush.org for explorer links * dexstats.info for address utilities, hush-lightwallet.de to get Data.
+
+This means your IP address is known to these servers. Enable Tor setting in SilentDragon to prevent this, or better yet, use TAILS: https://tails.boum.org/
+
+## Installation
+
+Go to the releases page and grab the latest installers or binary. https://github.com/MyHush/SilentDragonLite/releases
 
 ## Compiling from source
-* silentdragon is written in C++ 14, and can be compiled with g++/clang++/visual c++. 
+* SilentDragonLite is written in C++ 14, and can be compiled with g++/clang++/visual c++. 
 * It also depends on Qt5, which you can get from [here](https://www.qt.io/download). 
 * You'll need Rust v1.37 +
 
-### Building on Linux
+## Building on Linux
 
 ```
-git clone https://github.com/DenioD/SilenDragonLite.git
+git clone https://github.com/MyHush/SilenDragonLite.git
 cd silentdragonlite
-/path/to/qt5/bin/qmake silentdragon-lite.pro CONFIG+=debug
-make -j$(nproc)
+./build.sh
+./Silentdragonlite
 
-./silentdragonlite
 ```
 
-_PS: SilentDragonLite is NOT an official wallet, and is not affiliated with the Electric Coin Company in any way._
+

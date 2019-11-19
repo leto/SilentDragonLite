@@ -22,7 +22,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -79,9 +79,16 @@
                 <layout class="QHBoxLayout" name="horizontalLayout_17">
                  <item>
                   <widget class="QLabel" name="label_15">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
                    <property name="font">
                     <font>
-                     <pointsize>10</pointsize>
+                     <pointsize>11</pointsize>
+                     <kerning>true</kerning>
                     </font>
                    </property>
                    <property name="text">
@@ -93,7 +100,7 @@
                   <widget class="QLabel" name="balVerified">
                    <property name="font">
                     <font>
-                     <pointsize>10</pointsize>
+                     <pointsize>11</pointsize>
                     </font>
                    </property>
                    <property name="text">
@@ -1159,7 +1166,7 @@
   </action>
   <action name="actionDonate">
    <property name="text">
-    <string>&amp;Send Duke Feedback</string>
+    <string>&amp;Send DenioD Feedback</string>
    </property>
   </action>
   <action name="actionDiscord">
