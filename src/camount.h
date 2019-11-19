@@ -27,8 +27,29 @@ public:
     double  toDecimalDouble() const;
     QString toDecimalString() const;
     QString toDecimalUSDString() const;
+    QString toDecimalEURString() const;
+    QString toDecimalBTCString() const;
+    QString toDecimalCNYString() const;
+    QString toDecimalRUBString() const;
+    QString toDecimalCADString() const;
+    QString toDecimalSGDString() const;
+    QString toDecimalCHFString() const;
+    QString toDecimalINRString() const;
+    QString toDecimalGBPString() const;
+    QString toDecimalAUDString() const;
     QString toDecimalhushString() const;
     QString toDecimalhushUSDString() const;
+    QString toDecimalhushEURString() const;
+    QString toDecimalhushBTCString() const;
+    QString toDecimalhushCNYString() const;
+    QString toDecimalhushRUBString() const;
+    QString toDecimalhushCADString() const;
+    QString toDecimalhushSGDString() const;
+    QString toDecimalhushCHFString() const;
+    QString toDecimalhushINRString() const;
+    QString toDecimalhushGBPString() const;
+    QString toDecimalhushAUDString() const;
+    
     qint64  toqint64() const { return amount; };
 
     CAmount operator+ (const CAmount& other) const {

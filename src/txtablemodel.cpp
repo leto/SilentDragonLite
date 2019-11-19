@@ -70,15 +70,18 @@ bool TxTableModel::exportToCsv(QString fileName) const {
  }
 
 QString TxTableModel::concatMultipleMemos(const TransactionItem& dat) const {
-    // Concat all the memos
-    QString memo;
-    for (auto item : dat.items) {
-        if (!item.memo.trimmed().isEmpty()) {
-            memo += item.address + ": \"" + item.memo + "\"\n";
+    if (dat.items.length() == 1) {
+        return dat.items[0].memo;
+    } else {
+        // Concat all the memos
+        QString memo;
+        for (auto item : dat.items) {
+            if (!item.memo.trimmed().isEmpty()) {
+                memo += item.address + ": \"" + item.memo + "\"\n";
+            }
         }
+        return memo;
     }
-
-    return memo;
 };
 
 QVariant TxTableModel::data(const QModelIndex &index, int role) const {
@@ -155,7 +158,31 @@ QVariant TxTableModel::data(const QModelIndex &index, int role) const {
             for (int i=0; i < dat.items.length(); i++) {
                 total = total + dat.items[i].amount;
             }
-            return total.toDecimalUSDString();
+        if (Settings::getInstance()->get_currency_name() == "USD") {
+                return total.toDecimalUSDString();
+        } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+            return total.toDecimalEURString();
+        } else if (Settings::getInstance()->get_currency_name() == "BTC") {
+                return total.toDecimalBTCString();
+        } else if (Settings::getInstance()->get_currency_name() == "EUR") {
+                return total.toDecimalEURString();
+        } else if (Settings::getInstance()->get_currency_name() == "CNY") {
+                return total.toDecimalCNYString();
+        } else if (Settings::getInstance()->get_currency_name() == "RUB") {
+                return total.toDecimalRUBString();
+        } else if (Settings::getInstance()->get_currency_name() == "CAD") {
+                return total.toDecimalCADString();
+        } else if (Settings::getInstance()->get_currency_name() == "SGD") {
+                return total.toDecimalSGDString();
+        } else if (Settings::getInstance()->get_currency_name() == "CHF") {
+                return total.toDecimalCHFString();
+        } else if (Settings::getInstance()->get_currency_name() == "INR") {
+                return total.toDecimalINRString();
+        } else if (Settings::getInstance()->get_currency_name() == "GBP") {
+                return total.toDecimalGBPString();
+        } else if (Settings::getInstance()->get_currency_name() == "AUD") {
+                return total.toDecimalAUDString();
+              }  
         }    
         }
     }

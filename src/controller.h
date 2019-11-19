@@ -37,6 +37,17 @@ public:
     
     void checkForUpdate(bool silent = true);
     void refreshZECPrice();
+    void refreshEURPrice();
+    void refreshBTCPrice();
+    void refreshCNYPrice();
+    void refreshRUBPrice();
+    void refreshCADPrice();
+    void refreshSGDPrice();
+    void refreshCHFPrice();
+    void refreshINRPrice();
+    void refreshGBPPrice();
+    void refreshAUDPrice();
+    
     
     void executeStandardUITransaction(Tx tx); 
 
@@ -60,6 +71,8 @@ public:
                 zrpc->removeWalletEncryption(password, cb); }
 
     void saveWallet(const std::function<void(json)>& cb) { zrpc->saveWallet(cb); }
+
+    void clearWallet(const std::function<void(json)>& cb) { zrpc->clearWallet(cb); }
 
     void createNewZaddr(bool sapling, const std::function<void(json)>& cb) { 
         unlockIfEncrypted([=] () {
@@ -106,6 +119,7 @@ public:
     QString getDefaultTAddress();   
     
 private:
+    void processInfo(const json&);
     void refreshBalances();
 
     void refreshTransactions();    

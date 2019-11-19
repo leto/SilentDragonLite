@@ -205,7 +205,7 @@ public:
         
 
         w = new MainWindow();
-        w->setWindowTitle("SilentDragon Lite v" + QString(APP_VERSION));
+        w->setWindowTitle("SilentDragonLite v" + QString(APP_VERSION));
 
         // If there was a payment URI on the command line, pay it
         if (parser.positionalArguments().length() > 0) {
