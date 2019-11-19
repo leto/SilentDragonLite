@@ -158,13 +158,15 @@ void Controller::getInfoThenRefresh(bool force) {
 
     static bool prevCallSucceeded = false;
 
-    zrpc->fetchLatestBlock([=] (const json& reply) {   
+    zrpc->fetchInfo([=] (const json& reply) {   
         prevCallSucceeded = true;       
 
-        int curBlock  = reply["height"].get<json::number_integer_t>();
+        int curBlock  = reply["latest_block_height"].get<json::number_integer_t>();
         bool doUpdate = force || (model->getLatestBlock() != curBlock);
         model->setLatestBlock(curBlock);
         ui->blockHeight->setText(QString::number(curBlock));
+        ui->Version->setText(QString::fromStdString(reply["version"].get<json::string_t>())); 
+        ui->Vendor->setText(QString::fromStdString(reply["vendor"].get<json::string_t>()));
 
         main->logger->write(QString("Refresh. curblock ") % QString::number(curBlock) % ", update=" % (doUpdate ? "true" : "false") );
 
