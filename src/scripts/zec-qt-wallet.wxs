@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="*" Name="silentdragon vRELEASE_VERSION" Language="1033" Version="RELEASE_VERSION" Manufacturer="silentdragonlite-org" UpgradeCode="fb9bf166-b55f-46b5-a990-9189bdf64533">
+	<Product Id="*" Name="SilentDragonLite vRELEASE_VERSION" Language="1033" Version="RELEASE_VERSION" Manufacturer="silentdragonlite-org" UpgradeCode="fb9bf166-b55f-46b5-a990-9189bdf64533">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 		<MediaTemplate EmbedCab="yes"/>
 
-        <Icon Id="silentdragonlite.exe" SourceFile="res/icon.ico"/>
-        <Property Id="ARPPRODUCTICON" Value="silentdragonlite.exe" />
+        <Icon Id="SilentDragonLite.exe" SourceFile="res/icon.ico"/>
+        <Property Id="ARPPRODUCTICON" Value="SilentDragonLite.exe" />
 
 		<Feature Id="ProductFeature" Title="silentdragonlite" Level="1">
 			<ComponentGroupRef Id="ProductComponents" /> 
@@ -55,24 +55,21 @@
 	<Fragment>
 		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
 			<Component Id="ProductComponent" Guid="0D210F5A-53E0-4E7E-CAAD-15A26995505E">
-                <File Source="silentdragon.exe" KeyPath="yes">
+                <File Source="SilentDragonLite.exe" KeyPath="yes">
                     <Shortcut Id="startMenuShotcut" Advertise="yes" Directory="ApplicationProgramsFolder"
-                        Name="silentdragon" WorkingDirectory="INSTALLFOLDER" Icon="silentdragonlite.exe" >
+                        Name="SilentDragonLite" WorkingDirectory="INSTALLFOLDER" Icon="SilentDragonLite.exe" >
                     </Shortcut>
                 </File>
                 <File Source="LICENSE" />
-                <File Source="hushd.exe" />
-                <File Source="hush-cli.exe" />
-                <File Source="README.md" />
 
                 <RegistryKey Root="HKCR" Key="hush">
                     <RegistryValue Type="string" Name="URL Protocol" Value=""/>
                     <RegistryValue Type="string" Value="URL:hush URI protocol"/>
                     <RegistryKey Key="DefaultIcon">
-                    <RegistryValue Type="string" Value="silentdragon.exe" />
+                    <RegistryValue Type="string" Value="SilentDragonLite.exe" />
                     </RegistryKey>
                     <RegistryKey Key="shell\open\command">
-                    <RegistryValue Type="string" Value="&quot;[INSTALLFOLDER]silentdragon.exe&quot; &quot;%1&quot;" />
+                    <RegistryValue Type="string" Value="&quot;[INSTALLFOLDER]SilentDragonLite.exe&quot; &quot;%1&quot;" />
                     </RegistryKey>
                 </RegistryKey>
 			</Component>
