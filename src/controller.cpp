@@ -837,7 +837,7 @@ void Controller::refreshZECPrice() {
             {
               
                 qDebug() << "HUSH = CHF" << QString::number((double)hush["chf"]);
-                Settings::getInstance()->setCADPrice( hush["chf"]);
+                Settings::getInstance()->setCHFPrice( hush["chf"]);
             }
             if (hush["inr"] >= 0)
             {
