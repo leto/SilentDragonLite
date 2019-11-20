@@ -203,7 +203,7 @@ void Controller::getInfoThenRefresh(bool force) {
         main->statusLabel->setText(" HUSH/AUD=$ " + QString::number((double)  Settings::getInstance()->getAUDPrice() ,'f',2));
         
     } else {
-    main->statusLabel->setText(" error Input" + QString::number(Settings::getInstance()->getEURPrice() ));
+    main->statusLabel->setText(" HUSH/USD=$" + QString::number(Settings::getInstance()->getZECPrice(),'f',2 ));
     }
         main->statusLabel->setToolTip(tooltip);
         main->statusIcon->setPixmap(i.pixmap(16, 16));

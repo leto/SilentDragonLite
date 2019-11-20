@@ -161,11 +161,9 @@ QVariant TxTableModel::data(const QModelIndex &index, int role) const {
         if (Settings::getInstance()->get_currency_name() == "USD") {
                 return total.toDecimalUSDString();
         } else if (Settings::getInstance()->get_currency_name() == "EUR") {
-            return total.toDecimalEURString();
+               return total.toDecimalEURString();
         } else if (Settings::getInstance()->get_currency_name() == "BTC") {
                 return total.toDecimalBTCString();
-        } else if (Settings::getInstance()->get_currency_name() == "EUR") {
-                return total.toDecimalEURString();
         } else if (Settings::getInstance()->get_currency_name() == "CNY") {
                 return total.toDecimalCNYString();
         } else if (Settings::getInstance()->get_currency_name() == "RUB") {
@@ -182,9 +180,10 @@ QVariant TxTableModel::data(const QModelIndex &index, int role) const {
                 return total.toDecimalGBPString();
         } else if (Settings::getInstance()->get_currency_name() == "AUD") {
                 return total.toDecimalAUDString();
-              }  
-        }    
+              }
         }
+        }    
+        
     }
 
     if (role == Qt::DecorationRole && index.column() == 0) {        

@@ -30,9 +30,13 @@
 <context>
     <name>ConnectionDialog</name>
     <message>
-        <location filename="../src/connection.ui" line="17"/>
         <source>silentdragon</source>
-        <translation>SilentDragonLite</translation>
+        <translation type="vanished">SilentDragonLite</translation>
+    </message>
+    <message>
+        <location filename="../src/connection.ui" line="17"/>
+        <source>SilentDragonLite</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/connection.ui" line="58"/>
@@ -43,29 +47,29 @@
 <context>
     <name>Controller</name>
     <message>
-        <location filename="../src/controller.cpp" line="572"/>
+        <location filename="../src/controller.cpp" line="577"/>
         <source>Wallet Password</source>
         <translation>Wallet Passwort</translation>
     </message>
     <message>
-        <location filename="../src/controller.cpp" line="573"/>
+        <location filename="../src/controller.cpp" line="578"/>
         <source>Your wallet is encrypted.
 Please enter your wallet password</source>
         <translation>Ihr Wallet ist verschlüsselt. Bitte geben Sie das Passwort ein</translation>
     </message>
     <message>
-        <location filename="../src/controller.cpp" line="576"/>
-        <location filename="../src/controller.cpp" line="591"/>
+        <location filename="../src/controller.cpp" line="581"/>
+        <location filename="../src/controller.cpp" line="596"/>
         <source>Wallet Decryption Failed</source>
         <translation>Entschlüsslung gescheitert</translation>
     </message>
     <message>
-        <location filename="../src/controller.cpp" line="577"/>
+        <location filename="../src/controller.cpp" line="582"/>
         <source>Please enter a valid password</source>
         <translation>Bitte geben Sie ein gültiges Passwort ein</translation>
     </message>
     <message>
-        <location filename="../src/controller.cpp" line="647"/>
+        <location filename="../src/controller.cpp" line="652"/>
         <source>Failed to unlock wallet</source>
         <translation>Konnte das Wallet nicht entsperren</translation>
     </message>
@@ -101,9 +105,8 @@ Please enter your wallet password</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/mainwindow.ui" line="14"/>
         <source>silentdragon</source>
-        <translation>SilentDragonLite</translation>
+        <translation type="vanished">SilentDragonLite</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="29"/>
@@ -214,8 +217,8 @@ Please enter your wallet password</source>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="499"/>
-        <location filename="../src/mainwindow.cpp" line="864"/>
-        <location filename="../src/mainwindow.cpp" line="912"/>
+        <location filename="../src/mainwindow.cpp" line="885"/>
+        <location filename="../src/mainwindow.cpp" line="933"/>
         <location filename="../src/sendtab.cpp" line="291"/>
         <source>Memo</source>
         <translation>Nachricht hinzufügen</translation>
@@ -308,7 +311,7 @@ Please enter your wallet password</source>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="851"/>
-        <location filename="../src/mainwindow.cpp" line="1056"/>
+        <location filename="../src/mainwindow.cpp" line="1077"/>
         <source>Export Private Key</source>
         <translation>Private Key exportieren</translation>
     </message>
@@ -333,29 +336,39 @@ Please enter your wallet password</source>
         <translation>Hushdlight Version</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1169"/>
+        <location filename="../src/mainwindow.ui" line="1171"/>
         <source>&amp;Send DenioD Feedback</source>
         <translation>Sende DenioD Feedback</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1202"/>
+        <location filename="../src/mainwindow.ui" line="1204"/>
         <source>&amp;Export seed phrase</source>
         <translation>Seed exportieren</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1240"/>
+        <location filename="../src/mainwindow.ui" line="1242"/>
         <source>Encrypt Wallet</source>
         <translation>Wallet verschlüsseln</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1245"/>
+        <location filename="../src/mainwindow.ui" line="1247"/>
         <source>Remove Wallet Encryption</source>
         <translation>Verschlüsslung entfernen</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="1252"/>
+        <source>Rescan</source>
+        <translation type="unfinished">Neu Scannen</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="981"/>
         <source>This is a Lightwallet, you cant mine with it!</source>
         <translation>Dies ist ein Lightwallet, sie können damit nicht Minen!</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="14"/>
+        <source>SilentDragonLite</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1001"/>
@@ -405,346 +418,345 @@ Please enter your wallet password</source>
         <translation>Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1151"/>
+        <location filename="../src/mainwindow.ui" line="1153"/>
         <source>E&amp;xit</source>
         <translation>Beenden</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1156"/>
+        <location filename="../src/mainwindow.ui" line="1158"/>
         <source>&amp;About</source>
         <translation>Über</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1161"/>
+        <location filename="../src/mainwindow.ui" line="1163"/>
         <source>&amp;Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1164"/>
+        <location filename="../src/mainwindow.ui" line="1166"/>
         <source>Ctrl+P</source>
         <translation>Ctrl+P</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1174"/>
+        <location filename="../src/mainwindow.ui" line="1176"/>
         <source>&amp;Hush Discord</source>
         <translation>&amp;Hush Discord</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1179"/>
+        <location filename="../src/mainwindow.ui" line="1181"/>
         <source>&amp;Hush Website</source>
         <translation>&amp;Hush Website</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1184"/>
+        <location filename="../src/mainwindow.ui" line="1186"/>
         <source>Check github.com for &amp;updates</source>
         <translation>Überprüfe Github für Updates</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1189"/>
+        <location filename="../src/mainwindow.ui" line="1191"/>
         <source>&amp;Export all private keys</source>
         <translation>Alle private Keys exportieren</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1194"/>
+        <location filename="../src/mainwindow.ui" line="1196"/>
         <source>Address &amp;book</source>
         <translation>Adressbuch</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1197"/>
+        <location filename="../src/mainwindow.ui" line="1199"/>
         <source>Ctrl+B</source>
         <translation>Ctrl+B</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1207"/>
-        <location filename="../src/mainwindow.cpp" line="679"/>
+        <location filename="../src/mainwindow.ui" line="1209"/>
+        <location filename="../src/mainwindow.cpp" line="700"/>
         <source>Export transactions</source>
         <translation>Transaktionen exportieren</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1212"/>
+        <location filename="../src/mainwindow.ui" line="1214"/>
         <source>Pay hush &amp;URI...</source>
         <translation>Zahlungs Hush &amp;URI...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1217"/>
+        <location filename="../src/mainwindow.ui" line="1219"/>
         <source>Connect mobile &amp;app</source>
         <translation>Smartphone verbinden</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1220"/>
+        <location filename="../src/mainwindow.ui" line="1222"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1225"/>
+        <location filename="../src/mainwindow.ui" line="1227"/>
         <source>&amp;Recurring Payments</source>
         <translation>Wiederkehrende Zahlung</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1230"/>
+        <location filename="../src/mainwindow.ui" line="1232"/>
         <source>Request hush...</source>
         <translation>Hush anfordern...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1235"/>
+        <location filename="../src/mainwindow.ui" line="1237"/>
         <source>File a bug...</source>
         <translation>Fehler melden...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="368"/>
-        <location filename="../src/mainwindow.cpp" line="886"/>
+        <location filename="../src/mainwindow.cpp" line="383"/>
+        <location filename="../src/mainwindow.cpp" line="907"/>
         <source>Copy txid</source>
         <translation>Transaktions ID kopieren</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="371"/>
+        <location filename="../src/mainwindow.cpp" line="386"/>
         <source>View tx on block explorer</source>
         <translation>Transaktions ID auf dem Blockexplorer anschauen</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="376"/>
+        <location filename="../src/mainwindow.cpp" line="391"/>
         <source>Refresh</source>
         <translation>Aktualisieren</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="420"/>
+        <location filename="../src/mainwindow.cpp" line="435"/>
         <source>Restart</source>
         <translation>Neustart</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="420"/>
+        <location filename="../src/mainwindow.cpp" line="435"/>
         <source>Please restart Silentdragonlite to have the theme apply</source>
         <translation>Bitte starten sie SilentDragonLite neu</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="451"/>
         <source>You&apos;re using an external hushd. Please restart hushd with -rescan</source>
-        <translation>Starte SilentDragonLite neu</translation>
+        <translation type="vanished">Starte SilentDragonLite neu</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="506"/>
+        <location filename="../src/mainwindow.cpp" line="527"/>
         <source>Some feedback about SilentDragonlite or Hush...</source>
         <translation>Etwas Feedback über SilentDragonLite...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="508"/>
+        <location filename="../src/mainwindow.cpp" line="529"/>
         <source>Send Duke some private and shielded feedback about</source>
         <translation>Sende DenioD anonym Feedback über</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="508"/>
+        <location filename="../src/mainwindow.cpp" line="529"/>
         <source> or SilentDragonLite</source>
         <translation> oder SilentDragonLite</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="589"/>
+        <location filename="../src/mainwindow.cpp" line="610"/>
         <source>Paste HUSH URI</source>
         <translation>Hush URI einfügen</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="601"/>
+        <location filename="../src/mainwindow.cpp" line="622"/>
         <source>Error paying HUSH URI</source>
         <translation>Fehler bei HUSH URI</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="602"/>
+        <location filename="../src/mainwindow.cpp" line="623"/>
         <source>URI should be of the form &apos;hush:&lt;addr&gt;?amt=x&amp;memo=y</source>
         <translation>Die URI sollte folgendemaßen aussehen &apos;hush:&lt;addr&gt;?amt=x&amp;memo=y</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="685"/>
+        <location filename="../src/mainwindow.cpp" line="706"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="686"/>
+        <location filename="../src/mainwindow.cpp" line="707"/>
         <source>Error exporting transactions, file was not saved</source>
         <translation>Fehler beim exportieren der Transaktionen. Die Datei wurde nicht gespeichert</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="756"/>
+        <location filename="../src/mainwindow.cpp" line="777"/>
         <source>Error getting private keys</source>
         <translation>Fehler beim empfangen der private Keys</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="757"/>
+        <location filename="../src/mainwindow.cpp" line="778"/>
         <source>Error loading private keys: </source>
         <translation>Fehler beim laden der private Keys: </translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="777"/>
+        <location filename="../src/mainwindow.cpp" line="798"/>
         <source>These are all the private keys for all the addresses in your wallet</source>
         <translation>Dies sind alle private Keys für ihr Wallet</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="779"/>
+        <location filename="../src/mainwindow.cpp" line="800"/>
         <source>Private key for </source>
         <translation>Private Key für </translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="723"/>
-        <location filename="../src/mainwindow.cpp" line="784"/>
+        <location filename="../src/mainwindow.cpp" line="744"/>
+        <location filename="../src/mainwindow.cpp" line="805"/>
         <source>Save File</source>
         <translation>Datei sichern</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="231"/>
+        <location filename="../src/mainwindow.cpp" line="246"/>
         <source>Wallet is already encrypted</source>
         <translation>SilentDragonLite ist bereits verschlüsselt</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="232"/>
+        <location filename="../src/mainwindow.cpp" line="247"/>
         <source>Your wallet is already encrypted with a password.
 Please use &apos;Remove Wallet Encryption&apos; if you want to remove the wallet encryption.</source>
         <translation>SilentDragonLite ist bereits mit einem Passwort verschlüsselt. Bitte benutzen Sie die Funktion &apos;Verschlüsselung entfernen&apos;.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="250"/>
+        <location filename="../src/mainwindow.cpp" line="265"/>
         <source>Passwords don&apos;t match</source>
         <translation>Passwort falsch</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="263"/>
+        <location filename="../src/mainwindow.cpp" line="278"/>
         <source>Error was:
 </source>
         <translation>Der Fehler war:
 </translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="274"/>
+        <location filename="../src/mainwindow.cpp" line="289"/>
         <source>Wallet Encrypted</source>
         <translation>SilentDragonLite verschlüsselt</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="275"/>
+        <location filename="../src/mainwindow.cpp" line="290"/>
         <source>Your wallet was successfully encrypted! The password will be needed to send funds or export private keys.</source>
         <translation>SilentDragonLite wurde erfolgreich verschlüsselt. Sie benötigen Ihr Passwort um Zahlungen zu senden oder Ihre private Keys zu exportieren.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="279"/>
-        <location filename="../src/mainwindow.cpp" line="286"/>
+        <location filename="../src/mainwindow.cpp" line="294"/>
+        <location filename="../src/mainwindow.cpp" line="301"/>
         <source>Wallet Encryption Failed</source>
         <translation>Verschlüsslung gescheitert</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="296"/>
+        <location filename="../src/mainwindow.cpp" line="311"/>
         <source>Wallet is not encrypted</source>
         <translation>SilentDragonLite ist nicht verschlüsselt</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="297"/>
+        <location filename="../src/mainwindow.cpp" line="312"/>
         <source>Your wallet is not encrypted with a password.</source>
         <translation>SilentDragonLite ist nicht mit einem Passwort verschlüsselt.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="304"/>
+        <location filename="../src/mainwindow.cpp" line="319"/>
         <source>Wallet Password</source>
         <translation>SilentDragonLite Passwort</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="305"/>
+        <location filename="../src/mainwindow.cpp" line="320"/>
         <source>Please enter your wallet password</source>
         <translation>Bitte geben sie Ihr Passwort ein</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="313"/>
-        <location filename="../src/mainwindow.cpp" line="330"/>
-        <location filename="../src/mainwindow.cpp" line="340"/>
+        <location filename="../src/mainwindow.cpp" line="328"/>
+        <location filename="../src/mainwindow.cpp" line="345"/>
+        <location filename="../src/mainwindow.cpp" line="355"/>
         <source>Wallet Decryption Failed</source>
         <translation>SilentDragonLite konnte nicht entschlüsselt werden</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="314"/>
+        <location filename="../src/mainwindow.cpp" line="329"/>
         <source>Please enter a password to decrypt your wallet!</source>
         <translation>Bitte geben Sie das Passwort ein, um SilentDragonLite zu entschlüsseln!</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="325"/>
+        <location filename="../src/mainwindow.cpp" line="340"/>
         <source>Wallet Encryption Removed</source>
         <translation>Verschlüsselung wurde entfernt</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="326"/>
+        <location filename="../src/mainwindow.cpp" line="341"/>
         <source>Your wallet was successfully decrypted! You will no longer need a password to send funds or export private keys.</source>
         <translation>SilentDragonLite wurde erfolgreich entschlüsselt. Sie benötigen Ihr Passwort nicht mehr.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="432"/>
+        <location filename="../src/mainwindow.cpp" line="447"/>
         <source>Currency Change</source>
         <translation>Währungszeichen wechseln</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="432"/>
+        <location filename="../src/mainwindow.cpp" line="447"/>
         <source>Please restart SilentDragonLite to have new currencies apply</source>
         <translation>Bitte starten sie SilentDragonLite neu</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="719"/>
+        <location filename="../src/mainwindow.cpp" line="740"/>
         <source>This is your wallet seed. Please back it up carefully and safely.</source>
         <translation>Dies ist Ihr SilentDragonLite Seed. Bitte sichern Sie ihn sorgfältig.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="727"/>
-        <location filename="../src/mainwindow.cpp" line="788"/>
+        <location filename="../src/mainwindow.cpp" line="748"/>
+        <location filename="../src/mainwindow.cpp" line="809"/>
         <source>Unable to open file</source>
         <translation>Konnte die Datei nicht öffnen</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="832"/>
-        <location filename="../src/mainwindow.cpp" line="892"/>
+        <location filename="../src/mainwindow.cpp" line="853"/>
+        <location filename="../src/mainwindow.cpp" line="913"/>
         <source>Copy address</source>
         <translation>Adresse kopieren</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="835"/>
-        <location filename="../src/mainwindow.cpp" line="888"/>
-        <location filename="../src/mainwindow.cpp" line="894"/>
+        <location filename="../src/mainwindow.cpp" line="856"/>
+        <location filename="../src/mainwindow.cpp" line="909"/>
+        <location filename="../src/mainwindow.cpp" line="915"/>
         <source>Copied to clipboard</source>
         <translation>In die Zwischenablage kopiert</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="838"/>
+        <location filename="../src/mainwindow.cpp" line="859"/>
         <source>Get private key</source>
         <translation>Private Key erhalten</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="844"/>
-        <location filename="../src/mainwindow.cpp" line="898"/>
+        <location filename="../src/mainwindow.cpp" line="865"/>
+        <location filename="../src/mainwindow.cpp" line="919"/>
         <source>View on block explorer</source>
         <translation>Auf dem Blockexplorer anschauen</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="904"/>
+        <location filename="../src/mainwindow.cpp" line="925"/>
         <source>View Payment Request</source>
         <translation>Zahlungsanforderung ansehen</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="911"/>
+        <location filename="../src/mainwindow.cpp" line="932"/>
         <source>View Memo</source>
         <translation>Nachricht ansehen</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="925"/>
+        <location filename="../src/mainwindow.cpp" line="946"/>
         <source>Reply to </source>
         <translation>Antworten an </translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1012"/>
+        <location filename="../src/mainwindow.cpp" line="1033"/>
         <source>Created new t-Addr</source>
         <translation>Neue sichtbare Adresse erstellen</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1062"/>
+        <location filename="../src/mainwindow.cpp" line="1083"/>
         <source>Copy Address</source>
         <translation>Adresse kopieren</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1151"/>
+        <location filename="../src/mainwindow.cpp" line="1172"/>
         <source>Address has been previously used</source>
         <translation>Diese Adresse wurde schon einmal benutzt</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1153"/>
+        <location filename="../src/mainwindow.cpp" line="1174"/>
         <source>Address is unused</source>
         <translation>Adresse ist unbenutzt</translation>
     </message>
@@ -1080,13 +1092,13 @@ Anmerkung: Sie bnötigen 2 Bestätigungen</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="153"/>
-        <location filename="../src/controller.cpp" line="231"/>
+        <location filename="../src/controller.cpp" line="236"/>
         <source>Connection Error</source>
         <translation>Verbsindungsfehler</translation>
     </message>
     <message>
         <location filename="../src/connection.cpp" line="251"/>
-        <location filename="../src/controller.cpp" line="619"/>
+        <location filename="../src/controller.cpp" line="624"/>
         <location filename="../src/sendtab.cpp" line="888"/>
         <source>Transaction Error</source>
         <translation>Transaktionsfehler</translation>
@@ -1103,43 +1115,43 @@ Anmerkung: Sie bnötigen 2 Bestätigungen</translation>
         <translation>keine Verbindung</translation>
     </message>
     <message>
-        <location filename="../src/controller.cpp" line="231"/>
+        <location filename="../src/controller.cpp" line="236"/>
         <source>There was an error connecting to hushd. The error was</source>
         <translation>Es gab einen Fehler zum server zu verbinden</translation>
     </message>
     <message>
-        <location filename="../src/controller.cpp" line="614"/>
+        <location filename="../src/controller.cpp" line="619"/>
         <location filename="../src/recurring.cpp" line="598"/>
         <location filename="../src/sendtab.cpp" line="871"/>
         <source> Tx </source>
         <translation> Transaktion </translation>
     </message>
     <message>
-        <location filename="../src/controller.cpp" line="614"/>
+        <location filename="../src/controller.cpp" line="619"/>
         <location filename="../src/recurring.cpp" line="598"/>
         <location filename="../src/sendtab.cpp" line="871"/>
         <source> failed</source>
         <translation> gescheitert</translation>
     </message>
     <message>
-        <location filename="../src/controller.cpp" line="617"/>
+        <location filename="../src/controller.cpp" line="622"/>
         <location filename="../src/sendtab.cpp" line="879"/>
         <source>The transaction with id </source>
         <translation>Die Transaktion mit der ID </translation>
     </message>
     <message>
-        <location filename="../src/controller.cpp" line="617"/>
+        <location filename="../src/controller.cpp" line="622"/>
         <location filename="../src/sendtab.cpp" line="879"/>
         <source> failed. The error was</source>
         <translation> ist gescheitert</translation>
     </message>
     <message>
-        <location filename="../src/controller.cpp" line="698"/>
+        <location filename="../src/controller.cpp" line="703"/>
         <source>Update Available</source>
         <translation>Update verfügbar</translation>
     </message>
     <message>
-        <location filename="../src/controller.cpp" line="699"/>
+        <location filename="../src/controller.cpp" line="704"/>
         <source>A new release v%1 is available! You have v%2.
 
 Would you like to visit the releases page?</source>
@@ -1148,22 +1160,22 @@ Would you like to visit the releases page?</source>
 Möchten Sie die Release Seite besuchen?</translation>
     </message>
     <message>
-        <location filename="../src/controller.cpp" line="711"/>
+        <location filename="../src/controller.cpp" line="716"/>
         <source>No updates available</source>
         <translation>keine Updates verfügbar</translation>
     </message>
     <message>
-        <location filename="../src/controller.cpp" line="712"/>
+        <location filename="../src/controller.cpp" line="717"/>
         <source>You already have the latest release v%1</source>
         <translation>Sie haben bereits die neueste Version v%1</translation>
     </message>
     <message>
-        <location filename="../src/controller.cpp" line="886"/>
+        <location filename="../src/controller.cpp" line="891"/>
         <source>Please wait for SilentDragonLite to exit</source>
         <translation>Bitte warten Sie bis SilentDragonLite beendet ist</translation>
     </message>
     <message>
-        <location filename="../src/controller.cpp" line="887"/>
+        <location filename="../src/controller.cpp" line="892"/>
         <source>Waiting for hushd to exit</source>
         <translation>Warten auf beendigung der Serververbindung</translation>
     </message>
@@ -1229,22 +1241,22 @@ Möchten Sie die Release Seite besuchen?</translation>
         <translation>Betrag</translation>
     </message>
     <message>
-        <location filename="../src/websockets.cpp" line="356"/>
+        <location filename="../src/websockets.cpp" line="355"/>
         <source>Connected directly</source>
         <translation>Direkt verbunden</translation>
     </message>
     <message>
-        <location filename="../src/websockets.cpp" line="359"/>
+        <location filename="../src/websockets.cpp" line="358"/>
         <source>Connected over the internet via silentdragon wormhole service</source>
         <translation>Über das Internet verbunden</translation>
     </message>
     <message>
-        <location filename="../src/websockets.cpp" line="652"/>
+        <location filename="../src/websockets.cpp" line="651"/>
         <source>Node is still syncing.</source>
         <translation>SilentDragonLite synchronisiert noch.</translation>
     </message>
     <message>
-        <location filename="../src/websockets.cpp" line="676"/>
+        <location filename="../src/websockets.cpp" line="675"/>
         <source>No sapling or transparent addresses with enough balance to spend.</source>
         <translation>Nicht genügend Guthaben verfügbar.</translation>
     </message>
@@ -1593,27 +1605,32 @@ Möchten Sie die Release Seite besuchen?</translation>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../src/settings.ui" line="20"/>
+        <location filename="../src/settings.ui" line="14"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="86"/>
+        <location filename="../src/settings.ui" line="49"/>
+        <source>Lightwallet Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settings.ui" line="81"/>
         <source>Options</source>
         <translation>Optionen</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="160"/>
+        <location filename="../src/settings.ui" line="155"/>
         <source>Connect to github on startup to check for updates</source>
         <translation>Überprüfe Github für Updates</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="214"/>
+        <location filename="../src/settings.ui" line="209"/>
         <source>Connect to the internet to fetch hush prices</source>
         <translation>Hush Preise abrufen (dies kann Ihre Privatssphäre einschränken)</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="147"/>
+        <location filename="../src/settings.ui" line="142"/>
         <source>Check github for updates at startup</source>
         <translation>Überprüfe Github beim Start auf Updates</translation>
     </message>
@@ -1622,109 +1639,105 @@ Möchten Sie die Release Seite besuchen?</translation>
         <translation type="vanished">Hush Preise abrufen</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="179"/>
+        <location filename="../src/settings.ui" line="174"/>
         <source>Theme</source>
         <translation>Design</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="105"/>
+        <location filename="../src/settings.ui" line="100"/>
         <source>default</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="33"/>
+        <location filename="../src/settings.ui" line="27"/>
         <source>Connection</source>
         <translation>Verbidnung</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="55"/>
         <source>Server</source>
-        <translation>Server</translation>
+        <translation type="vanished">Server</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="110"/>
+        <location filename="../src/settings.ui" line="105"/>
         <source>blue</source>
         <translation>Blau</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="115"/>
+        <location filename="../src/settings.ui" line="110"/>
         <source>light</source>
         <translation>Hell</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="120"/>
+        <location filename="../src/settings.ui" line="115"/>
         <source>dark</source>
         <translation>Dark</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="134"/>
+        <location filename="../src/settings.ui" line="129"/>
         <source>Fetch hush prices</source>
         <translation>Hush Preise abrufen</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="233"/>
+        <location filename="../src/settings.ui" line="228"/>
         <source>Currency</source>
         <translation>Währung</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="256"/>
+        <location filename="../src/settings.ui" line="251"/>
         <source>AUD</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="261"/>
+        <location filename="../src/settings.ui" line="256"/>
         <source>BTC</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="266"/>
+        <location filename="../src/settings.ui" line="261"/>
         <source>CAD</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="271"/>
+        <location filename="../src/settings.ui" line="266"/>
         <source>CHF</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="276"/>
+        <location filename="../src/settings.ui" line="271"/>
         <source>CNY</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="281"/>
+        <location filename="../src/settings.ui" line="276"/>
         <source>EUR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="286"/>
+        <location filename="../src/settings.ui" line="281"/>
         <source>GBP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="291"/>
+        <location filename="../src/settings.ui" line="286"/>
         <source>INR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="296"/>
+        <location filename="../src/settings.ui" line="291"/>
         <source>USD</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="303"/>
         <source>Troubleshooting</source>
-        <translation>Problembehebung</translation>
+        <translation type="vanished">Problembehebung</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="329"/>
         <source>Rescan the blockchain for any missing wallet transactions and to correct your wallet balance. This may take several hours. You need to restart hushWallet for this to take effect</source>
-        <translation>Das Wallet neu scannen um das Guthaben zu aktuallisieren</translation>
+        <translation type="vanished">Das Wallet neu scannen um das Guthaben zu aktuallisieren</translation>
     </message>
     <message>
-        <location filename="../src/settings.ui" line="339"/>
         <source>Rescan</source>
-        <translation>Neu Scannen</translation>
+        <translation type="vanished">Neu Scannen</translation>
     </message>
 </context>
 <context>
