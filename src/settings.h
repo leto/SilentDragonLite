@@ -124,7 +124,8 @@ public:
     static const QString labelRegExp;
 
     static const int     updateSpeed         = 30 * 1000;        // 30 sec
-    static const int     priceRefreshSpeed   = 5 * 60 * 1000;   // 1 hr
+    static const int     quickUpdateSpeed    = 5  * 1000;        // 3 sec
+    static const int     priceRefreshSpeed   = 5 * 60 * 1000;   // 15 min
 
 private:
     // This class can only be accessed through Settings::getInstance()
