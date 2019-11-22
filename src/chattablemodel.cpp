@@ -119,30 +119,44 @@ QVariant ChatTableModel::data(const QModelIndex &index, int role) const {
     
 
  }}}
+                    
+
     if (role == Qt::DisplayRole) {
         switch (index.column()) {
         case Column::Type: return dat.type;
         case Column::Address: {
                     auto addr = dat.address;
-                    if (addr.trimmed().isEmpty()) 
-                        return "(Shielded)";
-                    else 
+                    for (auto item : dat.items)
+                    if (!item.memo.trimmed().isEmpty()== true) {
+                     
                         return addr;
+                        
+                        
+                    }else{ 
+                    
+                        return "";}
                 }
-     
-      case Column::Time: return QDateTime::fromMSecsSinceEpoch(dat.datetime *  (qint64)1000).toLocalTime().toString();
+       case Column::Time: {
+
+           for (auto item : dat.items)
+            if (!item.memo.trimmed().isEmpty()== true) {
+           
+           
+           return QDateTime::fromMSecsSinceEpoch(dat.datetime *  (qint64)1000).toLocalTime().toString();
+
+            }else {return "";}}
         
-        case Column::Confirmations: return QString::number(dat.confirmations);
-        case Column::Amount: {
+       // case Column::Confirmations: return QString::number(dat.confirmations);
+       // case Column::Amount: {
             // Sum up all the amounts
-            CAmount total;
-            for (int i=0; i < dat.items.length(); i++) {
-                total = total + dat.items[i].amount;
-            }
-            return total.toDecimalhushString();
-        }
-        }
-    } 
+         //   CAmount total;
+           // for (int i=0; i < dat.items.length(); i++) {
+             //   total = total + dat.items[i].amount;
+            
+           // return total.toDecimalhushString();
+        
+        
+    }}
 
     if (role == Qt::ToolTipRole) {
         switch (index.column()) {
@@ -162,21 +176,22 @@ QVariant ChatTableModel::data(const QModelIndex &index, int role) const {
                 }
         case Column::Address: {
                     auto addr = modeldata->at(index.row()).address;
-                    if (addr.trimmed().isEmpty()) 
-                        return "(Shielded)";
-                    else 
+                    for (auto item : dat.items)
+                    if (!item.memo.trimmed().isEmpty()) 
                         return addr;
+                    else 
+                        return "";
                 }
-        case Column::Time: return QDateTime::fromMSecsSinceEpoch(modeldata->at(index.row()).datetime * (qint64)1000).toLocalTime().toString();
-        case Column::Confirmations: return QString("%1 Network Confirmations").arg(QString::number(dat.confirmations));
-        case Column::Amount: {
+       // case Column::Time: return QDateTime::fromMSecsSinceEpoch(modeldata->at(index.row()).datetime * (qint64)1000).toLocalTime().toString();
+        //case Column::Confirmations: return QString("%1 Network Confirmations").arg(QString::number(dat.confirmations));
+        //case Column::Amount: {
             // Sum up all the amounts
-            CAmount total;
-            for (int i=0; i < dat.items.length(); i++) {
-                total = total + dat.items[i].amount;
-            }
-            return total.toDecimalUSDString();
-        }    
+           // CAmount total;
+            //for (int i=0; i < dat.items.length(); i++) {
+              //  total = total + dat.items[i].amount;
+            //}
+           // return total.toDecimalUSDString();
+        //}    
         }
     }
 
