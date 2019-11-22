@@ -101,6 +101,24 @@ QVariant ChatTableModel::data(const QModelIndex &index, int role) const {
         return b;        
     }
 
+ // Concat all the memos
+
+    if (role == Qt::DisplayRole) {
+        switch (index.column()) {
+        case Column::Type: return dat.type;
+        case Column::Memo:{
+
+    QString memo;
+    for (auto item : dat.items) {
+        if (!item.memo.trimmed().isEmpty()) {
+            memo +=  item.memo + "\"\n";
+        }
+    }
+
+     return memo;
+    
+
+ }}}
     if (role == Qt::DisplayRole) {
         switch (index.column()) {
         case Column::Type: return dat.type;
@@ -111,7 +129,9 @@ QVariant ChatTableModel::data(const QModelIndex &index, int role) const {
                     else 
                         return addr;
                 }
-        case Column::Time: return QDateTime::fromMSecsSinceEpoch(dat.datetime *  (qint64)1000).toLocalTime().toString();
+     
+      case Column::Time: return QDateTime::fromMSecsSinceEpoch(dat.datetime *  (qint64)1000).toLocalTime().toString();
+        
         case Column::Confirmations: return QString::number(dat.confirmations);
         case Column::Amount: {
             // Sum up all the amounts
@@ -212,7 +232,7 @@ QString ChatTableModel::getTxId(int row) const {
 
 QString ChatTableModel::getMemo(int row) const {
   auto dat = modeldata->at(row);
-    //return modeldata->at(row).memo.trimmed();
+    //return modeldata->at(row).memo;
     return concatMultipleMemos(dat);
 }
 
