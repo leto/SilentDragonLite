@@ -24,6 +24,10 @@ Controller::Controller(MainWindow* main) {
     // Setup transactions table model
     transactionsTableModel = new TxTableModel(ui->transactionsTable);
     main->ui->transactionsTable->setModel(transactionsTableModel);
+
+    // Setup chat table model
+    chatTableModel = new ChatTableModel(ui->chatTable);
+    main->ui->chatTable->setModel(chatTableModel);
     
     // Set up timer to refresh Price
     priceTimer = new QTimer(main);
@@ -53,6 +57,7 @@ Controller::~Controller() {
     delete txTimer;
 
     delete transactionsTableModel;
+    delete chatTableModel;
     delete balancesTableModel;
 
     delete model;
@@ -116,6 +121,12 @@ void Controller::noConnection() {
     // Clear Transactions table.
     QList<TransactionItem> emptyTxs;
     transactionsTableModel->replaceData(emptyTxs);
+    
+
+  
+
+
+ 
 
     // Clear balances
     ui->balSheilded->setText("");
@@ -473,12 +484,14 @@ void Controller::refreshTransactions() {
         return noConnection();
 
     zrpc->fetchTransactions([=] (json reply) {
-        QList<TransactionItem> txdata;        
+        QList<TransactionItem> txdata; 
+        QList<ChatItem> txdatachat;     
 
         for (auto& it : reply.get<json::array_t>()) {  
             QString address;
             CAmount total_amount;
             QList<TransactionItemDetail> items;
+            QList<ChatItemDetail> chatitems;
 
             long confirmations;
             if (it.find("unconfirmed") != it.end() && it["unconfirmed"].get<json::boolean_t>()) {
@@ -509,6 +522,9 @@ void Controller::refreshTransactions() {
                     
                     items.push_back(TransactionItemDetail{address, amount, memo});
                     total_amount = total_amount + amount;
+                
+                    chatitems.push_back(ChatItemDetail{address, amount, memo});
+                    
                 }
 
                 {
@@ -523,6 +539,10 @@ void Controller::refreshTransactions() {
                 txdata.push_back(TransactionItem{
                    "send", datetime, address, txid,confirmations, items
                 });
+
+                txdatachat.push_back(ChatItem{
+                   "send", datetime, address, txid,confirmations, chatitems
+                    });
             } else {
                 // Incoming Transaction
                 address = (it["address"].is_null() ? "" : QString::fromStdString(it["address"]));
@@ -538,13 +558,23 @@ void Controller::refreshTransactions() {
                     CAmount::fromqint64(it["amount"].get<json::number_integer_t>()),
                     memo
                 });
-
+                chatitems.push_back(ChatItemDetail{
+                    address,
+                    CAmount::fromqint64(it["amount"].get<json::number_integer_t>()),
+                    memo
+                });
   
                 TransactionItem tx{
                     "Receive", datetime, address, txid,confirmations, items
                 };
 
                 txdata.push_back(tx);
+
+                ChatItem txchat{
+                    "Receive", datetime, address, txid,confirmations, chatitems
+                };
+
+                txdatachat.push_back(txchat);
             }
             
         }
@@ -565,7 +595,9 @@ void Controller::refreshTransactions() {
         updateUIBalances();
 
         // Update model data, which updates the table view
-        transactionsTableModel->replaceData(txdata);        
+        transactionsTableModel->replaceData(txdata); 
+        chatTableModel->replaceData(txdatachat);
+        //chatTableModel->replaceData(txdata);    
     });
 }
 

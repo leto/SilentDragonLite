@@ -152,6 +152,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setupReceiveTab();
     setupBalancesTab();
     setuphushdTab();
+    setupchatTab();
 
     rpc = new Controller(this);
 
@@ -877,6 +878,29 @@ void MainWindow::setupBalancesTab() {
 void MainWindow::setuphushdTab() {    
     ui->hushdlogo->setBasePixmap(QPixmap(":/img/res/hushdlogo.gif"));
 }
+
+void MainWindow::setupchatTab() {    
+
+
+    // Double click opens up memo if one exists
+   // QObject::connect(ui->chatTable, &QTableView::customContextMenuRequested, [=] (auto index) {
+     //   auto txModel = dynamic_cast<ChatTableModel *>(ui->chatTable->model());
+       // QString memo = txModel->getMemo(index.row());
+
+        //if (!memo.isEmpty()) {
+          //  QMessageBox mb(QMessageBox::Information, tr("Memo"), memo, QMessageBox::Ok, this);
+            //mb.setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+           // mb.exec();
+        //}
+    //});
+
+    // Set up context menu on transactions tab
+    
+    ui->chatTable->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    
+}
+
 
 void MainWindow::setupTransactionsTab() {
     // Double click opens up memo if one exists

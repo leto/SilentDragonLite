@@ -6,6 +6,7 @@
 #include "camount.h"
 #include "datamodel.h"
 #include "balancestablemodel.h"
+#include "chattablemodel.h"
 #include "txtablemodel.h"
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -58,6 +59,7 @@ public:
     void fillTxJsonParams(json& params, Tx tx);
     
     const TxTableModel*               getTransactionsModel() { return transactionsTableModel; }
+    const ChatTableModel*             getchatModel() { return chatTableModel; }
 
     void shutdownhushd();
     void noConnection();
@@ -136,6 +138,7 @@ private:
 
     TxTableModel*               transactionsTableModel      = nullptr;
     BalancesTableModel*         balancesTableModel          = nullptr;
+    ChatTableModel*             chatTableModel      = nullptr;
 
     DataModel*                  model;
     LiteInterface*              zrpc;

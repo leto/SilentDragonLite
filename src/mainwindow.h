@@ -88,6 +88,8 @@ private:
     void setupReceiveTab();
     void setupBalancesTab();
     void setuphushdTab();
+    void setupchatTab();
+
 
     void setupSettingsModal();
     void setupStatusBar();

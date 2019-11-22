@@ -46,6 +46,7 @@ SOURCES += \
     src/settings.cpp \
     src/sendtab.cpp \
     src/txtablemodel.cpp \
+    src/chattablemodel.cpp \
     src/qrcodelabel.cpp \
     src/connection.cpp \
     src/fillediconlabel.cpp \
@@ -74,6 +75,7 @@ HEADERS += \
     src/3rdparty/json/json.hpp \
     src/settings.h \
     src/txtablemodel.h \
+    src/chattablemodel.h \
     src/qrcodelabel.h \
     src/connection.h \
     src/fillediconlabel.h \

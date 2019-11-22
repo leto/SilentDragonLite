@@ -23,10 +23,33 @@ struct TransactionItem {
     qint64          datetime;
     QString         address;
     QString         txid;
+ //QString         memo;
     long            confirmations;
 
     QList<TransactionItemDetail> items;
 };
+
+struct ChatItemDetail {
+    QString         address;
+    CAmount         amount;
+    QString         memo;
+
+
+};
+
+// Represents a row in the transactions table. Note that each transaction can contain
+// multiple addresses (i.e., Multiple TransctionItemDetail)
+struct ChatItem {
+    QString         type;
+    qint64          datetime;
+    QString         address;
+    QString         txid;
+    //QString         memo;
+    long            confirmations;
+
+    QList<ChatItemDetail> items;
+};
+
 
 
 class LiteInterface {
