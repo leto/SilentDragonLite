@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="hr_HR" sourcelanguage="en">
+<TS version="2.1" language="sr_RS" sourcelanguage="en">
 <context>
     <name>AddressBookModel</name>
     <message>
@@ -51,14 +51,14 @@
         <location filename="../src/controller.cpp" line="578"/>
         <source>Your wallet is encrypted.
 Please enter your wallet password</source>
-        <translation>Vaš novčanik je šifriran.
+        <translation>Vaš novčanik je šifrovan.
 Molimo unesite vašu lozinku</translation>
     </message>
     <message>
         <location filename="../src/controller.cpp" line="581"/>
         <location filename="../src/controller.cpp" line="596"/>
         <source>Wallet Decryption Failed</source>
-        <translation>Dešifriranje novčanika neuspjelo</translation>
+        <translation>Dešifriranje novčanika neuspelo</translation>
     </message>
     <message>
         <location filename="../src/controller.cpp" line="582"/>
@@ -68,7 +68,7 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/controller.cpp" line="652"/>
         <source>Failed to unlock wallet</source>
-        <translation>Neuspjeh prilikom otključavanja novčanika</translation>
+        <translation>Neuspeh prilikom otključavanja novčanika</translation>
     </message>
 </context>
 <context>
@@ -81,12 +81,12 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/newwallet.ui" line="32"/>
         <source>Restore wallet from seed</source>
-        <translation>Vraćanje novčanika u početno stanje iz seed riječi</translation>
+        <translation>Vraćanje novčanika u početno stanje iz seed reči</translation>
     </message>
     <message>
         <location filename="../src/newwallet.ui" line="39"/>
         <source>Restore an existing wallet, using the 24-word seed. </source>
-        <translation>Vratite postojeći novčanik u početno stanje koristeći seed od 24 riječi. </translation>
+        <translation>Vratite postojeći novčanik u početno stanje koristeći seed od 24 reči. </translation>
     </message>
     <message>
         <location filename="../src/newwallet.ui" line="64"/>
@@ -96,7 +96,7 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/newwallet.ui" line="71"/>
         <source>Create a new wallet with a randomly generated seed.</source>
-        <translation>Napravite novi novčanik sa nasumice odabranim seed riječima.</translation>
+        <translation>Napravite novi novčanik sa nasumično odabranim seed rečima.</translation>
     </message>
 </context>
 <context>
@@ -114,7 +114,7 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/mainwindow.ui" line="43"/>
         <source>Summary</source>
-        <translation>Sažetak</translation>
+        <translation>Rezime</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="62"/>
@@ -139,12 +139,12 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/mainwindow.ui" line="195"/>
         <source>Your node is still syncing, balances may not be updated.</source>
-        <translation>Vaš čvor se još uvijek sinkronizira, saldo neće biti ažuriran.</translation>
+        <translation>Vaš čvor se još uvijek sinhronizuje, saldo neće biti ažuriran.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="214"/>
         <source>Some transactions are not yet confirmed. Balances may change.</source>
-        <translation>Neke transakcije još nisu potvrđene. Saldo se može promijeniti.</translation>
+        <translation>Neke transakcije još nisu potvrđene. Saldo se može promeniti.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="248"/>
@@ -160,7 +160,7 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/mainwindow.ui" line="334"/>
         <source>Total notarized funds available:</source>
-        <translation>Ukopna dostupna potvrđena sredstva:</translation>
+        <translation>Ukupna dostupna potvrđena sredstva:</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="371"/>
@@ -170,7 +170,7 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/mainwindow.ui" line="410"/>
         <source>Recipient</source>
-        <translation>Primatelj</translation>
+        <translation>Primalac</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="418"/>
@@ -211,7 +211,7 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/mainwindow.ui" line="547"/>
         <source>Add Recipient</source>
-        <translation>Dodaj primatelja</translation>
+        <translation>Dodaj primaoca</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="591"/>
@@ -221,7 +221,7 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/mainwindow.ui" line="598"/>
         <source>Every month, starting 12-May-2012, for 6 payments</source>
-        <translation>Svaki mjesec s početkom 12-Svibnja-2012, u 6 rata</translation>
+        <translation>Svaki mesec s početkom 12-Maja-2012, u 6 rata</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="605"/>
@@ -262,7 +262,7 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/mainwindow.ui" line="749"/>
         <source>t-Addr</source>
-        <translation>t-adr</translation>
+        <translation>t-Adr</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="773"/>
@@ -292,7 +292,7 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/mainwindow.ui" line="829"/>
         <source>Optional</source>
-        <translation>Opcionalno</translation>
+        <translation>Opciono</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="851"/>
@@ -303,7 +303,7 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/mainwindow.ui" line="888"/>
         <source>Your node is still syncing, balances may not be updated</source>
-        <translation>Vaš čvor se još uvijek sinkronizira, saldo neće biti ažuriran</translation>
+        <translation>Vaš čvor se još uvijek sinhronizuje, saldo neće biti ažuriran</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="931"/>
@@ -382,7 +382,7 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/mainwindow.ui" line="1163"/>
         <source>&amp;Settings</source>
-        <translation>&amp;Postavke</translation>
+        <translation>&amp;Podešavanja</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1166"/>
@@ -407,7 +407,7 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/mainwindow.ui" line="1186"/>
         <source>Check github.com for &amp;updates</source>
-        <translation>Provjeri na github.com &amp;dopune</translation>
+        <translation>Proveri na github.com &amp;dopune</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1191"/>
@@ -473,7 +473,7 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/mainwindow.ui" line="1247"/>
         <source>Remove Wallet Encryption</source>
-        <translation>Uklonite šifriranje novčanika</translation>
+        <translation>Uklonite šifrovanje novčanika</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1252"/>
@@ -483,14 +483,14 @@ Molimo unesite vašu lozinku</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="246"/>
         <source>Wallet is already encrypted</source>
-        <translation>Novčanik je već šifriran</translation>
+        <translation>Novčanik je već šifrovan</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="247"/>
         <source>Your wallet is already encrypted with a password.
 Please use &apos;Remove Wallet Encryption&apos; if you want to remove the wallet encryption.</source>
-        <translation>Vaš novčanik je već šifriran lozinkom.
-Molimo koristite &apos;Uklonite šifriranje novčanika&apos; ako želite ukloniti šifriranje novčanika.</translation>
+        <translation>Vaš novčanik je već šifrovan lozinkom.
+Molimo koristite &apos;Uklonite šifrovanje novčanika&apos; ako želite ukloniti šifrovanje novčanika.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="265"/>
@@ -507,28 +507,28 @@ Molimo koristite &apos;Uklonite šifriranje novčanika&apos; ako želite uklonit
     <message>
         <location filename="../src/mainwindow.cpp" line="289"/>
         <source>Wallet Encrypted</source>
-        <translation>Novčanik šifriran</translation>
+        <translation>Novčanik šifrovan</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="290"/>
         <source>Your wallet was successfully encrypted! The password will be needed to send funds or export private keys.</source>
-        <translation>Vaš novčanik je uspješno šifriran! Lozinka će vam trebati za slanje sredstava ili za izvoz privatnih ključeva.</translation>
+        <translation>Vaš novčanik je uspješno šifrovan! Lozinka će vam trebati za slanje sredstava ili za izvoz privatnih ključeva.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="294"/>
         <location filename="../src/mainwindow.cpp" line="301"/>
         <source>Wallet Encryption Failed</source>
-        <translation>Šifriranje novčanika neuspjelo</translation>
+        <translation>Šifrovanje novčanika neuspelo</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="311"/>
         <source>Wallet is not encrypted</source>
-        <translation>Novčanik nije šifriran</translation>
+        <translation>Novčanik nije šifrovan</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="312"/>
         <source>Your wallet is not encrypted with a password.</source>
-        <translation>Vaš novčanik nije šifriran sa lozinkom.</translation>
+        <translation>Vaš novčanik nije šifrovan sa lozinkom.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="319"/>
@@ -545,22 +545,22 @@ Molimo koristite &apos;Uklonite šifriranje novčanika&apos; ako želite uklonit
         <location filename="../src/mainwindow.cpp" line="345"/>
         <location filename="../src/mainwindow.cpp" line="355"/>
         <source>Wallet Decryption Failed</source>
-        <translation>Dešifriranje novčanika neuspjelo</translation>
+        <translation>Dešifrovanje novčanika neuspelo</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="329"/>
         <source>Please enter a password to decrypt your wallet!</source>
-        <translation>Molimo unesite lozinku za dešifriranje novčanika!</translation>
+        <translation>Molimo unesite lozinku za dešifrovanje novčanika!</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="340"/>
         <source>Wallet Encryption Removed</source>
-        <translation>Šifriranje novčanika uklonjeno</translation>
+        <translation>Šifrovanje novčanika uklonjeno</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="341"/>
         <source>Your wallet was successfully decrypted! You will no longer need a password to send funds or export private keys.</source>
-        <translation>Vaš novčanik je uspješno dešifriran! Lozinka vam više neće trebati za slanje sredstava ili za izvoz privatnih ključeva.</translation>
+        <translation>Vaš novčanik je uspešno dešifrovan! Lozinka vam više neće trebati za slanje sredstava ili za izvoz privatnih ključeva.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="383"/>
@@ -571,31 +571,31 @@ Molimo koristite &apos;Uklonite šifriranje novčanika&apos; ako želite uklonit
     <message>
         <location filename="../src/mainwindow.cpp" line="386"/>
         <source>View tx on block explorer</source>
-        <translation>Pogledaj tx na blok pregledniku</translation>
+        <translation>Pogledaj tx na blok pregledaču</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="391"/>
         <source>Refresh</source>
-        <translation>Osvježi</translation>
+        <translation>Osveži</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="437"/>
         <source>Restart</source>
-        <translation>Ponovno pokreni</translation>
+        <translation>Ponovo pokreni</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="437"/>
         <source>Please restart Silentdragonlite to have the theme apply</source>
-        <translation>Molimo ponovno pokrenite SilentDragonLite ako želite primjeniti temu</translation>
+        <translation>Molimo ponovo pokrenite SilentDragonLite ako želite primeniti temu</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="450"/>
         <source>Currency Change</source>
-        <translation>Razmjena valuta</translation>
+        <translation>Razmena valuta</translation>
     </message>
     <message>
         <source>Please restart SilentDragonLite to have new currencies apply</source>
-        <translation type="vanished">Molimo ponovno pokrenite SilentDragonLite ako želite primjeniti novu valutu</translation>
+        <translation type="vanished">Molimo ponovo pokrenite SilentDragonLite ako želite primeniti novu valutu</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="450"/>
@@ -605,7 +605,7 @@ Molimo koristite &apos;Uklonite šifriranje novčanika&apos; ako želite uklonit
     <message>
         <location filename="../src/mainwindow.cpp" line="530"/>
         <source>Some feedback about SilentDragonlite or Hush...</source>
-        <translation>Neke povratne informaciej o SilentDragonLite ili Hush...</translation>
+        <translation>Neke povratne informacije o SilentDragonLite ili Hush...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="532"/>
@@ -620,7 +620,7 @@ Molimo koristite &apos;Uklonite šifriranje novčanika&apos; ako želite uklonit
     <message>
         <location filename="../src/mainwindow.cpp" line="613"/>
         <source>Paste HUSH URI</source>
-        <translation>Zalijepi HUSH URI</translation>
+        <translation>Zalepi HUSH URI</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="625"/>
@@ -645,7 +645,7 @@ Molimo koristite &apos;Uklonite šifriranje novčanika&apos; ako želite uklonit
     <message>
         <location filename="../src/mainwindow.cpp" line="743"/>
         <source>This is your wallet seed. Please back it up carefully and safely.</source>
-        <translation>Ovo je vaš seed novčanika. Molimo izradite sigurnosnu kopiju.</translation>
+        <translation>Ovo je vaš seed novčanika. Molimo izradite rezervnu kopiju.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="747"/>
@@ -701,7 +701,7 @@ Molimo koristite &apos;Uklonite šifriranje novčanika&apos; ako želite uklonit
         <location filename="../src/mainwindow.cpp" line="868"/>
         <location filename="../src/mainwindow.cpp" line="922"/>
         <source>View on block explorer</source>
-        <translation>Pogledaj na blok pregledniku</translation>
+        <translation>Pogledaj na blok pregledaču</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="928"/>
@@ -751,7 +751,7 @@ Molimo koristite &apos;Uklonite šifriranje novčanika&apos; ako želite uklonit
     <message>
         <location filename="../src/sendtab.cpp" line="228"/>
         <source>Recipient </source>
-        <translation>Primatelj </translation>
+        <translation>Primalac </translation>
     </message>
     <message>
         <location filename="../src/sendtab.cpp" line="373"/>
@@ -860,7 +860,7 @@ Opaska: Za trošenje sredstava potrebno je 5 konfirmacija</translation>
     <message>
         <location filename="../src/migration.ui" line="30"/>
         <source>Migration History</source>
-        <translation>Povijest migracije</translation>
+        <translation>Istorija migracije</translation>
     </message>
     <message>
         <location filename="../src/migration.ui" line="36"/>
@@ -880,7 +880,7 @@ Opaska: Za trošenje sredstava potrebno je 5 konfirmacija</translation>
     <message>
         <location filename="../src/migration.ui" line="81"/>
         <source>If enabled, hushd will slowly migrate your Sprout shielded funds to your Sapling address. </source>
-        <translation>Ako se omogući, hushd će polako migrirati vaše Sprout zaštićena sredstva u vašu Sapling adresu. </translation>
+        <translation>Ako se omogući, hushd će polako mogrirati vaše Sprout zaštićena sredstva u vašu Sapling adresu. </translation>
     </message>
 </context>
 <context>
@@ -952,7 +952,7 @@ Opaska: Za trošenje sredstava potrebno je 5 konfirmacija</translation>
     <message>
         <location filename="../src/newseed.ui" line="30"/>
         <source>The seed phrase is the only way to restore the wallet. If you forget the seed phrase, THERE IS NO WAY TO RESTORE YOUR WALLET AND THE FUNDS in it</source>
-        <translation>Jedino je pomoću seed fraze moguće ponovno obnoviti novčanik. Ako zaboravite seed frazu, NE POSTOJI NAČIN DA PONOVNO OBNOVITE NOVČANIK I SREDSTVA unutra</translation>
+        <translation>Jedino je pomoću seed fraze moguće ponovo obnoviti novčanik. Ako zaboravite seed frazu, NE POSTOJI NAČIN DA PONOVO OBNOVITE NOVČANIK I SREDSTVA unutra</translation>
     </message>
 </context>
 <context>
@@ -965,7 +965,7 @@ Opaska: Za trošenje sredstava potrebno je 5 konfirmacija</translation>
     <message>
         <location filename="../src/firsttimewizard.cpp" line="104"/>
         <source>Failed to save wallet</source>
-        <translation>Neuspjelo spremanje novčanika</translation>
+        <translation>Neuspelo spremanje novčanika</translation>
     </message>
     <message>
         <location filename="../src/firsttimewizard.cpp" line="105"/>
@@ -1109,7 +1109,7 @@ Opaska: Za trošenje sredstava potrebno je 5 konfirmacija</translation>
         <location filename="../src/recurring.cpp" line="598"/>
         <location filename="../src/sendtab.cpp" line="871"/>
         <source> failed</source>
-        <translation> neuspjelo</translation>
+        <translation> neuspelo</translation>
     </message>
     <message>
         <location filename="../src/controller.cpp" line="622"/>
@@ -1121,7 +1121,7 @@ Opaska: Za trošenje sredstava potrebno je 5 konfirmacija</translation>
         <location filename="../src/controller.cpp" line="622"/>
         <location filename="../src/sendtab.cpp" line="879"/>
         <source> failed. The error was</source>
-        <translation> nesupjela. Greška je</translation>
+        <translation> nesupela. Greška je</translation>
     </message>
     <message>
         <location filename="../src/controller.cpp" line="703"/>
@@ -1135,7 +1135,7 @@ Opaska: Za trošenje sredstava potrebno je 5 konfirmacija</translation>
 Would you like to visit the releases page?</source>
         <translation>Nova verzija v%1 je dostupna! Vi imate v%2.
 
-Želite li posjetiti stranicu sa izadnjima?</translation>
+Želite li posetiti stranicu sa izadnjima?</translation>
     </message>
     <message>
         <location filename="../src/controller.cpp" line="716"/>
@@ -1160,12 +1160,12 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/recurring.cpp" line="542"/>
         <source>No hush price was available to convert from USD</source>
-        <translation>Nema hush cijene za pretvorbu iz USD</translation>
+        <translation>Nema hush cene za pretvorbu iz USD</translation>
     </message>
     <message>
         <location filename="../src/recurring.cpp" line="648"/>
         <source>View on block explorer</source>
-        <translation>Pogledajte na blok pregledniku</translation>
+        <translation>Pogledajte na blok pregledaču</translation>
     </message>
     <message>
         <location filename="../src/recurring.cpp" line="661"/>
@@ -1181,7 +1181,7 @@ Would you like to visit the releases page?</source>
         <location filename="../src/recurring.cpp" line="699"/>
         <location filename="../src/recurring.cpp" line="700"/>
         <source>Are you sure you want to delete the recurring payment?</source>
-        <translation>Da li ste sigurni da želite izbrisati ponavljajuće plačanje?</translation>
+        <translation>Da li ste sigurni da želite izbrisati ponavljajuće plaćanje?</translation>
     </message>
     <message>
         <location filename="../src/recurring.cpp" line="701"/>
@@ -1206,7 +1206,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/txtablemodel.cpp" line="7"/>
         <source>Date/Time</source>
-        <translation>Datum/Vrijeme</translation>
+        <translation>Datum/Vreme</translation>
     </message>
     <message>
         <location filename="../src/txtablemodel.cpp" line="7"/>
@@ -1231,7 +1231,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/websockets.cpp" line="688"/>
         <source>Node is still syncing.</source>
-        <translation>Čvor se još uvijek sinkronizira.</translation>
+        <translation>Čvor se još uvijek sinhronizira.</translation>
     </message>
     <message>
         <location filename="../src/websockets.cpp" line="712"/>
@@ -1277,7 +1277,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/recurring.cpp" line="724"/>
         <source>Next Payment</source>
-        <translation>Slijedeće plaćanje</translation>
+        <translation>Sledeće plaćanje</translation>
     </message>
     <message>
         <location filename="../src/recurring.cpp" line="724"/>
@@ -1349,7 +1349,7 @@ Would you like to visit the releases page?</source>
         <location filename="../src/recurring.cpp" line="799"/>
         <location filename="../src/recurring.cpp" line="800"/>
         <source>Unknown</source>
-        <translation>Nepotnato</translation>
+        <translation>Nepoznato</translation>
     </message>
 </context>
 <context>
@@ -1362,7 +1362,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/recurringmultiple.ui" line="20"/>
         <source>No payments will be processed. You can manually pay them from the Recurring Payments Dialog box</source>
-        <translation>Plaćanja se neće procesuirati. Možete ih ručno platiti u polju dialoga Ponavljajućeg plaćanja</translation>
+        <translation>Plaćanja se neće obraditi. Možete ih ručno platiti u polju dialoga Ponavljajućeg plaćanja</translation>
     </message>
     <message>
         <location filename="../src/recurringmultiple.ui" line="37"/>
@@ -1382,7 +1382,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/recurringmultiple.ui" line="58"/>
         <source>Only the latest pending payment will be processed. All previous pending payments will be skipped</source>
-        <translation>Procesuirati će se samo zadnje plaćanje u toku. Sva prijašnja plaćanja u toku će se preskočiti</translation>
+        <translation>Obradit će se samo zadnje plaćanje u toku. Sva prijašnja plaćanja u toku će se preskočiti</translation>
     </message>
     <message>
         <location filename="../src/recurringmultiple.ui" line="68"/>
@@ -1412,7 +1412,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/recurringmultiple.ui" line="137"/>
         <source>The following recurring payment has multiple payments pending</source>
-        <translation>Slijedeće ponavljajuće plaćanje sadrži višestruka plaćanja u toku</translation>
+        <translation>Sledeće ponavljajuće plaćanje sadrži višestruka plaćanja u toku</translation>
     </message>
 </context>
 <context>
@@ -1420,7 +1420,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/requestdialog.ui" line="14"/>
         <source>Payment Request</source>
-        <translation>Zahtjev o plaćanju</translation>
+        <translation>Zahtev o plaćanju</translation>
     </message>
     <message>
         <location filename="../src/requestdialog.ui" line="38"/>
@@ -1455,7 +1455,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/requestdialog.ui" line="159"/>
         <source>The recipient will see this address in the &quot;to&quot; field when they pay your request.</source>
-        <translation>Primatelj će prilikom plaćanja vidjeti ovu adresu u &quot;za&quot; polju.</translation>
+        <translation>Primalac će prilikom plaćanja videti ovu adresu u &quot;za&quot; polju.</translation>
     </message>
     <message>
         <location filename="../src/requestdialog.ui" line="179"/>
@@ -1500,7 +1500,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/requestdialog.cpp" line="87"/>
         <source>You are paying a payment request. Your address will not be visible to the person requesting this payment.</source>
-        <translation>Plaćate zahtjev za nalogom. Vaša adresa neće biti vidljiva osobi koja je zatražila ovaj nalog.</translation>
+        <translation>Plaćate zahtev za nalogom. Vaša adresa neće biti vidljiva osobi koja je zatražila ovaj nalog.</translation>
     </message>
     <message>
         <location filename="../src/requestdialog.cpp" line="106"/>
@@ -1518,7 +1518,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/restoreseed.ui" line="20"/>
         <source>Please enter your 24-word seed below</source>
-        <translation>Molimo unesite ispod seed od 24 riječi</translation>
+        <translation>Molimo unesite ispod seed od 24 reči</translation>
     </message>
     <message>
         <location filename="../src/restoreseed.ui" line="42"/>
@@ -1547,22 +1547,22 @@ Would you like to visit the releases page?</source>
         <location filename="../src/firsttimewizard.cpp" line="132"/>
         <location filename="../src/firsttimewizard.cpp" line="156"/>
         <source>Failed to restore wallet</source>
-        <translation>Neuspjelo obnavljanje novčanika</translation>
+        <translation>Neuspelo obnavljanje novčanika</translation>
     </message>
     <message>
         <location filename="../src/firsttimewizard.cpp" line="133"/>
         <source>SilentDragonLite needs 24 words to restore wallet</source>
-        <translation>SilentDragonLite treba 24 riječi za obnovu novčanika</translation>
+        <translation>SilentDragonLite treba 24 reči za obnovu novčanika</translation>
     </message>
     <message>
         <location filename="../src/firsttimewizard.cpp" line="143"/>
         <source>Failed to parse wallet birthday</source>
-        <translation>Neuspjelo očitanje rođendana novčanika</translation>
+        <translation>Neuspelo očitanje rođendana novčanika</translation>
     </message>
     <message>
         <location filename="../src/firsttimewizard.cpp" line="144"/>
         <source>Couldn&apos;t understand wallet birthday. This should be a block height from where to rescan the wallet. You can leave it as &apos;0&apos; if you don&apos;t know what it should be.</source>
-        <translation>Nisam u mogućnosti razumijeti rođendan novčanika. To bi trebala bi biti visina bloka od koje počinje rescan novčanika. Ako ne znate koja je, možete ostaviti &apos;0&apos;.</translation>
+        <translation>Nisam u mogućnosti razumeti rođendan novčanika. To bi trebala bi biti visina bloka od koje počinje rescan novčanika. Ako ne znate koja je, možete ostaviti &apos;0&apos;.</translation>
     </message>
     <message>
         <location filename="../src/firsttimewizard.cpp" line="157"/>
@@ -1572,7 +1572,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/firsttimewizard.cpp" line="170"/>
         <source>Failed to save wallet</source>
-        <translation>Neuspjeh spremanja novčanika</translation>
+        <translation>Neuspeh spremanja novčanika</translation>
     </message>
     <message>
         <location filename="../src/firsttimewizard.cpp" line="171"/>
@@ -1615,7 +1615,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/settings.ui" line="110"/>
         <source>light</source>
-        <translation>svijetlo</translation>
+        <translation>svetlo</translation>
     </message>
     <message>
         <location filename="../src/settings.ui" line="115"/>
@@ -1625,17 +1625,17 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/settings.ui" line="129"/>
         <source>Fetch hush prices</source>
-        <translation>Dohvati hush cijene</translation>
+        <translation>Zatraži hush cene</translation>
     </message>
     <message>
         <location filename="../src/settings.ui" line="142"/>
         <source>Check github for updates at startup</source>
-        <translation>Prilikom pokretanja provjetite ažuriranja na githubu</translation>
+        <translation>Prilikom pokretanja proverite ažuriranja na githubu</translation>
     </message>
     <message>
         <location filename="../src/settings.ui" line="155"/>
         <source>Connect to github on startup to check for updates</source>
-        <translation>Prilikom pokretanja provjetite ažuriranja na githubu</translation>
+        <translation>Prilikom pokretanja proverite ažuriranja na githubu</translation>
     </message>
     <message>
         <location filename="../src/settings.ui" line="174"/>
@@ -1645,7 +1645,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/settings.ui" line="209"/>
         <source>Connect to the internet to fetch hush prices</source>
-        <translation>Spoji se na Internet i dohvati hush cijene</translation>
+        <translation>Spoji se na Internet i dohvati hush cene</translation>
     </message>
     <message>
         <location filename="../src/settings.ui" line="228"/>
@@ -1790,7 +1790,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/confirm.ui" line="164"/>
         <source>You are sending a transaction while your node is still syncing. This may not work.</source>
-        <translation>Šaljete transakciju, a vaš čvor se još uvijek sinkronizira. To možda neće uspjeti.</translation>
+        <translation>Šaljete transakciju, a vaš čvor se još uvijek sinhronizira. To možda neće uspeti.</translation>
     </message>
 </context>
 <context>
@@ -1798,12 +1798,12 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/createhushconfdialog.ui" line="14"/>
         <source>Configure hush.conf</source>
-        <translation>Konfigurirajte hush.conf</translation>
+        <translation>Konfigurišite hush.conf</translation>
     </message>
     <message>
         <location filename="../src/createhushconfdialog.ui" line="20"/>
         <source>Your hush node will be configured for you automatically</source>
-        <translation>Vaš hush čvor će se automatski konfigurirati</translation>
+        <translation>Vaš hush čvor će se automatski konfigurisati</translation>
     </message>
     <message>
         <location filename="../src/createhushconfdialog.ui" line="30"/>
@@ -1818,7 +1818,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/createhushconfdialog.ui" line="112"/>
         <source>Allow connections to the internet to check for updates, get hush prices etc...</source>
-        <translation>Dopusti vezu na Internet za provjeru ažuriranja, hush cijana itd...</translation>
+        <translation>Dopusti vezu na Internet za proveru ažuriranja, hush cena itd...</translation>
     </message>
     <message>
         <location filename="../src/createhushconfdialog.ui" line="119"/>
@@ -1833,7 +1833,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/createhushconfdialog.ui" line="157"/>
         <source>Please note that you&apos;ll need to already have a Tor service configured on port 9050</source>
-        <translation>Uzmite u obzir da ćete već morati imati konfiguriranu Tor uslugu na portu 9050</translation>
+        <translation>Uzmite u obzir da ćete već morati imati konfigurisanu Tor uslugu na portu 9050</translation>
     </message>
     <message>
         <location filename="../src/createhushconfdialog.ui" line="164"/>
@@ -1853,7 +1853,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/createhushconfdialog.ui" line="205"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Skips the most expensive checks during the initial block download. &lt;a href=&quot;https://docs.silentdragon.co/using-silentdragon/#fastsync&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Learn More&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Preskače najskuplje provjere tokom početnog preuzimanja bloka. &lt;a href=&quot;https://docs.silentdragon.co/using-silentdragon/#fastsync&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Saznaj više&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Preskače najskuplje provere tokom početnog preuzimanja bloka. &lt;a href=&quot;https://docs.silentdragon.co/using-silentdragon/#fastsync&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Saznaj više&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -1861,12 +1861,12 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/encryption.ui" line="14"/>
         <source>Encrypt Your Wallet</source>
-        <translation>Šifrirajte vaš novčanik</translation>
+        <translation>Šifrujte vaš novčanik</translation>
     </message>
     <message>
         <location filename="../src/encryption.ui" line="27"/>
         <source>Encryption Password:</source>
-        <translation>Lozinka šifriranja:</translation>
+        <translation>Lozinka šifrovanja:</translation>
     </message>
     <message>
         <location filename="../src/encryption.ui" line="34"/>
@@ -1904,7 +1904,7 @@ Would you like to visit the releases page?</source>
     <message>
         <location filename="../src/newrecurring.ui" line="68"/>
         <source>Next Payment</source>
-        <translation>Slijedeće plaćanje</translation>
+        <translation>Sledeće plaćanje</translation>
     </message>
     <message>
         <location filename="../src/newrecurring.ui" line="75"/>

@@ -123,6 +123,7 @@ TRANSLATIONS = res/zec_qt_wallet_es.ts \
                res/zec_qt_wallet_it.ts \
                res/zec_qt_wallet_zh.ts \
                res/zec_qt_wallet_hr.ts \
+               res/zec_qt_wallet_sr.ts \
                res/zec_qt_wallet_tr.ts 
              
 include(singleapplication/singleapplication.pri)
