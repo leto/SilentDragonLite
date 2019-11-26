@@ -172,7 +172,7 @@ public:
         qDebug() << "Loading locale " << locale;
         
         QTranslator translator;
-        translator.load(QString(":/translations/res/hush_qt_wallet_") + locale);
+        translator.load(QString(":/translations/res/zec_qt_wallet_") + locale);
         a.installTranslator(&translator);
 
         QIcon icon(":/icons/res/icon.ico");

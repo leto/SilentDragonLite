@@ -18,6 +18,7 @@
     <file>res/zec_qt_wallet_fr.qm</file>
     <file>res/zec_qt_wallet_pt.qm</file>
     <file>res/zec_qt_wallet_it.qm</file>
+    <file>res/zec_qt_wallet_hr.qm</file>
     </qresource>
     <qresource prefix="/css">
         <file>res/css/blue.css</file>
