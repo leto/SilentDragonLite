@@ -137,7 +137,7 @@ QVariant TxTableModel::data(const QModelIndex &index, int role) const {
                             return Settings::paymentURIPretty(Settings::parseURI(memo));
                         } else {
                             return modeldata->at(index.row()).type + 
-                            (memo.isEmpty() ? "" : " tx memo: \"" + memo + "\"");
+                            (memo.isEmpty() ? "" : " tx memo: \"" + memo.toHtmlEscaped() + "\"");
                         }
                     } else {
                         return concatMultipleMemos(dat);
