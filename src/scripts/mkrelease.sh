@@ -31,7 +31,7 @@ echo "[OK]"
 
 
 echo -n "Building..............."
-rm -rf bin/silentdragonlite* > /dev/null
+rm -rf bin/SilentDragonLite* > /dev/null
 # Build the lib first
 cd lib && make release && cd ..
 make -j$(nproc) > /dev/null
@@ -40,7 +40,7 @@ echo "[OK]"
 
 # Test for Qt
 echo -n "Static link............"
-if [[ $(ldd silentdragonlite | grep -i "Qt") ]]; then
+if [[ $(ldd SilentDragonLite | grep -i "Qt") ]]; then
     echo "FOUND QT; ABORT"; 
     exit 1
 fi
@@ -48,25 +48,25 @@ echo "[OK]"
 
 
 echo -n "Packaging.............."
-mkdir bin/silentdragonlite-v$APP_VERSION > /dev/null
-strip silentdragonlite
+mkdir bin/SilentDragonLite-v$APP_VERSION > /dev/null
+strip SilentDragonLite
 
-cp silentdragonlite                 bin/silentdragonlite-v$APP_VERSION > /dev/null
-cp README.md                      bin/silentdragonlite-v$APP_VERSION > /dev/null
-cp LICENSE                        bin/silentdragonlite-v$APP_VERSION > /dev/null
+cp SilentDragonLite                 bin/SilentDragonLite-v$APP_VERSION > /dev/null
+cp README.md                      bin/SilentDragonLite-v$APP_VERSION > /dev/null
+cp LICENSE                        bin/SilentDragonLite-v$APP_VERSION > /dev/null
 
-cd bin && tar czf linux-silentdragonlite-v$APP_VERSION.tar.gz silentdragonlite-v$APP_VERSION/ > /dev/null
+cd bin && tar czf linux-SilentDragonLite-v$APP_VERSION.tar.gz SilentDragonLite-v$APP_VERSION/ > /dev/null
 cd .. 
 
 mkdir artifacts >/dev/null 2>&1
-cp bin/linux-silentdragonlite-v$APP_VERSION.tar.gz ./artifacts/linux-binaries-silentdragonlite-v$APP_VERSION.tar.gz
+cp bin/linux-SilentDragonLite-v$APP_VERSION.tar.gz ./artifacts/linux-binaries-SilentDragonLite-v$APP_VERSION.tar.gz
 echo "[OK]"
 
 
-if [ -f artifacts/linux-binaries-silentdragonlite-v$APP_VERSION.tar.gz ] ; then
+if [ -f artifacts/linux-binaries-SilentDragonLite-v$APP_VERSION.tar.gz ] ; then
     echo -n "Package contents......."
     # Test if the package is built OK
-    if tar tf "artifacts/linux-binaries-silentdragonlite-v$APP_VERSION.tar.gz" | wc -l | grep -q "4"; then 
+    if tar tf "artifacts/linux-binaries-SilentDragonLite-v$APP_VERSION.tar.gz" | wc -l | grep -q "4"; then 
         echo "[OK]"
     else
         echo "[ERROR]"
@@ -78,23 +78,23 @@ else
 fi
 
 echo -n "Building deb..........."
-debdir=bin/deb/silentdragonlite-v$APP_VERSION
+debdir=bin/deb/SilentDragonLite-v$APP_VERSION
 mkdir -p $debdir > /dev/null
 mkdir    $debdir/DEBIAN
 mkdir -p $debdir/usr/local/bin
 
 cat src/scripts/control | sed "s/RELEASE_VERSION/$APP_VERSION/g" > $debdir/DEBIAN/control
 
-cp silentdragonlite                   $debdir/usr/local/bin/
+cp SilentDragonLite                   $debdir/usr/local/bin/
 
 mkdir -p $debdir/usr/share/pixmaps/
-cp res/silentdragonlite.xpm           $debdir/usr/share/pixmaps/
+cp res/SilentDragonLite.xpm           $debdir/usr/share/pixmaps/
 
 mkdir -p $debdir/usr/share/applications
-cp src/scripts/desktopentry    $debdir/usr/share/applications/silentdragonlite.desktop
+cp src/scripts/desktopentry    $debdir/usr/share/applications/SilentDragonLite.desktop
 
 dpkg-deb --build $debdir >/dev/null
-cp $debdir.deb                 artifacts/linux-deb-silentdragonlite-v$APP_VERSION.deb
+cp $debdir.deb                 artifacts/linux-deb-SilentDragonLite-v$APP_VERSION.deb
 echo "[OK]"
 
 
@@ -112,36 +112,40 @@ export PATH=$MXE_PATH:$PATH
 
 echo -n "Configuring............"
 make clean  > /dev/null
-#rm -f silentdragonlite-mingw.pro
+#rm -f SilentDragonLite-mingw.pro
 rm -rf release/
+cp src/precompiled.h release/
 #Mingw seems to have trouble with precompiled headers, so strip that option from the .pro file
-#cat silentdragon-lite.pro | sed "s/precompile_header/release/g" | sed "s/PRECOMPILED_HEADER.*//g" > silentdragonlite-mingw.pro
+#cat silentdragon-lite.pro | sed "s/precompile_header/release/g" | sed "s/PRECOMPILED_HEADER.*//g" > SilentDragonLite-mingw.pro
 echo "[OK]"
 
 
 echo -n "Building..............."
+cp src/precompiled.h release/
 # Build the lib first
 cd lib && make winrelease && cd ..
-x86_64-w64-mingw32.static-qmake-qt5 silentdragonlite.pro CONFIG+=release > /dev/null
+cp src/precompiled.h release/
+x86_64-w64-mingw32.static-qmake-qt5 silentdragon-lite.pro CONFIG+=release > /dev/null
+cp src/precompiled.h release/
 make -j32 > /dev/null
 echo "[OK]"
 
 
 echo -n "Packaging.............."
-mkdir release/silentdragonlite-v$APP_VERSION  
-cp release/silentdragonlite.exe          release/silentdragonlite-v$APP_VERSION 
-cp README.md                          release/silentdragonlite-v$APP_VERSION 
-cp LICENSE                            release/silentdragonlite-v$APP_VERSION 
-cd release && zip -r Windows-binaries-silentdragonlite-v$APP_VERSION.zip silentdragonlite-v$APP_VERSION/ > /dev/null
+mkdir release/SilentDragonLite-v$APP_VERSION  
+cp release/SilentDragonLite.exe          release/SilentDragonLite-v$APP_VERSION 
+cp README.md                          release/SilentDragonLite-v$APP_VERSION 
+cp LICENSE                            release/SilentDragonLite-v$APP_VERSION 
+cd release && zip -r Windows-binaries-SilentDragonLite-v$APP_VERSION.zip SilentDragonLite-v$APP_VERSION/ > /dev/null
 cd ..
 
 mkdir artifacts >/dev/null 2>&1
-cp release/Windows-binaries-silentdragonlite-v$APP_VERSION.zip ./artifacts/
+cp release/Windows-binaries-SilentDragonLite-v$APP_VERSION.zip ./artifacts/
 echo "[OK]"
 
-if [ -f artifacts/Windows-binaries-silentdragonlite-v$APP_VERSION.zip ] ; then
+if [ -f artifacts/Windows-binaries-SilentDragonLite-v$APP_VERSION.zip ] ; then
     echo -n "Package contents......."
-    if unzip -l "artifacts/Windows-binaries-silentdragonlite-v$APP_VERSION.zip" | wc -l | grep -q "9"; then 
+    if unzip -l "artifacts/Windows-binaries-SilentDragonLite-v$APP_VERSION.zip" | wc -l | grep -q "9"; then 
         echo "[OK]"
     else
         echo "[ERROR]"
