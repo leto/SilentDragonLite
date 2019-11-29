@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // File a bug
     QObject::connect(ui->actionFile_a_bug, &QAction::triggered, [=]() {
-        QDesktopServices::openUrl(QUrl("https://github.com/DenioD/SilentDragonLite/issues/new"));
+        QDesktopServices::openUrl(QUrl("https://github.com/MyHush/SilentDragonLite/issues/new"));
     });
 
     // Set up check for updates action
@@ -529,7 +529,7 @@ void MainWindow::donate() {
     ui->Amount1->setText("0.00");
     ui->MemoTxt1->setText(tr("Some feedback about SilentDragonlite or Hush..."));
 
-    ui->statusBar->showMessage(tr("Send Duke some private and shielded feedback about") % Settings::getTokenName() % tr(" or SilentDragonLite"));
+    ui->statusBar->showMessage(tr("Send DenioD some private and shielded feedback about") % Settings::getTokenName() % tr(" or SilentDragonLite"));
 
     // And switch to the send tab.
     ui->tabWidget->setCurrentIndex(1);
