@@ -1170,7 +1170,7 @@ void MainWindow::setupReceiveTab() {
         } else if (Settings::getInstance()->get_currency_name() == "AUD") {
             ui->rcvBal->setText(rpc->getModel()->getAllBalances().value(addr).toDecimalhushAUDString());
             }
-
+        
         ui->txtReceive->setPlainText(addr);       
         ui->qrcodeDisplay->setQrcodeString(addr);
         if (rpc->getModel()->getUsedAddresses().value(addr, false)) {

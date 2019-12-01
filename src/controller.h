@@ -47,6 +47,28 @@ public:
     void refreshINRPrice();
     void refreshGBPPrice();
     void refreshAUDPrice();
+    void refreshUSDVolume();
+    void refreshEURVolume();
+    void refreshBTCVolume();
+    void refreshCNYVolume();
+    void refreshRUBVolume();
+    void refreshCADVolume();
+    void refreshSGDVolume();
+    void refreshCHFVolume();
+    void refreshINRVolume();
+    void refreshGBPVolume();
+    void refreshAUDVolume();
+    void refreshUSDCAP();
+    void refreshEURCAP();
+    void refreshBTCCAP();
+    void refreshCNYCAP();
+    void refreshRUBCAP();
+    void refreshCADCAP();
+    void refreshSGDCAP();
+    void refreshCHFCAP();
+    void refreshINRCAP();
+    void refreshGBPCAP();
+    void refreshAUDCAP();
     
     
     void executeStandardUITransaction(Tx tx); 
