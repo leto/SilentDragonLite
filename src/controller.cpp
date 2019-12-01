@@ -162,11 +162,16 @@ void Controller::getInfoThenRefresh(bool force) {
         prevCallSucceeded = true;       
 
         int curBlock  = reply["latest_block_height"].get<json::number_integer_t>();
+        int blocks_until_halving= 340000 - curBlock;
+        char halving_days[8];
+        sprintf(halving_days, "%.2f", (double) (blocks_until_halving * 150) / (60*60*24) );
         bool doUpdate = force || (model->getLatestBlock() != curBlock);
         model->setLatestBlock(curBlock);
         ui->blockHeight->setText(QString::number(curBlock));
+        ui->halvingTime->setText( QString::number(blocks_until_halving) % " blocks, " % QString::fromStdString(halving_days)  % " days" );
         ui->Version->setText(QString::fromStdString(reply["version"].get<json::string_t>())); 
         ui->Vendor->setText(QString::fromStdString(reply["vendor"].get<json::string_t>()));
+        ui->volumeExchange->setText(" BTC " + QString::number((double)  Settings::getInstance()->getBTCVolume() ,'f',8));
 
         main->logger->write(QString("Refresh. curblock ") % QString::number(curBlock) % ", update=" % (doUpdate ? "true" : "false") );
 
@@ -181,29 +186,53 @@ void Controller::getInfoThenRefresh(bool force) {
 
         if (Settings::getInstance()->get_currency_name() == "USD") {
         main->statusLabel->setText(" HUSH/USD=$ " + QString::number( (double) Settings::getInstance()->getZECPrice() ,'f',2));
+        ui->volumeExchange->setText(" $ " + QString::number((double)  Settings::getInstance()->getUSDVolume() ,'f',2));
+        ui->marketcapTab->setText(" $ " + QString::number((double)  Settings::getInstance()->getUSDCAP() ,'f',2));
     }   else if (Settings::getInstance()->get_currency_name() == "EUR") {
         main->statusLabel->setText(" HUSH/EUR=€ " + QString::number( (double) Settings::getInstance()->getEURPrice() ,'f',2));
+        ui->volumeExchange->setText(" € " + QString::number((double)  Settings::getInstance()->getEURVolume() ,'f',2));
+        ui->marketcapTab->setText(" € " + QString::number((double)  Settings::getInstance()->getEURCAP() ,'f',2));
     }   else if  (Settings::getInstance()->get_currency_name() == "BTC") {
         main->statusLabel->setText(" HUSH/BTC=BTC " + QString::number((double)  Settings::getInstance()->getBTCPrice() ,'f',8));
+        ui->volumeExchange->setText(" BTC " + QString::number((double)  Settings::getInstance()->getBTCVolume() ,'f',8));
+          ui->marketcapTab->setText(" BTC " + QString::number((double)  Settings::getInstance()->getBTCCAP() ,'f',8));
     }   else if (Settings::getInstance()->get_currency_name() == "CNY") {
         main->statusLabel->setText(" HUSH/CNY=¥ /元 " + QString::number( (double) Settings::getInstance()->getCNYPrice() ,'f',2));
+        ui->volumeExchange->setText(" ¥ /元  " + QString::number((double)  Settings::getInstance()->getCNYVolume() ,'f',2));
+        ui->marketcapTab->setText(" ¥ /元  " + QString::number((double)  Settings::getInstance()->getCNYCAP() ,'f',2));
     }   else if  (Settings::getInstance()->get_currency_name() == "RUB") {
         main->statusLabel->setText(" HUSH/RUB=₽ " + QString::number((double)  Settings::getInstance()->getRUBPrice() ,'f',2));
+        ui->volumeExchange->setText(" ₽  " + QString::number((double)  Settings::getInstance()->getRUBVolume() ,'f',2));
+        ui->marketcapTab->setText(" ₽  " + QString::number((double)  Settings::getInstance()->getRUBCAP() ,'f',2));
     }   else if (Settings::getInstance()->get_currency_name() == "CAD") {
         main->statusLabel->setText(" HUSH/CAD=$ " + QString::number( (double) Settings::getInstance()->getCADPrice() ,'f',2));
+        ui->volumeExchange->setText(" $  " + QString::number((double)  Settings::getInstance()->getCADVolume() ,'f',2));
+        ui->marketcapTab->setText(" $  " + QString::number((double)  Settings::getInstance()->getCADCAP() ,'f',2));
     }   else if  (Settings::getInstance()->get_currency_name() == "SGD") {
         main->statusLabel->setText(" HUSH/SGD=$ " + QString::number((double)  Settings::getInstance()->getSGDPrice() ,'f',2));
+        ui->volumeExchange->setText(" $  " + QString::number((double)  Settings::getInstance()->getSGDVolume() ,'f',2));
+        ui->marketcapTab->setText(" $  " + QString::number((double)  Settings::getInstance()->getSGDCAP() ,'f',2));
     }   else if  (Settings::getInstance()->get_currency_name() == "CHF") {
         main->statusLabel->setText(" HUSH/CHF=CHF " + QString::number((double)  Settings::getInstance()->getCHFPrice() ,'f',2));
+        ui->volumeExchange->setText(" CHF  " + QString::number((double)  Settings::getInstance()->getCHFVolume() ,'f',2));
+        ui->marketcapTab->setText(" CHF  " + QString::number((double)  Settings::getInstance()->getCHFCAP() ,'f',2));
     }   else if (Settings::getInstance()->get_currency_name() == "INR") {
         main->statusLabel->setText(" HUSH/INR=₹ " + QString::number( (double) Settings::getInstance()->getINRPrice() ,'f',2));
+        ui->volumeExchange->setText(" ₹  " + QString::number((double)  Settings::getInstance()->getINRVolume() ,'f',2));
+        ui->marketcapTab->setText(" ₹  " + QString::number((double)  Settings::getInstance()->getINRCAP() ,'f',2));
     }   else if  (Settings::getInstance()->get_currency_name() == "GBP") {
         main->statusLabel->setText(" HUSH/GBP=£ " + QString::number((double)  Settings::getInstance()->getGBPPrice() ,'f',2));
+        ui->volumeExchange->setText(" £  " + QString::number((double)  Settings::getInstance()->getGBPVolume() ,'f',2));
+        ui->marketcapTab->setText(" £  " + QString::number((double)  Settings::getInstance()->getRUBCAP() ,'f',2));
         }else if  (Settings::getInstance()->get_currency_name() == "AUD") {
         main->statusLabel->setText(" HUSH/AUD=$ " + QString::number((double)  Settings::getInstance()->getAUDPrice() ,'f',2));
+        ui->volumeExchange->setText(" $  " + QString::number((double)  Settings::getInstance()->getAUDVolume() ,'f',2));
+        ui->marketcapTab->setText(" $  " + QString::number((double)  Settings::getInstance()->getAUDCAP() ,'f',2));
         
     } else {
     main->statusLabel->setText(" HUSH/USD=$" + QString::number(Settings::getInstance()->getZECPrice(),'f',2 ));
+    ui->volumeExchange->setText(" $  " + QString::number((double)  Settings::getInstance()->getUSDVolume() ,'f',2));
+    ui->marketcapTab->setText(" $  " + QString::number((double)  Settings::getInstance()->getUSDCAP() ,'f',2));
     }
         main->statusLabel->setToolTip(tooltip);
         main->statusIcon->setPixmap(i.pixmap(16, 16));
@@ -336,6 +365,7 @@ void Controller::updateUIBalances() {
     ui->balVerified   ->setToolTip(balVerified.toDecimalEURString());
     ui->balTransparent->setToolTip(balT.toDecimalEURString());
     ui->balTotal      ->setToolTip(balTotal.toDecimalEURString());
+    
 
     } else if (Settings::getInstance()->get_currency_name() == "BTC") {
     ui->balSheilded   ->setToolTip(balZ.toDecimalBTCString());
@@ -764,6 +794,28 @@ void Controller::refreshZECPrice() {
                 Settings::getInstance()->setGBPPrice(0);
                 Settings::getInstance()->setAUDPrice(0);
                 Settings::getInstance()->setINRPrice(0);
+                Settings::getInstance()->setUSDVolume(0);
+                Settings::getInstance()->setEURVolume(0);
+                Settings::getInstance()->setBTCVolume(0);
+                Settings::getInstance()->setCNYVolume(0);
+                Settings::getInstance()->setRUBVolume(0);
+                Settings::getInstance()->setCADVolume(0);
+                Settings::getInstance()->setINRVolume(0);
+                Settings::getInstance()->setSGDVolume(0);
+                Settings::getInstance()->setCHFVolume(0);
+                Settings::getInstance()->setGBPVolume(0);
+                Settings::getInstance()->setAUDVolume(0);
+                Settings::getInstance()->setUSDCAP(0);
+                Settings::getInstance()->setEURCAP(0);
+                Settings::getInstance()->setBTCCAP(0);
+                Settings::getInstance()->setCNYCAP(0);
+                Settings::getInstance()->setRUBCAP(0);
+                Settings::getInstance()->setCADCAP(0);
+                Settings::getInstance()->setINRCAP(0);
+                Settings::getInstance()->setSGDCAP(0);
+                Settings::getInstance()->setCHFCAP(0);
+                Settings::getInstance()->setGBPCAP(0);
+                Settings::getInstance()->setAUDCAP(0);
                
                 return;
             }
@@ -784,6 +836,28 @@ void Controller::refreshZECPrice() {
                 Settings::getInstance()->setGBPPrice(0);
                 Settings::getInstance()->setAUDPrice(0);
                 Settings::getInstance()->setINRPrice(0);
+                Settings::getInstance()->setUSDVolume(0);
+                Settings::getInstance()->setEURVolume(0);
+                Settings::getInstance()->setBTCVolume(0);
+                Settings::getInstance()->setCNYVolume(0);
+                Settings::getInstance()->setRUBVolume(0);
+                Settings::getInstance()->setCADVolume(0);
+                Settings::getInstance()->setINRVolume(0);
+                Settings::getInstance()->setSGDVolume(0);
+                Settings::getInstance()->setCHFVolume(0);
+                Settings::getInstance()->setGBPVolume(0);
+                Settings::getInstance()->setAUDVolume(0);
+                Settings::getInstance()->setUSDCAP(0);
+                Settings::getInstance()->setEURCAP(0);
+                Settings::getInstance()->setBTCCAP(0);
+                Settings::getInstance()->setCNYCAP(0);
+                Settings::getInstance()->setRUBCAP(0);
+                Settings::getInstance()->setCADCAP(0);
+                Settings::getInstance()->setINRCAP(0);
+                Settings::getInstance()->setSGDCAP(0);
+                Settings::getInstance()->setCHFCAP(0);
+                Settings::getInstance()->setGBPCAP(0);
+                Settings::getInstance()->setAUDCAP(0);
                 return;
             }
 
@@ -857,8 +931,138 @@ void Controller::refreshZECPrice() {
                 qDebug() << "HUSH = AUD" << QString::number((double)hush["aud"]);
                 Settings::getInstance()->setAUDPrice( hush["aud"]);
             }
-
-
+             if (hush["btc_24h_vol"] >= 0)
+            {
+              
+                qDebug() << "HUSH = usd_24h_vol" << QString::number((double)hush["usd_24h_vol"]);
+                Settings::getInstance()->setUSDVolume( hush["usd_24h_vol"]);
+            }
+                if (hush["btc_24h_vol"] >= 0)
+            {
+              
+                qDebug() << "HUSH = euro_24h_vol" << QString::number((double)hush["eur_24h_vol"]);
+                Settings::getInstance()->setEURVolume( hush["eur_24h_vol"]);
+            }
+                if (hush["btc_24h_vol"] >= 0)
+            {
+              
+                qDebug() << "HUSH = btc_24h_vol" << QString::number((double)hush["btc_24h_vol"]);
+                Settings::getInstance()->setBTCVolume( hush["btc_24h_vol"]);
+            }
+                if (hush["cny_24h_vol"] >= 0)
+            {
+              
+                qDebug() << "HUSH = cny_24h_vol" << QString::number((double)hush["cny_24h_vol"]);
+                Settings::getInstance()->setCNYVolume( hush["cny_24h_vol"]);
+            }
+                if (hush["rub_24h_vol"] >= 0)
+            {
+              
+                qDebug() << "HUSH = rub_24h_vol" << QString::number((double)hush["rub_24h_vol"]);
+                Settings::getInstance()->setRUBVolume( hush["rub_24h_vol"]);
+            }
+                if (hush["cad_24h_vol"] >= 0)
+            {
+              
+                qDebug() << "HUSH = cad_24h_vol" << QString::number((double)hush["cad_24h_vol"]);
+                Settings::getInstance()->setCADVolume( hush["cad_24h_vol"]);
+            }
+                if (hush["sgd_24h_vol"] >= 0)
+            {
+              
+                qDebug() << "HUSH = sgd_24h_vol" << QString::number((double)hush["sgd_24h_vol"]);
+                Settings::getInstance()->setSGDVolume( hush["sgd_24h_vol"]);
+            }
+                if (hush["chf_24h_vol"] >= 0)
+            {
+              
+                qDebug() << "HUSH = chf_24h_vol" << QString::number((double)hush["chf_24h_vol"]);
+                Settings::getInstance()->setCHFVolume( hush["chf_24h_vol"]);
+            }
+             if (hush["inr_24h_vol"] >= 0)
+            {
+              
+                qDebug() << "HUSH = inr_24h_vol" << QString::number((double)hush["inr_24h_vol"]);
+                Settings::getInstance()->setINRVolume( hush["inr_24h_vol"]);
+            }
+                if (hush["gbp_24h_vol"] >= 0)
+            {
+              
+                qDebug() << "HUSH = gbp_24h_vol" << QString::number((double)hush["gbp_24h_vol"]);
+                Settings::getInstance()->setGBPVolume( hush["gbp_24h_vol"]);
+            }
+                if (hush["aud_24h_vol"] >= 0)
+            {
+              
+                qDebug() << "HUSH = aud_24h_vol" << QString::number((double)hush["aud_24h_vol"]);
+                Settings::getInstance()->setAUDVolume( hush["aud_24h_vol"]);
+            }
+             if (hush["usd_market_cap"] >= 0)
+            {
+              
+                qDebug() << "HUSH = usd_market_cap" << QString::number((double)hush["usd_market_cap"]);
+                Settings::getInstance()->setUSDCAP( hush["usd_market_cap"]);
+            }
+                if (hush["eur_market_cap"] >= 0)
+            {
+              
+                qDebug() << "HUSH = eur_market_cap" << QString::number((double)hush["eur_market_cap"]);
+                Settings::getInstance()->setEURCAP( hush["eur_market_cap"]);
+            }
+                if (hush["btc_market_cap"] >= 0)
+            {
+              
+                qDebug() << "HUSH = btc_market_cap" << QString::number((double)hush["btc_market_cap"]);
+                Settings::getInstance()->setBTCCAP( hush["btc_market_cap"]);
+            }
+                if (hush["cny_market_cap"] >= 0)
+            {
+              
+                qDebug() << "HUSH = cny_market_cap" << QString::number((double)hush["cny_market_cap"]);
+                Settings::getInstance()->setCNYCAP( hush["cny_market_cap"]);
+            }
+                if (hush["rub_market_cap"] >= 0)
+            {
+              
+                qDebug() << "HUSH = rub_market_cap" << QString::number((double)hush["rub_market_cap"]);
+                Settings::getInstance()->setRUBCAP( hush["rub_market_cap"]);
+            }
+                if (hush["cad_market_cap"] >= 0)
+            {
+              
+                qDebug() << "HUSH = cad_market_cap" << QString::number((double)hush["cad_market_cap"]);
+                Settings::getInstance()->setCADCAP( hush["cad_market_cap"]);
+            }
+                if (hush["sgd_market_cap"] >= 0)
+            {
+              
+                qDebug() << "HUSH = sgd_market_cap" << QString::number((double)hush["sgd_market_cap"]);
+                Settings::getInstance()->setSGDCAP( hush["sgd_market_cap"]);
+            }
+                if (hush["chf_market_cap"] >= 0)
+            {
+              
+                qDebug() << "HUSH = chf_market_cap" << QString::number((double)hush["chf_market_cap"]);
+                Settings::getInstance()->setCHFCAP( hush["chf_market_cap"]);
+            }
+             if (hush["inr_market_cap"] >= 0)
+            {
+              
+                qDebug() << "HUSH = inr_market_cap" << QString::number((double)hush["inr_market_cap"]);
+                Settings::getInstance()->setINRCAP( hush["inr_market_cap"]);
+            }
+                if (hush["gbp_market_cap"] >= 0)
+            {
+              
+                qDebug() << "HUSH = gbp_market_cap" << QString::number((double)hush["gbp_market_cap"]);
+                Settings::getInstance()->setGBPCAP( hush["gbp_market_cap"]);
+            }
+                if (hush["aud_market_cap"] >= 0)
+            {
+              
+                qDebug() << "HUSH = aud_market_cap" << QString::number((double)hush["aud_market_cap"]);
+                Settings::getInstance()->setAUDCAP( hush["aud_market_cap"]);
+            }
             return;
          } catch (const std::exception& e) {
             // If anything at all goes wrong, just set the price to 0 and move on.
@@ -877,6 +1081,29 @@ void Controller::refreshZECPrice() {
                 Settings::getInstance()->setGBPPrice(0);
                 Settings::getInstance()->setAUDPrice(0);
                 Settings::getInstance()->setINRPrice(0);
+                Settings::getInstance()->setBTCVolume(0);
+                Settings::getInstance()->setUSDVolume(0);
+                Settings::getInstance()->setEURVolume(0);
+                Settings::getInstance()->setBTCVolume(0);
+                Settings::getInstance()->setCNYVolume(0);
+                Settings::getInstance()->setRUBVolume(0);
+                Settings::getInstance()->setCADVolume(0);
+                Settings::getInstance()->setINRVolume(0);
+                Settings::getInstance()->setSGDVolume(0);
+                Settings::getInstance()->setCHFVolume(0);
+                Settings::getInstance()->setGBPVolume(0);
+                Settings::getInstance()->setAUDVolume(0);
+                Settings::getInstance()->setUSDCAP(0);
+                Settings::getInstance()->setEURCAP(0);
+                Settings::getInstance()->setBTCCAP(0);
+                Settings::getInstance()->setCNYCAP(0);
+                Settings::getInstance()->setRUBCAP(0);
+                Settings::getInstance()->setCADCAP(0);
+                Settings::getInstance()->setINRCAP(0);
+                Settings::getInstance()->setSGDCAP(0);
+                Settings::getInstance()->setCHFCAP(0);
+                Settings::getInstance()->setGBPCAP(0);
+                Settings::getInstance()->setAUDCAP(0);
     });
 
 }
