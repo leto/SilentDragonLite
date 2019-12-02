@@ -162,12 +162,18 @@ void Controller::getInfoThenRefresh(bool force) {
         prevCallSucceeded = true;       
 
         int curBlock  = reply["latest_block_height"].get<json::number_integer_t>();
+        int longestchain = reply["longestchain"].get<json::number_integer_t>();
+        int notarized = reply["notarized"].get<json::number_integer_t>();
+        int difficulty = reply["difficulty"].get<json::number_integer_t>();
         int blocks_until_halving= 340000 - curBlock;
         char halving_days[8];
         sprintf(halving_days, "%.2f", (double) (blocks_until_halving * 150) / (60*60*24) );
         bool doUpdate = force || (model->getLatestBlock() != curBlock);
         model->setLatestBlock(curBlock);
         ui->blockHeight->setText(QString::number(curBlock));
+        ui->last_notarized->setText(QString::number(notarized));
+        ui->longestchain->setText(QString::number(longestchain));
+        ui->difficulty->setText(QString::number(difficulty));
         ui->halvingTime->setText( QString::number(blocks_until_halving) % " blocks, " % QString::fromStdString(halving_days)  % " days" );
         ui->Version->setText(QString::fromStdString(reply["version"].get<json::string_t>())); 
         ui->Vendor->setText(QString::fromStdString(reply["vendor"].get<json::string_t>()));
@@ -189,9 +195,9 @@ void Controller::getInfoThenRefresh(bool force) {
         ui->volumeExchange->setText(" $ " + QString::number((double)  Settings::getInstance()->getUSDVolume() ,'f',2));
         ui->marketcapTab->setText(" $ " + QString::number((double)  Settings::getInstance()->getUSDCAP() ,'f',2));
     }   else if (Settings::getInstance()->get_currency_name() == "EUR") {
-        main->statusLabel->setText(" HUSH/EUR=€ " + QString::number( (double) Settings::getInstance()->getEURPrice() ,'f',2));
-        ui->volumeExchange->setText(" € " + QString::number((double)  Settings::getInstance()->getEURVolume() ,'f',2));
-        ui->marketcapTab->setText(" € " + QString::number((double)  Settings::getInstance()->getEURCAP() ,'f',2));
+        main->statusLabel->setText(" HUSH/EUR= " + QString::number( (double) Settings::getInstance()->getEURPrice() ,'f',2) + " €");
+        ui->volumeExchange->setText(QString::number((double)  Settings::getInstance()->getEURVolume() ,'f',2) + " €");
+        ui->marketcapTab->setText(QString::number((double)  Settings::getInstance()->getEURCAP() ,'f',2)+ " €");
     }   else if  (Settings::getInstance()->get_currency_name() == "BTC") {
         main->statusLabel->setText(" HUSH/BTC=BTC " + QString::number((double)  Settings::getInstance()->getBTCPrice() ,'f',8));
         ui->volumeExchange->setText(" BTC " + QString::number((double)  Settings::getInstance()->getBTCVolume() ,'f',8));
