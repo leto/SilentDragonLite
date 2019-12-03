@@ -116,15 +116,15 @@ FORMS += \
     src/recurringmultiple.ui 
 
 
-TRANSLATIONS = res/zec_qt_wallet_es.ts \
-               res/zec_qt_wallet_fr.ts \
-               res/zec_qt_wallet_de.ts \
-               res/zec_qt_wallet_pt.ts \
-               res/zec_qt_wallet_it.ts \
-               res/zec_qt_wallet_zh.ts \
-               res/zec_qt_wallet_hr.ts \
-               res/zec_qt_wallet_sr.ts \
-               res/zec_qt_wallet_tr.ts 
+TRANSLATIONS = res/silentdragonlite_es.ts \
+               res/silentdragonlite_fr.ts \
+               res/silentdragonlite_de.ts \
+               res/silentdragonlite_pt.ts \
+               res/silentdragonlite_it.ts \
+               res/silentdragonlite_zh.ts \
+               res/silentdragonlite_hr.ts \
+               res/silentdragonlite_sr.ts \
+               res/silentdragonlite_tr.ts 
              
 include(singleapplication/singleapplication.pri)
 DEFINES += QAPPLICATION_CLASS=QApplication

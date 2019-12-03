@@ -80,6 +80,28 @@ public:
     void    setINRPrice(double p) { INRPrice = p; }
     void    setGBPPrice(double p) { GBPPrice = p; }
     void    setAUDPrice(double p) { AUDPrice = p; }
+    void    setUSDVolume(double p) { USDVolume = p; }
+    void    setEURVolume(double p) { EURVolume = p; }
+    void    setBTCVolume(double p) { BTCVolume = p; }
+    void    setCNYVolume(double p) { CNYVolume = p; }
+    void    setRUBVolume(double p) { RUBVolume = p; }
+    void    setCADVolume(double p) { CADVolume = p; }
+    void    setSGDVolume(double p) { SGDVolume = p; }
+    void    setCHFVolume(double p) { CHFVolume = p; }
+    void    setINRVolume(double p) { INRVolume = p; }
+    void    setGBPVolume(double p) { GBPVolume = p; }
+    void    setAUDVolume(double p) { AUDVolume = p; }
+    void    setUSDCAP(double p) { USDCAP = p; }
+    void    setEURCAP(double p) { EURCAP = p; }
+    void    setBTCCAP(double p) { BTCCAP = p; }
+    void    setCNYCAP(double p) { CNYCAP = p; }
+    void    setRUBCAP(double p) { RUBCAP = p; }
+    void    setCADCAP(double p) { CADCAP = p; }
+    void    setSGDCAP(double p) { SGDCAP = p; }
+    void    setCHFCAP(double p) { CHFCAP = p; }
+    void    setINRCAP(double p) { INRCAP = p; }
+    void    setGBPCAP(double p) { GBPCAP = p; }
+    void    setAUDCAP(double p) { AUDCAP = p; }
     double  getZECPrice();
     double  getEURPrice();
     double  getBTCPrice();
@@ -91,6 +113,29 @@ public:
     double  getINRPrice();
     double  getGBPPrice();
     double  getAUDPrice();
+    double  getUSDVolume();
+    double  getEURVolume();
+    double  getBTCVolume();
+    double  getCNYVolume();
+    double  getRUBVolume();
+    double  getCADVolume();
+    double  getSGDVolume();
+    double  getCHFVolume();
+    double  getINRVolume();
+    double  getGBPVolume();
+    double  getAUDVolume();
+    double  getUSDCAP();
+    double  getEURCAP();
+    double  getBTCCAP();
+    double  getCNYCAP();
+    double  getRUBCAP();
+    double  getCADCAP();
+    double  getSGDCAP();
+    double  getCHFCAP();
+    double  getINRCAP();
+    double  getGBPCAP();
+    double  getAUDCAP();
+    
 
     // Static stuff
     static const QString txidStatusMessage;
@@ -153,6 +198,28 @@ private:
     double  INRPrice          = 0.0;
     double  GBPPrice          = 0.0;
     double  AUDPrice          = 0.0;
+    double  USDVolume          = 0.0;
+    double  EURVolume          = 0.0;
+    double  BTCVolume          = 0.0;
+    double  CNYVolume          = 0.0;
+    double  RUBVolume          = 0.0;
+    double  CADVolume          = 0.0;
+    double  SGDVolume          = 0.0;
+    double  CHFVolume          = 0.0;
+    double  INRVolume          = 0.0;
+    double  GBPVolume          = 0.0;
+    double  AUDVolume          = 0.0;
+    double  USDCAP          = 0.0;
+    double  EURCAP          = 0.0;
+    double  BTCCAP          = 0.0;
+    double  CNYCAP          = 0.0;
+    double  RUBCAP          = 0.0;
+    double  CADCAP          = 0.0;
+    double  SGDCAP          = 0.0;
+    double  CHFCAP          = 0.0;
+    double  INRCAP          = 0.0;
+    double  GBPCAP          = 0.0;
+    double  AUDCAP          = 0.0;
 };
 
 

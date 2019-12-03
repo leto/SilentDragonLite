@@ -135,6 +135,73 @@ double Settings::getGBPPrice() {
 double Settings::getAUDPrice() { 
     return AUDPrice; 
 }
+double Settings::getUSDVolume() { 
+    return USDVolume; 
+}
+double Settings::getEURVolume() { 
+    return EURVolume; 
+}
+double Settings::getBTCVolume() { 
+    return BTCVolume; 
+}
+double Settings::getCNYVolume() { 
+    return CNYVolume; 
+}
+double Settings::getRUBVolume() { 
+    return RUBVolume; 
+}
+double Settings::getCADVolume() { 
+    return CADVolume; 
+}
+double Settings::getSGDVolume() { 
+    return SGDVolume; 
+}
+double Settings::getCHFVolume() { 
+    return CHFVolume; 
+}
+double Settings::getINRVolume() { 
+    return INRVolume; 
+}
+double Settings::getGBPVolume() { 
+    return GBPVolume; 
+}
+double Settings::getAUDVolume() { 
+    return AUDVolume; 
+}
+double Settings::getUSDCAP() { 
+    return USDCAP; 
+}
+double Settings::getEURCAP() { 
+    return EURCAP; 
+}
+double Settings::getBTCCAP() { 
+    return BTCCAP; 
+}
+double Settings::getCNYCAP() { 
+    return CNYCAP; 
+}
+double Settings::getRUBCAP() { 
+    return RUBCAP; 
+}
+double Settings::getCADCAP() { 
+    return CADCAP; 
+}
+double Settings::getSGDCAP() { 
+    return SGDCAP; 
+}
+double Settings::getCHFCAP() { 
+    return CHFCAP; 
+}
+double Settings::getINRCAP() { 
+    return INRCAP; 
+}
+double Settings::getGBPCAP() { 
+    return GBPCAP; 
+}
+double Settings::getAUDCAP() { 
+    return AUDCAP; 
+}
+
 
 bool Settings::getCheckForUpdates() {
     return QSettings().value("options/allowcheckupdates", true).toBool();
@@ -292,27 +359,23 @@ PaymentURI Settings::parseURI(QString uri) {
         ans.error = "Could not understand address";
         return ans;
     }
-    uri = uri.right(uri.length() - ans.addr.length());
+  uri = uri.right(uri.length() - ans.addr.length()-1);  // swallow '?'
+    QUrlQuery query(uri);
 
-    if (!uri.isEmpty()) {
-        uri = uri.right(uri.length() - 1); // Eat the "?"
+    // parse out amt / amount
+    if (query.hasQueryItem("amt")) {
+        ans.amt  = query.queryItemValue("amt");
+    } else if (query.hasQueryItem("amount")) {
+        ans.amt  = query.queryItemValue("amount");
+    }
 
-        QStringList args = uri.split("&");
-        for (QString arg: args) {
-            QStringList kv = arg.split("=");
-            if (kv.length() != 2) {
-                ans.error = "No value argument was seen";
-                return ans;
-            }
-
-            if (kv[0].toLower() == "amt" || kv[0].toLower() == "amount") {
-                ans.amt = kv[1];
-            } else if (kv[0].toLower() == "memo" || kv[0].toLower() == "message" || kv[0].toLower() == "msg") {
-                ans.memo = QUrl::fromPercentEncoding(kv[1].toUtf8());
-            } else {
-                // Ignore unknown fields, since some developers use it to pass extra data.
-            }
-        }
+    // parse out memo / msg / message
+    if (query.hasQueryItem("memo")) {
+        ans.memo  = query.queryItemValue("memo");
+    } else if (query.hasQueryItem("msg")) {
+        ans.memo  = query.queryItemValue("msg");
+    } else if  (query.hasQueryItem("message")) {
+        ans.memo  = query.queryItemValue("message");
     }
 
     return ans;

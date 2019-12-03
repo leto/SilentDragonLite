@@ -55,7 +55,7 @@ export PATH=$PATH:/usr/local/bin
 #Clean
 echo -n "Cleaning..............."
 make distclean >/dev/null 2>&1
-rm -f artifacts/macOS-silentdragonlite-v$APP_VERSION.dmg
+rm -f artifacts/macOS-SilentDragonLite-v$APP_VERSION.dmg
 echo "[OK]"
 
 
@@ -73,7 +73,7 @@ echo "[OK]"
 #Qt deploy
 echo -n "Deploying.............."
 mkdir artifacts >/dev/null 2>&1
-rm -f artifcats/Silentdragonlite.dmg >/dev/null 2>&1
+rm -f artifcats/SilentDragonLite.dmg >/dev/null 2>&1
 rm -f artifacts/rw* >/dev/null 2>&1
 $QT_PATH/bin/macdeployqt SilentDragonLite.app 
 codesign --deep --force --verify --verbose -s "$CERTIFICATE" --options runtime --timestamp SilentDragonLite.app/
@@ -81,7 +81,7 @@ echo "[OK]"
 
 
 echo -n "Building dmg..........."
-mv silentdragonlite.app Silentdragonlite.app
+mv SilentDragonLite.app SilentDragonLite.app
 create-dmg --volname "SilentDragonLite-v$APP_VERSION" --volicon "res/logo.icns" --window-pos 200 120 --icon "SilentDragonLite.app" 200 190  --app-drop-link 600 185 --hide-extension "SilentDragonLite.app"  --window-size 800 400 --hdiutil-quiet --background res/dmgbg.png  artifacts/macOS-SilentDragonLite-v$APP_VERSION.dmg SilentDragonLite.app >/dev/null 2>&1
 
 if [ ! -f artifacts/macOS-SilentDragonLite-v$APP_VERSION.dmg ]; then
