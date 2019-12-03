@@ -457,8 +457,8 @@ void MainWindow::setupSettingsModal() {
         settings.chkFetchPrices->setChecked(Settings::getInstance()->getAllowFetchPrices());
         
         // List of default servers
+        settings.cmbServer->addItem("https://lite.myhush.org");
         settings.cmbServer->addItem("https://hush-lightwallet.de:443");
-        settings.cmbServer->addItem("https://lite.myhush.org:443");
 
         // Load current values into the dialog        
         auto conf = Settings::getInstance()->getSettings();
