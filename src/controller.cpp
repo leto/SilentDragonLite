@@ -353,6 +353,9 @@ void Controller::updateUIBalances() {
 
     CAmount balTotal     = balT + balZ;
     CAmount balAvailable = balT + balVerified;
+    if (balZ < 0) {
+        balZ = CAmount::fromqint64(0);
+    }
 
     // Balances table
     ui->balSheilded   ->setText(balZ.toDecimalhushString());

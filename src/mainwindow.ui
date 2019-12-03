@@ -770,7 +770,7 @@
                <item>
                 <widget class="QPushButton" name="btnReceiveNewAddr">
                  <property name="text">
-                  <string>New Address</string>
+                  <string>Next Address</string>
                  </property>
                 </widget>
                </item>
