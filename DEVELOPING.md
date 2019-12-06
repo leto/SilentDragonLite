@@ -3,20 +3,22 @@
 
 ```
 # build dependencies
-sudo apt install clang g++ build-essential make mingw-w64 git pkg-config libc6-dev m4 g++-multilib autoconf libtool-bin ncurses-dev unzip python python-zmq zlib1g-dev wget curl bsdmainutils automake libgl1-mesa-dev libglu1-mesa-dev libfontconfig1-dev autopoint libssl-dev
+sudo apt install -y clang g++ build-essential make mingw-w64 git pkg-config libc6-dev m4 g++-multilib autoconf libtool-bin ncurses-dev unzip python python-zmq zlib1g-dev wget curl bsdmainutils automake libgl1-mesa-dev libglu1-mesa-dev libfontconfig1-dev autopoint libssl-dev
 
 # MXE dependencies
-sudo apt install bash bison bzip2 flex gettext git gperf intltool libc6-dev-i386 libgdk-pixbuf2.0-dev libltdl-dev libtool-bin libxml-parser-perl make openssl p7zip-full patch perl pkg-config python ruby sed unzip wget xz-utils
+sudo apt install -y bash bison bzip2 flex gettext git gperf intltool libc6-dev-i386 libgdk-pixbuf2.0-dev libltdl-dev libtool-bin libxml-parser-perl make openssl p7zip-full patch perl pkg-config python ruby sed unzip wget xz-utils
 
 ```
 # Compile OpenSSL
 
 ```
-# Download openssl 1.0.2
-https://www.openssl.org/source/
+# Download openssl 1.0.2 from https://openssl.org/source/
+
+wget https://www.openssl.org/source/openssl-1.0.2t.tar.gz
+tar zxvpf https://www.openssl.org/source/openssl-1.0.2t.tar.gz
 cd openssl
-./Configure linux-x86_64
-make
+./configure linux-x86_64
+make -j$(nproc)
 ```
 ## Static build of Qt5
 
@@ -25,7 +27,7 @@ make
 mkdir -p ~/Qt/5.11.2 && cd ~/Qt/5.11.2
 
 wget https://download.qt.io/archive/qt/5.11/5.11.2/single/qt-everywhere-src-5.11.2.tar.xz
-tar xvf qt-everywhere-src-5.11.2.tar.xz && cd qt-everywhere-src-5.11.2
+tar xvpf qt-everywhere-src-5.11.2.tar.xz && cd qt-everywhere-src-5.11.2
 
 ```
 # Configure and build Qt5 statically.
